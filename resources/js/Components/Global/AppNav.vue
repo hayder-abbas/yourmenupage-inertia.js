@@ -31,7 +31,9 @@ onUnmounted(() => {
         class="flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse"
       >
         <!-- Dark mode button -->
-        <DarkModeButton @click="toggleDark()" :isDark="isDark" />
+        <div class="hidden md:block mr-1 md:mr-4">
+          <DarkModeButton @click="toggleDark()" :isDark="isDark" />
+        </div>
         <!-- Dropdown User -->
         <Dropdown />
         <button
@@ -57,6 +59,10 @@ onUnmounted(() => {
         <ul
           class="flex flex-col font-medium p-4 lg:p-0 mt-4 rounded-lg bg-gray-50 dark:bg-gray-600 lg:bg-transparent lg:dark:bg-transparent lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:mt-0"
         >
+          <li class="flex justify-end items-center md:hidden">
+            <!-- Dark mode button -->
+            <DarkModeButton @click="toggleDark()" :isDark="isDark" />
+          </li>
           <li>
             <NavLink :href="route('home')" :active="route().current('home')">
               Home
@@ -67,7 +73,7 @@ onUnmounted(() => {
               :href="route('cities')"
               :active="route().current('cities')"
             >
-              All cities
+              Cities
             </NavLink>
           </li>
           <li>
