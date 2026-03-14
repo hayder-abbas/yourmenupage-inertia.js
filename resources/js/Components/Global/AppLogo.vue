@@ -14,11 +14,11 @@
         $page.component === 'Dashboard'
           ? 'text-xl sm:text-2xl text-gray-50'
           : $page.component === 'Home'
-          ? 'text-xl sm:text-3xl text-gray-50'
-          : 'text-2xl sm:text-3xl text-gray-900 dark:text-gray-50'
+            ? 'text-xl sm:text-3xl text-gray-50'
+            : 'text-2xl sm:text-3xl text-gray-900 dark:text-gray-50'
       "
     >
-      yourmenupage
+      YourMenuPage
     </span>
   </Link>
 </template>
