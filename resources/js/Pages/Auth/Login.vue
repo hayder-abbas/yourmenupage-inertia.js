@@ -1,4 +1,5 @@
 <script setup>
+import AppLogo from "@/Components/Global/AppLogo.vue";
 import Checkbox from "@/Components/Ui/Checkbox.vue";
 import InputError from "@/Components/Ui/InputError.vue";
 import InputLabel from "@/Components/Ui/InputLabel.vue";
@@ -26,10 +27,16 @@ const submit = () => {
 </script>
 
 <template>
+  <!-- Login form -->
   <section
-    class="h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900"
+    class="min-h-screen p-4 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900"
   >
     <Head title="Login Page" />
+
+    <!-- Logo -->
+    <div class="p-6">
+      <AppLogo />
+    </div>
 
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
       {{ status }}
