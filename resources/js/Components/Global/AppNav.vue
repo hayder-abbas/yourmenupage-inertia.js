@@ -9,7 +9,7 @@ import { onUnmounted } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
 
 const app = useAppStore();
-const isDark = useDark();
+const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
 
 onUnmounted(() => {
