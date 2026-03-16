@@ -12,10 +12,10 @@ class DatabaseSeeder extends Seeder
   {
     // User::factory(10)->create();
 
-    // User::factory()->create([
-    //   'name' => 'Heydar Abbas',
-    //   'email' => 'h@mail.com',
-    // ]);
+    User::factory()->create([
+      'name' => 'Heydar Abbas',
+      'email' => 'h@mail.com',
+    ]);
 
     $this->call([
       CitySeeder::class,
