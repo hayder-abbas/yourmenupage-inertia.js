@@ -32,7 +32,7 @@ watch(
   () => form.city_id,
   (newValue) => {
     form.city_id = newValue;
-  }
+  },
 );
 
 function onChangeInput(e) {
@@ -43,8 +43,9 @@ function onChangeInput(e) {
 </script>
 
 <template>
+  <!-- Create Restaurant -->
   <div
-    class="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800"
+    class="min-h-screen py-4 lg:py-8 flex items-center justify-center bg-white dark:bg-gray-800"
   >
     <Head title="Create Restaurant" />
 
