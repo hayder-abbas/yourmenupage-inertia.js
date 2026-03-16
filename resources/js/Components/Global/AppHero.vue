@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from "vue";
 import HomeSearchBar from "../Ui/HomeSearchBar.vue";
 
 defineProps({
