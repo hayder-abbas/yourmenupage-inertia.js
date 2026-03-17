@@ -7,14 +7,14 @@ import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineProps({
   cities: Object,
 });
 
-let src = ref("../storage/restaurant_logo/default.png");
+let src = ref("/storage/default.png");
 const form = useForm({
   user_id: usePage().props.auth.user.id,
   city_id: "",

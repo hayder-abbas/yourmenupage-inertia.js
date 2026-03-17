@@ -7,7 +7,7 @@ import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineEmits(["change"]);
@@ -23,20 +23,20 @@ const form = useForm({
   image: "",
   previewImage: "",
 });
-const src = ref("../storage/item_image/default.png");
+const src = ref("/storage/default.png");
 
 watch(
   () => form.restaurant_id,
   (newValue) => {
     form.restaurant_id = newValue;
-  }
+  },
 );
 
 watch(
   () => form.category_id,
   (newValue) => {
     form.category_id = newValue;
-  }
+  },
 );
 
 function onChangeInput(e) {
@@ -48,7 +48,7 @@ function onChangeInput(e) {
 
 <template>
   <section
-    class="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800"
+    class="min-h-screen py-8 flex items-center justify-center bg-white dark:bg-gray-800"
   >
     <Head title="Create item" />
 

@@ -13,7 +13,7 @@ defineProps({
   >
     <Link :href="route('city.show', city)">
       <img
-        :src="`storage/city_images/${city.image}`"
+        :src="`/storage/city_images/${city.image}`"
         alt="City image"
         class="w-full h-full object-cover rounded-sm"
       />

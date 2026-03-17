@@ -4,8 +4,9 @@ import BarsIcon from "../Icons/BarsIcon.vue";
 import DropdownLink from "../Global/DropdownLink.vue";
 import { useDark, useToggle } from "@vueuse/core";
 import { useDashboardStore } from "@/Stores/DashboardStore";
+import { Link } from "@inertiajs/vue3";
 
-const isDark = useDark();
+const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
 const dashboard = useDashboardStore();
 </script>
@@ -36,7 +37,8 @@ const dashboard = useDashboardStore();
           >
             <button
               @click="
-                dashboard.openDashboardUserMenu = !dashboard.openDashboardUserMenu
+                dashboard.openDashboardUserMenu =
+                  !dashboard.openDashboardUserMenu
               "
               type="button"
               class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -45,8 +47,8 @@ const dashboard = useDashboardStore();
                 class="w-8 h-8 p-1 rounded-full bg-gray-50 dark:bg-gray-600"
                 :src="
                   $page.props.auth.user.image
-                    ? `storage/${$page.props.auth.user.image}`
-                    : 'storage/user_image/default.png'
+                    ? `/storage/${$page.props.auth.user.image}`
+                    : '/storage/default.png'
                 "
                 alt="user photo"
               />

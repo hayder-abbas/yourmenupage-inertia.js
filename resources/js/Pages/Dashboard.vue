@@ -6,6 +6,7 @@ import CloseIcon from "@/Components/Icons/CloseIcon.vue";
 import { onUnmounted, provide } from "vue";
 import { useDashboardStore } from "@/Stores/DashboardStore";
 import { useAppStore } from "@/Stores/AppStore";
+import { Head } from "@inertiajs/vue3";
 
 const app = useAppStore();
 const dashboard = useDashboardStore();

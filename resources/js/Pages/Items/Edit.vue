@@ -7,7 +7,7 @@ import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
-import { useForm } from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineEmits(["change"]);
@@ -27,7 +27,7 @@ const props = defineProps({
 });
 
 const item = props.item.data;
-const src = ref(`../../storage/${item.image}`);
+const src = ref(`/storage/${item.image}`);
 
 const form = useForm({
   restaurant_id: item.restaurant.id,
@@ -44,14 +44,14 @@ watch(
   () => form.restaurant_id,
   (newValue) => {
     form.restaurant_id = newValue;
-  }
+  },
 );
 
 watch(
   () => form.category_id,
   (newValue) => {
     form.category_id = newValue;
-  }
+  },
 );
 
 function onChangeInput(e) {
@@ -63,7 +63,7 @@ function onChangeInput(e) {
 
 <template>
   <section
-    class="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900"
+    class="min-h-screen py-8 flex items-center justify-center bg-white dark:bg-gray-900"
   >
     <Head title="Edit Item" />
 

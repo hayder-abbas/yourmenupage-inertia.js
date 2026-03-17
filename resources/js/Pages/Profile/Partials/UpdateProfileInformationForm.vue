@@ -4,7 +4,7 @@ import InputError from "@/Components/Ui/InputError.vue";
 import InputLabel from "@/Components/Ui/InputLabel.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -23,8 +23,8 @@ const form = useForm({
   _method: "patch",
 });
 let src = user.image
-  ? ref(`storage/${user.image}`)
-  : ref(`storage/user_image/default.png`);
+  ? ref(`/storage/${user.image}`)
+  : ref(`/storage/default.png`);
 
 function onChangeInput(e) {
   form.image = e.target.files[0];

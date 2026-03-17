@@ -6,10 +6,10 @@ import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
   restaurant: {
     type: Object,
     required: true,
@@ -28,7 +28,9 @@ const form = useForm({
   previewLogo: null,
   _method: "Patch",
 });
-let src = ref(`../../storage/${user.logo}`);
+let src = ref(
+  `/storage/${props.restaurant.data.logo ?? "/storage/default.png"}`,
+);
 
 function onChangeInput(e) {
   form.logo = e.target.files[0];
@@ -39,7 +41,7 @@ function onChangeInput(e) {
 
 <template>
   <section
-    class="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800"
+    class="min-h-screen py-8 flex items-center justify-center bg-white dark:bg-gray-800"
   >
     <Head title="Edit Restaurant" />
 

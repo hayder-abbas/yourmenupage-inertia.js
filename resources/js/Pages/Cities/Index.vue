@@ -1,11 +1,18 @@
-<script setup lang="ts">
+<script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CardCity from "@/Components/Global/CardCity.vue";
+import { useAppStore } from "@/Stores/AppStore";
+import { onUnmounted } from "vue";
 
 defineOptions({ layout: AppLayout });
-defineProps<{
-  cities: any;
-}>();
+defineProps({
+  cities: Object,
+});
+
+const app = useAppStore();
+onUnmounted(() => {
+  app.openUserMenu = false;
+});
 </script>
 
 <template>
