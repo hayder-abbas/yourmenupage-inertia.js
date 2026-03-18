@@ -81,14 +81,6 @@ onUnmounted(() => {
               About
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              :href="route('contact')"
-              :active="route().current('contact')"
-            >
-              Contact
-            </NavLink>
-          </li>
         </ul>
       </div>
     </div>

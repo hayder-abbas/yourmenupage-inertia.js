@@ -13,7 +13,7 @@ import AppFooter from "@/Components/Global/AppFooter.vue";
     </header>
 
     <!-- Page Content -->
-    <main class="min-h-screen dark:bg-slate-800">
+    <main class="min-h-screen">
       <slot />
     </main>
 

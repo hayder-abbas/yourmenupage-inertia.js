@@ -2,7 +2,7 @@
 import SearchIcon from "../Icons/SearchIcon.vue";
 import { ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
-import { router } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
   restaurants: Object,
@@ -19,13 +19,13 @@ watch(
       router.get(
         "/",
         { search: value },
-        { preserveState: true, preserveScroll: true, replace: true }
+        { preserveState: true, preserveScroll: true, replace: true },
       );
       searchList.value = true;
     } else {
       searchList.value = false;
     }
-  }, 500)
+  }, 500),
 );
 </script>
 
@@ -46,7 +46,10 @@ watch(
         />
       </div>
 
-      <div v-if="searchList" class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-14 left-0 w-full">
+      <div
+        v-if="searchList"
+        class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-14 left-0 w-full"
+      >
         <Link
           v-for="restaurant in restaurants.data"
           :key="restaurant.id"

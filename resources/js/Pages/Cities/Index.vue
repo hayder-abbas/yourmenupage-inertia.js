@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import CardCity from "@/Components/Global/CardCity.vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { onUnmounted } from "vue";
+import { Head } from "@inertiajs/vue3";
 
 defineOptions({ layout: AppLayout });
 defineProps({
@@ -16,7 +17,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-0">
+  <div class="md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto p-4 md:px-0">
     <Head title="Cities" />
 
     <h1 class="py-8 font-extrabold text-4xl dark:text-white">Popular cities</h1>

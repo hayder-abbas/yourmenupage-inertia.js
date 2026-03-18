@@ -12,8 +12,8 @@ defineProps({
       <img :src="img" alt="Icon" loading="lazy" class="w-20 object-cover" />
     </div>
     <div class="p-2 ml-4 lg:ml-0 lg:text-center">
-      <h3 class="font-extrabold text-lg">{{ title }}</h3>
-      <p class="font-thin text-slate-700 text-sm">
+      <h3 class="font-extrabold text-lg dark:text-white">{{ title }}</h3>
+      <p class="font-thin text-slate-700 text-sm dark:text-white">
         {{ desc }}
       </p>
     </div>

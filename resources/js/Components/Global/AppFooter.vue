@@ -1,30 +1,33 @@
-<script setup lang="ts">
-import AppLogo from "./AppLogo.vue";
+<script setup>
+import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-  <footer class="bg-white shadow dark:bg-gray-900">
+  <footer class="shadow bg-slate-900">
     <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
       <div class="sm:flex sm:items-center sm:justify-between">
-        <!-- Logo -->
-        <div class="mb-4 sm:m-0">
-          <AppLogo />
+        <div
+          class="mb-4 sm:m-0 font-bold italic text-2xl sm:text-3xl text-gray-50"
+        >
+          YourMenuPage
         </div>
 
         <ul
           class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
         >
           <li>
-            <a href="#" class="hover:underline me-4 md:me-6">About</a>
+            <Link href="#" class="hover:underline me-4 md:me-6">About</Link>
           </li>
           <li>
-            <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+            <Link href="#" class="hover:underline me-4 md:me-6">
+              Privacy Policy
+            </Link>
           </li>
           <li>
-            <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+            <Link href="#" class="hover:underline me-4 md:me-6">Licensing</Link>
           </li>
           <li>
-            <a href="#" class="hover:underline">Contact</a>
+            <Link href="#" class="hover:underline">Contact</Link>
           </li>
         </ul>
       </div>

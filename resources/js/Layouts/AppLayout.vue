@@ -6,7 +6,7 @@ import AppFooter from "@/Components/Global/AppFooter.vue";
 <template>
   <div>
     <!-- Page Heading -->
-    <header class="dark:bg-gray-700">
+    <header>
       <div
         class="max-w-3xl md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-0"
       >
@@ -15,7 +15,7 @@ import AppFooter from "@/Components/Global/AppFooter.vue";
     </header>
 
     <!-- Page Content -->
-    <main class="min-h-screen dark:bg-gray-700">
+    <main class="min-h-screen">
       <slot />
     </main>
 

@@ -1,13 +1,12 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+</script>
+
 <template>
   <Link
     href="/"
     class="flex items-center space-x-3 cursor-pointer rounded-full rtl:space-x-reverse"
   >
-    <!-- <img
-      src="https://flowbite.com/docs/images/logo.svg"
-      class="h-8 w-8 hidden sm:block rounded-full"
-      alt="Flowbite Logo"
-    /> -->
     <span
       class="font-bold italic"
       :class="

@@ -2,6 +2,7 @@
 import AppHero from "@/Components/Global/AppHero.vue";
 import Card from "@/Components/Ui/Card.vue";
 import HomeLayout from "@/Layouts/HomeLayout.vue";
+import { Head } from "@inertiajs/vue3";
 import { provide } from "vue";
 
 defineOptions({ layout: HomeLayout });
@@ -30,7 +31,7 @@ provide("canLogin", props.canLogin);
 
   <!-- How it works -->
   <section
-    class="md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 mb-8 md:px-0 dark:text-white"
+    class="md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 mb-8 md:px-0 lg:py-8"
   >
     <h1 class="py-8 font-extrabold text-4xl dark:text-white">How it works</h1>
 
