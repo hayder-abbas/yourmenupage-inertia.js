@@ -27,6 +27,7 @@ onUnmounted(() => {
     <div class="relative flex flex-wrap items-center justify-between">
       <!-- LOGO -->
       <AppLogo />
+
       <div
         class="flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse"
       >
@@ -49,8 +50,10 @@ onUnmounted(() => {
           <HamburgerIcon class="w-5 h-5" />
         </button>
       </div>
+
+      <!-- Links -->
       <div
-        class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1"
+        class="items-center justify-end flex-grow mr-5 w-full lg:flex lg:w-auto lg:order-1"
         :class="{
           hidden: !app.openHamburgerMenu,
           'absolute top-10 lg:relative lg:top-0': $page.component === 'Home',
