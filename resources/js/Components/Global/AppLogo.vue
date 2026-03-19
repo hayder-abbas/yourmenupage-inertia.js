@@ -8,7 +8,7 @@ import { Link } from "@inertiajs/vue3";
     class="flex items-center space-x-3 cursor-pointer rounded-full rtl:space-x-reverse"
   >
     <span
-      class="font-extrabold italic text-2xl"
+      class="font-extrabold italic text-3xl"
       :class="
         $page.component === 'Home'
           ? 'text-white'
