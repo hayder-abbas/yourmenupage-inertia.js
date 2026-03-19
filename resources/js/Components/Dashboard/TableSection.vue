@@ -46,7 +46,7 @@ watch(
       preserveState: true,
       replace: true,
     });
-  }, 300)
+  }, 300),
 );
 
 function openActionsRecord(item) {
@@ -140,13 +140,13 @@ function openActionsRecord(item) {
           <tbody class="w-full">
             <tr
               v-if="items.data.length > 0"
-              v-for="item in items.data"
-              :key="item.id"
+              v-for="(item, index) in items.data"
+              :key="index"
               @click="openActionsRecord(item)"
               class="w-full grid grid-cols-5 border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100"
             >
               <th class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                {{ item.id }}
+                {{ index + 1 }}
               </th>
               <td class="px-4 py-3">
                 {{ item.title }}
@@ -161,10 +161,11 @@ function openActionsRecord(item) {
                 {{ item.restaurant.name }}
               </td>
             </tr>
-            <tr v-else class="w-full border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100">
-              <th class="px-4 py-3 text-center">
-                Table is empty!
-              </th>
+            <tr
+              v-else
+              class="w-full border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100"
+            >
+              <th class="px-4 py-3 text-center">Table is empty!</th>
             </tr>
           </tbody>
         </table>
