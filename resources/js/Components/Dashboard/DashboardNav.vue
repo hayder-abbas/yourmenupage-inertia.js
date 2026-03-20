@@ -25,14 +25,16 @@ const dashboard = useDashboardStore();
           class="h-7 w-7 text-gray-900 dark:text-gray-50 cursor-pointer"
         />
       </div>
-      <div
-        class="flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse"
-      >
+      <div class="flex items-center gap-4 lg:order-2">
         <!-- Dark mode button -->
-        <DarkModeButton @click="toggleDark()" :isDark="isDark" />
+        <DarkModeButton
+          @click="toggleDark()"
+          :isDark="isDark"
+          class="text-gray-900 dark:text-white"
+        />
+
         <div class="flex justify-end">
           <div
-            v-if="$page.props.auth.user"
             class="relative flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse"
           >
             <button
@@ -51,6 +53,7 @@ const dashboard = useDashboardStore();
                     : '/storage/default.png'
                 "
                 alt="user photo"
+                loading="lazy"
               />
             </button>
             <!-- Dropdown menu -->
@@ -59,14 +62,14 @@ const dashboard = useDashboardStore();
               :class="{ hidden: !dashboard.openDashboardUserMenu }"
             >
               <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white">
-                  {{ $page.props.auth.user.name }}
-                </span>
-                <span
+                <div
+                  v-text="$page.props.auth.user.name"
+                  class="block text-sm text-gray-900 dark:text-white"
+                ></div>
+                <div
+                  v-text="$page.props.auth.user.email"
                   class="block text-sm text-gray-500 truncate dark:text-gray-400"
-                >
-                  {{ $page.props.auth.user.email }}
-                </span>
+                ></div>
               </div>
               <ul class="py-2">
                 <li>
@@ -85,14 +88,6 @@ const dashboard = useDashboardStore();
                 </li>
               </ul>
             </div>
-          </div>
-          <div v-else>
-            <Link
-              :href="route('login')"
-              class="rounded-md text-black text-xl ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-            >
-              Log in
-            </Link>
           </div>
         </div>
       </div>

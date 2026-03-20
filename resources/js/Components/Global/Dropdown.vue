@@ -2,7 +2,6 @@
 import DropdownLink from "./DropdownLink.vue";
 import { onUnmounted } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
-import { Link } from "@inertiajs/vue3";
 
 const app = useAppStore();
 onUnmounted(() => {
@@ -28,6 +27,7 @@ onUnmounted(() => {
               : '/storage/default.png'
           "
           alt="user photo"
+          loading="lazy"
         />
       </button>
       <!-- Dropdown menu -->
@@ -36,12 +36,14 @@ onUnmounted(() => {
         :class="{ hidden: !app.openUserMenu }"
       >
         <div class="px-4 py-3">
-          <span class="block text-sm text-gray-900 dark:text-white">
-            {{ $page.props.auth.user.name }}
-          </span>
-          <span class="block text-sm text-gray-500 truncate dark:text-gray-400">
-            {{ $page.props.auth.user.email }}
-          </span>
+          <div
+            v-text="$page.props.auth.user.name"
+            class="block text-sm text-gray-900 dark:text-white"
+          ></div>
+          <div
+            v-text="$page.props.auth.user.email"
+            class="block text-sm text-gray-500 truncate dark:text-gray-400"
+          ></div>
         </div>
         <ul class="py-2">
           <li>
@@ -57,15 +59,6 @@ onUnmounted(() => {
           </li>
         </ul>
       </div>
-    </div>
-    <div v-else>
-      <Link
-        :href="route('login')"
-        class="text-xl font-bold dark:text-gray-50 hover:text-blue-500 dark:hover:text-blue-500"
-        :class="$page.component === 'Home' ? 'text-gray-50' : 'text-gray-900'"
-      >
-        Log in
-      </Link>
     </div>
   </div>
 </template>
