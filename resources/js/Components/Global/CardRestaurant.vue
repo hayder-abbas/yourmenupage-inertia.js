@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
   restaurant: {
     type: Object,
@@ -14,28 +16,28 @@ defineProps({
   >
     <img
       :src="`../storage/${restaurant.logo}`"
-      alt="Restaurant Logo"
+      :alt="restaurant.name"
       class="w-[6rem] h-auto rounded-bl-md rounded-tl-md"
+      loading="lazy"
     />
 
     <div class="flex flex-col sm:grow p-5">
       <!-- Name -->
-      <h3
+      <div
+        v-text="restaurant.name"
         class="text-xl font-medium mb-3 text-blue-500 hover:underline overflow-hidden"
-      >
-        #{{ restaurant.name }}
-      </h3>
+      ></div>
       <!-- Location -->
-      <p class="text-sm mb-3 min-h-[2rem] overflow-hidden">
-        {{ restaurant.location }}
-      </p>
+      <div
+        v-text="restaurant.location"
+        class="text-sm mb-3 min-h-[2rem] overflow-hidden"
+      ></div>
       <!-- Phone -->
-      <p class="text-sm overflow-hidden">
-        {{ restaurant.phone }}
-      </p>
+      <div v-text="restaurant.phone" class="text-sm overflow-hidden"></div>
     </div>
     <div class="p-5 sm:flex items-end hidden">
       <button
+        type="button"
         class="py-2 px-4 rounded-md border border-gray-300 hover:bg-blue-500 hover:text-white hover:border-none"
       >
         Show Menu

@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CardItem from "@/Components/Global/CardItem.vue";
+import { Head } from "@inertiajs/vue3";
 
 defineOptions({ layout: AppLayout });
 defineProps({
@@ -14,13 +15,13 @@ defineProps({
     <Head title="Restaurant Menu" />
 
     <section
-      class="antialiased px-4 mb-8 lg:px-0 mx-auto w-full md:max-w-2xl lg:max-w-4xl xl:max-w-5xl bg-white dark:bg-gray-700"
+      class="antialiased px-4 mb-8 lg:px-0 mx-auto w-full md:max-w-2xl lg:max-w-4xl xl:max-w-5xl"
     >
       <div class="mx-auto px-4 py-8 md:px-0">
-        <h1 class="font-semibold dark:text-gray-50">
-          <span class="text-2xl text-gray-900 leading-tight">
-            {{ restaurant?.name }} Menu
-          </span>
+        <h1
+          class="font-extrabold dark:text-gray-50 text-4xl text-gray-900 leading-tight"
+        >
+          {{ restaurant?.name }} Menu
         </h1>
       </div>
 

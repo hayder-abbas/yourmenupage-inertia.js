@@ -6,7 +6,7 @@ import DeleteConfirmation from "@/Components/Ui/DeleteConfirmation.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import { useAppStore } from "@/Stores/AppStore";
-import { usePage } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -19,7 +19,7 @@ const props = defineProps({
 const app = useAppStore();
 const isAuth = ref(
   usePage().props.auth.user &&
-    usePage().props.auth.user.id === props.item.data.user.id
+    usePage().props.auth.user.id === props.item.data.user.id,
 );
 </script>
 
@@ -33,11 +33,12 @@ const isAuth = ref(
       <section
         class="w-full rounded-lg sm:grid grid-flow-row-dense grid-cols-3"
       >
-        <div class="w-full">
+        <div class="w-full shadow-xl">
           <img
             :src="`../storage/${item.data.image}`"
-            alt="Item Image"
+            :alt="item.data.title"
             class="h-80 w-96 sm:h-96 md:h-full md:rounded-lg object-cover"
+            loading="lazy"
           />
         </div>
 
@@ -47,12 +48,12 @@ const isAuth = ref(
           >
             {{ item.data.title }}
           </h2>
-          <p
+          <div
             class="mb-4 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
           >
             {{ item.data.price }}
             <span class="text-sm text-gray-500 dark:text-gray-400">dinar</span>
-          </p>
+          </div>
           <dl>
             <dd
               class="mb-4 font-semibold text-gray-500 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent sm:mb-5 dark:text-gray-400"

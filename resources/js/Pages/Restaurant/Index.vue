@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CardRestaurant from "@/Components/Global/CardRestaurant.vue";
+import { Head } from "@inertiajs/vue3";
 
 defineOptions({ layout: AppLayout });
 defineProps({
@@ -22,7 +23,7 @@ defineProps({
     <Head title="Restaurants" />
 
     <div class="py-6 text-gray-900 dark:text-gray-50">
-      <p>Restaurant menus in</p>
+      <div>Restaurant menus in</div>
       <h1
         class="text-gray-900 text-4xl font-bold dark:text-gray-50"
         v-text="city.name"
