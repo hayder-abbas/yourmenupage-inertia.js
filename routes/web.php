@@ -4,14 +4,13 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
-use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
-use App\Models\Category;
 use App\Models\Item;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,7 +24,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/dashboard', function (Request $request) {
     $query = Item::query();
     $request->validate([
-      'field' => ['in:id,title,category,price,restaurant_id'],
+      'field' => ['in:id,title,category,price,restaurant'],
       'direction' => ['in:asc,desc']
     ]);
 
@@ -38,16 +37,17 @@ Route::middleware('auth')->group(function () {
     }
 
     return Inertia::render('Dashboard', [
-      'restaurants' => RestaurantResource::collection(
-        Restaurant::where('user_id', Auth::id())->get()
-      ),
+      'restaurants' => DB::table('restaurants')
+        ->where('user_id', Auth::id())
+        ->select('id', 'name')
+        ->get(),
+
       'items' => ItemResource::collection(
         $query->where('user_id', Auth::id())->paginate(10)
       ),
+
       'filters' => $request->all(['search', 'field', 'direction']),
-      'categories' => CategoryResource::collection(
-        Category::all()
-      )
+
     ]);
   })->name('dashboard');
 
@@ -74,19 +74,14 @@ Route::get('/', function (Request $request) {
   ]);
 })->name('home');
 
-
 Route::get('/cities', [CityController::class, 'index'])->name('cities');
 Route::get('/cities/{city}', [CityController::class, 'show'])->name('city.show');
-
 
 Route::get('/restaurants/{restaurant}', [RestaurantController::class, 'show'])
   ->name('restaurant.show');
 
-
 Route::get('items/{item}', [ItemController::class, 'show'])->name('item.show');
 
-
 Route::inertia('/about', 'About')->name('about');
-Route::inertia('/contact', 'Contact')->name('contact');
 
 require __DIR__ . '/auth.php';

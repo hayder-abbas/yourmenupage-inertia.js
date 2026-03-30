@@ -13,13 +13,12 @@ import { useDashboardStore } from "@/Stores/DashboardStore";
 
 const props = defineProps({
   items: Object,
-  restaurants: Object,
-  categories: Object,
   filters: Object,
 });
 
 const dashboard = useDashboardStore();
 const itemClicked = ref(null);
+
 let params = reactive({
   search: props.filters.search,
   field: props.filters.field ?? "id",
@@ -128,7 +127,7 @@ function openActionsRecord(item) {
                 <SortIcon class="hidden sm:block" />
               </th>
               <th
-                @click="sort('restaurant_id')"
+                @click="sort('restaurant')"
                 class="px-4 py-3 flex justify-between items-center"
               >
                 <span>Restaurant</span>
