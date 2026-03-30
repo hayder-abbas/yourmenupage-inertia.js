@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useDashboardStore = defineStore(
-  "dashboard",
+  "dashboardStore",
   () => {
     const openDashboardSidebar = ref(false);
     const openDashboardUserMenu = ref(false);
@@ -17,6 +17,6 @@ export const useDashboardStore = defineStore(
       openFilterButton,
       openRecordDropdown,
     };
-  }
-  // {persist: true}  it's not work with ssr
+  },
+  { persist: true },
 );
