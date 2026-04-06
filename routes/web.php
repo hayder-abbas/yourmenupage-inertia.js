@@ -8,10 +8,12 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Item;
 use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 
@@ -56,8 +58,13 @@ Route::middleware('auth')->group(function () {
   Route::resource('restaurants', RestaurantController::class);
 
   Route::resource('items', ItemController::class);
-  Route::post('/items/resetImage/{item}', [ItemController::class, 'resetImage'])
-    ->name('items.resetImage');
+
+  Route::post('/resetprofileimage', function () {
+    $getUser = User::findOrFail(Auth::id());
+    User::where('id', Auth::id())->update(['image' => '']);
+    Storage::disk('public')->delete($getUser['image']);
+    return to_route('profile.edit');
+  })->name('reset.profile.image');
 });
 
 Route::get('/', function (Request $request) {

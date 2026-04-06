@@ -6,13 +6,12 @@ import { router, useForm } from "@inertiajs/vue3";
 const props = defineProps({
   src: String,
   alt: String,
-  resetRoute: String,
 });
 
 const form = useForm({});
 
-function resetInput() {
-  form.post(route(props.resetRoute), {
+function resetProfileImage() {
+  form.post(route("reset.profile.image"), {
     onSuccess: () => router.reload(),
   });
 }
@@ -40,12 +39,12 @@ function resetInput() {
       hidden
     />
 
-    <div
+    <button
       v-if="$page.component === 'Profile/Edit'"
-      @click.prevent="resetInput"
+      @click.prevent="resetProfileImage"
       class="absolute bottom-3 left-[6.3em] z-20 p-1 bg-gray-300 hover:bg-gray-400 rounded-full cursor-pointer"
     >
       <TrashIcon class="text-red-500 w-5 h-5" />
-    </div>
+    </button>
   </label>
 </template>

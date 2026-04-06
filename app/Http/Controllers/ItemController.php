@@ -90,12 +90,4 @@ class ItemController extends Controller
     $item->delete();
     return to_route('dashboard');
   }
-
-
-  public function resetImage(Item $item)
-  {
-    $getItem = Item::findOrFail($item->id);
-    Item::where('id', $item->id)->update(['image' => '']);
-    Storage::disk('public')->delete($getItem['image']);
-  }
 }

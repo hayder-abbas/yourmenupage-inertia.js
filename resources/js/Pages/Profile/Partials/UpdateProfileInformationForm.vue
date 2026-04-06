@@ -53,7 +53,6 @@ function onChangeInput(e) {
         <ImageInput
           @change="onChangeInput($event)"
           :src="src"
-          resetRoute="profile.resetImage"
           alt="User Image"
         />
         <InputError class="mt-2" :message="form.errors.image" />
