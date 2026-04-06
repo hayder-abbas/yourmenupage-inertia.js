@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
-use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
-use App\Http\Resources\RestaurantResource;
-use App\Models\Category;
-use App\Models\Restaurant;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -25,12 +22,8 @@ class ItemController extends Controller
   public function create()
   {
     return Inertia::render('Items/Create', [
-      'restaurants' => RestaurantResource::collection(
-        Restaurant::where('user_id', Auth::id())->get()
-      ),
-      'categories' => CategoryResource::collection(
-        Category::all()
-      )
+      'restaurants' => DB::table('restaurants')->where('user_id', Auth::id())->get(["id", "name"]),
+      'categories' => DB::table('categories')->get(["id", "name"]),
     ]);
   }
 
@@ -46,6 +39,7 @@ class ItemController extends Controller
     Item::create($fields);
     return to_route('dashboard');
   }
+
 
   public function show(Item $item)
   {
@@ -63,12 +57,8 @@ class ItemController extends Controller
       'item' => new ItemResource(
         Item::findOrFail($item->id)
       ),
-      'restaurants' => RestaurantResource::collection(
-        Restaurant::where('user_id', Auth::id())->get()
-      ),
-      'categories' => CategoryResource::collection(
-        Category::all()
-      )
+      'restaurants' => DB::table('restaurants')->where('user_id', Auth::id())->get(["id", "name"]),
+      'categories' => DB::table('categories')->get(["id", "name"]),
     ]);
   }
 

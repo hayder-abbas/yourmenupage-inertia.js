@@ -43,7 +43,9 @@ Route::middleware('auth')->group(function () {
         ->get(),
 
       'items' => ItemResource::collection(
-        $query->where('user_id', Auth::id())->paginate(10)
+        Item::query()
+          ->where('user_id', Auth::id())
+          ->paginate(10)
       ),
 
       'filters' => $request->all(['search', 'field', 'direction']),
@@ -54,7 +56,7 @@ Route::middleware('auth')->group(function () {
   Route::resource('restaurants', RestaurantController::class);
 
   Route::resource('items', ItemController::class);
-  Route::post('/items/{item}', [ItemController::class, 'resetImage'])
+  Route::post('/items/resetImage/{item}', [ItemController::class, 'resetImage'])
     ->name('items.resetImage');
 });
 
@@ -62,14 +64,11 @@ Route::get('/', function (Request $request) {
   return Inertia::render('Home', [
     'canLogin' => Route::has('login'),
     'canRegister' => Route::has('register'),
-    'restaurants' => RestaurantResource::collection(
-      Restaurant::query()
-        ->where('id', '>', 0)
-        ->when($request->input('search'), function ($query, $search) {
-          $query->where('name', 'like', "%{$search}%");
-        })
-        ->paginate(5)
-    ),
+    'restaurants' => Restaurant::query()
+      ->where('id', '>', 0)
+      ->when($request->input('search'), function ($query, $search) {
+        $query->where('name', 'like', "{$search}%");
+      })->get(['id', 'name', 'location']),
     'filters' => $request->only(['search']),
   ]);
 })->name('home');

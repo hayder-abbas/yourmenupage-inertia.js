@@ -11,7 +11,7 @@ import { Head, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineEmits(["change"]);
-defineProps({ restaurants: Object, categories: Object });
+defineProps({ restaurants: Array, categories: Array });
 
 const form = useForm({
   restaurant_id: "",
@@ -98,7 +98,7 @@ function onChangeInput(e) {
             <InputLabel value="Category" for="category" />
             <SelectInput v-model="form.category_id" id="category" required>
               <option
-                v-for="c in categories.data"
+                v-for="c in categories"
                 :key="c.id"
                 :value="c.id"
                 v-text="c.name"
@@ -111,7 +111,7 @@ function onChangeInput(e) {
             <InputLabel value="Restaurants" for="restaurant" />
             <SelectInput v-model="form.restaurant_id" id="restaurant" required>
               <option
-                v-for="r in restaurants.data"
+                v-for="r in restaurants"
                 :key="r.id"
                 :value="r.id"
                 v-text="r.name"

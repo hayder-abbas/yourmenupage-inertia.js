@@ -6,20 +6,17 @@ import DeleteConfirmation from "@/Components/Ui/DeleteConfirmation.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import { useAppStore } from "@/Stores/AppStore";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
-  item: {
-    type: Object,
-    required: true,
-  },
+  item: Object,
 });
 
 const app = useAppStore();
+const page = usePage();
 const isAuth = ref(
-  usePage().props.auth.user &&
-    usePage().props.auth.user.id === props.item.data.user.id,
+  page.props.auth.user && page.props.auth.user.id === props.item.data.userID,
 );
 </script>
 

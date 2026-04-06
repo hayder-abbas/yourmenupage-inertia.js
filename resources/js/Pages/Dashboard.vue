@@ -11,7 +11,7 @@ import { Head } from "@inertiajs/vue3";
 const app = useAppStore();
 const dashboard = useDashboardStore();
 defineProps({
-  restaurants: Object,
+  restaurants: Array,
   items: Object,
   filters: Object,
 });

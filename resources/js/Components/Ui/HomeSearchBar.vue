@@ -51,7 +51,7 @@ watch(
         class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-14 left-0 w-full"
       >
         <Link
-          v-for="restaurant in restaurants.data"
+          v-for="restaurant in restaurants"
           :key="restaurant.id"
           :href="route('restaurant.show', restaurant)"
           class="block p-2 text-left hover:bg-blue-300 dark:hover:bg-gray-500 rounded-sm"

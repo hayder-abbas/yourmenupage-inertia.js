@@ -3,25 +3,14 @@ import AppHero from "@/Components/Global/AppHero.vue";
 import Card from "@/Components/Ui/Card.vue";
 import HomeLayout from "@/Layouts/HomeLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { provide } from "vue";
 
 defineOptions({ layout: HomeLayout });
 const props = defineProps({
-  canLogin: {
-    type: Boolean,
-  },
-  canRegister: {
-    type: Boolean,
-  },
-  restaurants: {
-    type: Object,
-  },
-  filters: {
-    type: Object,
-  },
+  canLogin: Boolean,
+  canRegister: Boolean,
+  restaurants: Object,
+  filters: Object,
 });
-
-provide("canLogin", props.canLogin);
 </script>
 
 <template>
