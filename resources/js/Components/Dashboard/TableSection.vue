@@ -145,7 +145,7 @@ function openActionsRecord(item) {
               class="w-full grid grid-cols-5 border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100"
             >
               <th class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                {{ index + 1 }}
+                {{ item.id }}
               </th>
               <td class="px-4 py-3">
                 {{ item.title }}
