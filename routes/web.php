@@ -5,7 +5,6 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Resources\ItemResource;
-use App\Http\Resources\RestaurantResource;
 use App\Models\Item;
 use App\Models\Restaurant;
 use App\Models\User;
@@ -26,7 +25,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/dashboard', function (Request $request) {
     $query = Item::query();
     $request->validate([
-      'field' => ['in:id,title,category,price,restaurant'],
+      'field' => ['in:id,title,category_id,price,restaurant_id'],
       'direction' => ['in:asc,desc']
     ]);
 
@@ -45,9 +44,7 @@ Route::middleware('auth')->group(function () {
         ->get(),
 
       'items' => ItemResource::collection(
-        Item::query()
-          ->where('user_id', Auth::id())
-          ->paginate(10)
+        $query->where('user_id', Auth::id())->paginate(10)
       ),
 
       'filters' => $request->all(['search', 'field', 'direction']),

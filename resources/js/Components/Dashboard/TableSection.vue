@@ -118,7 +118,7 @@ function openActionsRecord(item) {
                   <SortIcon />
                 </THeader>
 
-                <THeader @click="sort('category')">
+                <THeader @click="sort('category_id')">
                   <span>Category</span>
                   <SortIcon />
                 </THeader>
@@ -128,7 +128,7 @@ function openActionsRecord(item) {
                   <SortIcon />
                 </THeader>
 
-                <THeader @click="sort('restaurant')">
+                <THeader @click="sort('restaurant_id')">
                   <span>Restaurant</span>
                   <SortIcon />
                 </THeader>
