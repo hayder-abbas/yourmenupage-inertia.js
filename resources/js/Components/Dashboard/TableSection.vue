@@ -167,14 +167,22 @@ function openActionsRecord(item) {
 
                 <TData class="hidden lg:flex">
                   <!-- Show Item Button -->
-                  <SecondaryButton type="button" class="w-6 h-8">
+                  <SecondaryButton
+                    type="button"
+                    class="w-6 h-8"
+                    title="View item"
+                  >
                     <Link :href="route('item.show', item)">
                       <EyeIcon class="w-5 h-5" />
                     </Link>
                   </SecondaryButton>
 
                   <!-- Edit Item Button -->
-                  <PrimaryButton type="button" class="w-6 h-8">
+                  <PrimaryButton
+                    type="button"
+                    class="w-6 h-8"
+                    title="Edit item"
+                  >
                     <Link :href="route('items.edit', item)">
                       <EditIcon class="w-5 h-5" />
                     </Link>
@@ -185,6 +193,7 @@ function openActionsRecord(item) {
                     type="button"
                     @click="app.openDeleteConfirmation = true"
                     class="w-6 h-8"
+                    title="Delete item"
                   >
                     <div>
                       <TrashIcon class="w-5 h-5" />
