@@ -1,12 +1,10 @@
 <script setup>
 import { useAppStore } from "@/Stores/AppStore";
 import { useDashboardStore } from "@/Stores/DashboardStore";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({
-  item: {
-    type: Object,
-    required: true,
-  },
+  item: Object,
 });
 
 const app = useAppStore();
@@ -17,7 +15,7 @@ const dashboard = useDashboardStore();
   <div
     @click="dashboard.openRecordDropdown = false"
     :class="{ hidden: !dashboard.openRecordDropdown }"
-    class="absolute top-0 left-0 z-10 h-full w-full flex items-center justify-center bg-transparent"
+    class="absolute top-0 left-0 z-10 h-full w-full lg:hidden flex items-center justify-center bg-transparent"
   >
     <div
       class="w-44 bg-white rounded divide-y divide-gray-100 shadow-xl dark:bg-gray-700 dark:divide-gray-600"

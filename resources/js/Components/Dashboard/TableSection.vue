@@ -1,21 +1,31 @@
 <script setup>
 import DeleteConfirmation from "@/Components/Ui/DeleteConfirmation.vue";
+import PrimaryButton from "../Ui/PrimaryButton.vue";
+import SecondaryButton from "../Ui/SecondaryButton.vue";
+import DangerButton from "../Ui/DangerButton.vue";
 import Pagination from "./Pagination.vue";
 import ActionsButton from "./ActionsButton.vue";
 import SearchBar from "./SearchBar.vue";
 import AddItemButton from "./AddItemButton.vue";
 import SortIcon from "../Icons/SortIcon.vue";
 import RecordDropdown from "./RecordDropdown.vue";
+import EyeIcon from "../Icons/EyeIcon.vue";
+import EditIcon from "../Icons/EditIcon.vue";
+import TrashIcon from "../Icons/TrashIcon.vue";
+import TData from "../Table/TData.vue";
+import THeader from "../Table/THeader.vue";
 import { reactive, ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import { useDebounceFn } from "@vueuse/core";
 import { useDashboardStore } from "@/Stores/DashboardStore";
+import { useAppStore } from "@/Stores/AppStore";
 
 const props = defineProps({
   items: Object,
   filters: Object,
 });
 
+const app = useAppStore();
 const dashboard = useDashboardStore();
 const itemClicked = ref(null);
 
@@ -62,26 +72,24 @@ function openActionsRecord(item) {
 </script>
 
 <template>
-  <section
-    class="bg-gray-50 dark:bg-gray-900 p-3 mt-5 sm:p-0 sm:rounded-lg mx-auto"
-  >
+  <section class="bg-gray-50 dark:bg-gray-800 p-4 sm:p-0 sm:rounded-lg mx-auto">
     <div class="mx-auto w-full">
       <!-- Start coding here -->
-      <div
-        class="bg-white dark:bg-gray-800 relative sm:rounded-lg overflow-hidden"
-      >
+      <div class="bg-white dark:bg-gray-800 relative sm:rounded-lg">
         <div
           class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
         >
           <!-- Search -->
           <SearchBar v-model="params.search" />
+
           <div
             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
           >
             <!-- Add Item Button -->
             <AddItemButton />
+
+            <!-- Actions Button -->
             <div class="flex items-center space-x-3 w-full md:w-auto">
-              <!-- Actions Button -->
               <ActionsButton
                 @click="
                   dashboard.openActionButton = !dashboard.openActionButton
@@ -90,84 +98,109 @@ function openActionsRecord(item) {
             </div>
           </div>
         </div>
-        <!-- Start Table -->
-        <table
-          class="relative w-full min-h-[9rem] text-sm text-left text-gray-500 dark:text-gray-400"
-        >
-          <thead
-            class="w-full text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-          >
-            <tr class="grid grid-cols-5 items-center w-full">
-              <th
-                @click="sort('id')"
-                class="px-4 py-3 flex justify-between items-center"
-              >
-                <span>#ID</span>
-                <SortIcon class="hidden sm:block" />
-              </th>
-              <th
-                @click="sort('title')"
-                class="px-4 py-3 flex justify-between items-center"
-              >
-                <span>Title</span>
-                <SortIcon class="hidden sm:block" />
-              </th>
-              <th
-                @click="sort('category')"
-                class="px-4 py-3 flex justify-between items-center"
-              >
-                <span>Category</span>
-                <SortIcon class="hidden sm:block" />
-              </th>
-              <th
-                @click="sort('price')"
-                class="px-4 py-3 flex justify-between items-center"
-              >
-                <span>Price</span>
-                <SortIcon class="hidden sm:block" />
-              </th>
-              <th
-                @click="sort('restaurant')"
-                class="px-4 py-3 flex justify-between items-center"
-              >
-                <span>Restaurant</span>
-                <SortIcon class="hidden sm:block" />
-              </th>
-            </tr>
-          </thead>
 
-          <tbody class="w-full">
-            <tr
-              v-if="items.data.length > 0"
-              v-for="(item, index) in items.data"
-              :key="index"
-              @click="openActionsRecord(item)"
-              class="w-full grid grid-cols-5 border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100"
+        <!-- Start Table -->
+        <div class="w-full overflow-scroll">
+          <table
+            class="relative w-[56rem] lg:w-full min-h-36 text-gray-500 dark:text-gray-400"
+          >
+            <thead
+              class="w-full text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
-              <th class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                {{ item.id }}
-              </th>
-              <td class="px-4 py-3">
-                {{ item.title }}
-              </td>
-              <td class="px-4 py-3">
-                {{ item.category.name }}
-              </td>
-              <td class="px-4 py-3">
-                {{ item.price }}
-              </td>
-              <td class="px-4 py-3">
-                {{ item.restaurant.name }}
-              </td>
-            </tr>
-            <tr
-              v-else
-              class="w-full border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100"
-            >
-              <th class="px-4 py-3 text-center">Table is empty!</th>
-            </tr>
-          </tbody>
-        </table>
+              <tr class="flex justify-between items-center">
+                <THeader @click="sort('id')" class="flex-none">
+                  <span>#ID</span>
+                  <SortIcon />
+                </THeader>
+
+                <THeader @click="sort('title')">
+                  <span>Title</span>
+                  <SortIcon />
+                </THeader>
+
+                <THeader @click="sort('category')">
+                  <span>Category</span>
+                  <SortIcon />
+                </THeader>
+
+                <THeader @click="sort('price')">
+                  <span>Price</span>
+                  <SortIcon />
+                </THeader>
+
+                <THeader @click="sort('restaurant')">
+                  <span>Restaurant</span>
+                  <SortIcon />
+                </THeader>
+
+                <THeader class="hidden lg:flex"> Action </THeader>
+              </tr>
+            </thead>
+
+            <tbody class="w-full">
+              <tr
+                v-if="items.data.length > 0"
+                v-for="(item, index) in items.data"
+                :key="index"
+                @click="openActionsRecord(item)"
+                class="w-full flex justify-between items-center border-b dark:border-gray-700 dark:hover:bg-gray-900 hover:bg-gray-100"
+              >
+                <THeader class="flex-none w-20">
+                  {{ item.id }}
+                </THeader>
+
+                <TData>
+                  {{ item.title }}
+                </TData>
+
+                <TData>
+                  {{ item.category.name }}
+                </TData>
+
+                <TData>
+                  {{ item.price }}
+                </TData>
+
+                <TData>
+                  {{ item.restaurant.name }}
+                </TData>
+
+                <TData class="hidden lg:flex">
+                  <!-- Show Item Button -->
+                  <SecondaryButton type="button" class="w-6 h-8">
+                    <Link :href="route('item.show', item)">
+                      <EyeIcon class="w-5 h-5" />
+                    </Link>
+                  </SecondaryButton>
+
+                  <!-- Edit Item Button -->
+                  <PrimaryButton type="button" class="w-6 h-8">
+                    <Link :href="route('items.edit', item)">
+                      <EditIcon class="w-5 h-5" />
+                    </Link>
+                  </PrimaryButton>
+
+                  <!-- Delete Item Button -->
+                  <DangerButton
+                    type="button"
+                    @click="app.openDeleteConfirmation = true"
+                    class="w-6 h-8"
+                  >
+                    <div>
+                      <TrashIcon class="w-5 h-5" />
+                    </div>
+                  </DangerButton>
+                </TData>
+              </tr>
+              <tr
+                v-else
+                class="w-full border-b dark:border-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100"
+              >
+                <th class="px-4 py-3 text-center">Table is empty!</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <!-- Record Dropdown -->
         <RecordDropdown v-if="itemClicked" :item="itemClicked" />
 

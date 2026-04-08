@@ -4,7 +4,6 @@ import BarsIcon from "../Icons/BarsIcon.vue";
 import DropdownLink from "../Global/DropdownLink.vue";
 import { useDark, useToggle } from "@vueuse/core";
 import { useDashboardStore } from "@/Stores/DashboardStore";
-import { Link } from "@inertiajs/vue3";
 
 const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
@@ -14,10 +13,10 @@ const dashboard = useDashboardStore();
 <template>
   <nav class="bg-white dark:bg-gray-900">
     <div
-      class="flex flex-wrap items-center justify-between lg:justify-end mx-auto p-4 border border-b-gray-200 border-r-transparent border-l-transparent dark:border-none"
+      class="flex flex-wrap items-center justify-between xl:justify-end mx-auto p-4 border border-b-gray-200 border-r-transparent border-l-transparent dark:border-none"
     >
       <!-- Sidbar button -->
-      <div class="lg:hidden">
+      <div class="xl:hidden">
         <BarsIcon
           @click="
             dashboard.openDashboardSidebar = !dashboard.openDashboardSidebar

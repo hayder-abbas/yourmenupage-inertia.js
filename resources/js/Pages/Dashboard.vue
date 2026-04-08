@@ -27,19 +27,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative flex flex-col lg:flex-row">
+  <div class="relative flex flex-col xl:flex-row">
     <Head title="Dashboard" />
 
     <!-- Main Sidebar -->
-    <SideBar
-      :restaurants="restaurants"
-      class="hidden lg:block lg:basis-1/4 xl:basis-1/5"
-    />
+    <SideBar :restaurants="restaurants" class="hidden xl:block xl:basis-1/5" />
 
     <!-- Floating Sidebar -->
     <SideBar
       :restaurants="restaurants"
-      class="fixed top-0 left-0 z-50 lg:hidden w-64 duration-300"
+      class="fixed top-0 left-0 z-50 xl:hidden w-64 duration-300"
       :class="{ '-translate-x-full': !dashboard.openDashboardSidebar }"
     >
       <template #close_button>
@@ -52,14 +49,12 @@ onUnmounted(() => {
       </template>
     </SideBar>
 
-    <div
-      class="flex flex-col w-full lg:basis-3/4 xl:basis-4/5 bg-gray-50 dark:bg-gray-800"
-    >
+    <div class="flex flex-col w-full xl:basis-4/5 bg-gray-50 dark:bg-gray-800">
       <!-- Navbar -->
       <DashboardNav />
 
       <!-- Content -->
-      <div class="py-4 sm:p-4 h-screen lg:h-auto sm:overflow-auto">
+      <div class="py-4 sm:p-4 h-screen xl:h-auto sm:overflow-auto">
         <!-- Table section -->
         <TableSection :items="items" :filters="filters" />
       </div>
