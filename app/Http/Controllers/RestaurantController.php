@@ -16,12 +16,6 @@ use Inertia\Inertia;
 
 class RestaurantController extends Controller
 {
-  public function index()
-  {
-    //
-  }
-
-
   public function create()
   {
     return Inertia::render("Restaurant/Create", [
