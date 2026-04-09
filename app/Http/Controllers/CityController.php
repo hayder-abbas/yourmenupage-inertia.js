@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CityResource;
-use App\Http\Resources\RestaurantResource;
 use App\Models\City;
 use App\Models\Restaurant;
 use Inertia\Inertia;
@@ -22,11 +21,10 @@ class CityController extends Controller
 
   public function show(City $city)
   {
-    return Inertia::render("Restaurant/Index", [
-      "restaurants" => RestaurantResource::collection(
-        Restaurant::where('city_id', $city->id)->get()
-      ),
-      'city' => $city
+    return Inertia::render('Cities/Show', [
+      'restaurants' => Restaurant::where('city_id', $city->id)
+        ->get(['id', 'name', 'logo', 'location', 'phone']),
+      'cityName' => $city->name
     ]);
   }
 }
