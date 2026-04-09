@@ -13,6 +13,7 @@ defineProps({
 const app = useAppStore();
 onUnmounted(() => {
   app.openUserMenu = false;
+  app.openHamburgerMenu = false;
 });
 </script>
 
