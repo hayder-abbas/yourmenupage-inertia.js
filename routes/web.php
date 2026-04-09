@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     ]);
 
     if ($request->search) {
-      $query->where('title', 'LIKE', "%$request->search%");
+      $query->where('title', 'LIKE', "$request->search%");
     }
 
     if ($request->has(['field', 'direction'])) {
