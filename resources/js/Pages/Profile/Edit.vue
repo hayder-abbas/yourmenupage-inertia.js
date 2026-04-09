@@ -4,11 +4,21 @@ import DeleteUserForm from "./Partials/DeleteUserForm.vue";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
 import { Head } from "@inertiajs/vue3";
+import { useAppStore } from "@/Stores/AppStore";
+import { onUnmounted } from "vue";
 
 defineOptions({ layout: AppLayout });
+
 defineProps({
   mustVerifyEmail: Boolean,
   status: String,
+});
+
+const app = useAppStore();
+
+onUnmounted(() => {
+  app.openUserMenu = false;
+  app.openHamburgerMenu = false;
 });
 </script>
 
