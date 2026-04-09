@@ -5,24 +5,23 @@ import { Head } from "@inertiajs/vue3";
 
 defineOptions({ layout: AppLayout });
 defineProps({
-  items: Object,
-  restaurant: Object,
+  items: Array,
+  restaurantName: String,
 });
 </script>
 
 <template>
   <div>
-    <Head title="Restaurant Menu" />
+    <Head :title="`${restaurantName} Menu`" />
 
     <section
       class="antialiased px-4 mb-8 lg:px-0 mx-auto w-full md:max-w-2xl lg:max-w-4xl xl:max-w-5xl"
     >
       <div class="mx-auto px-4 py-8 md:px-0">
         <h1
+          v-text="restaurantName"
           class="font-extrabold dark:text-gray-50 text-4xl text-gray-900 leading-tight"
-        >
-          {{ restaurant?.name }} Menu
-        </h1>
+        ></h1>
       </div>
 
       <div>
@@ -104,7 +103,7 @@ defineProps({
         </div>
         <div class="mb-4 md:mb-8 grid sm:grid-cols-2 gap-4">
           <!-- Card Item -->
-          <CardItem v-for="item in items?.data" :key="item.id" :item="item" />
+          <CardItem v-for="(item, index) in items" :key="index" :item="item" />
         </div>
         <div class="w-full text-center">
           <button

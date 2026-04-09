@@ -10,6 +10,7 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\City;
 use App\Models\Item;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -41,11 +42,11 @@ class RestaurantController extends Controller
 
   public function show(Restaurant $restaurant)
   {
-    return Inertia::render('Items/Index', [
-      'items' => ItemResource::collection(
-        Item::where('restaurant_id', $restaurant->id)->get()
-      ),
-      'restaurant' => $restaurant,
+    return Inertia::render('Restaurant/Show', [
+      'items' => DB::table('items')
+        ->where('restaurant_id', $restaurant->id)
+        ->get(['id', 'title', 'description', 'price', 'image']),
+      'restaurantName' => $restaurant->name,
     ]);
   }
 
