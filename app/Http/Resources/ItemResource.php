@@ -14,6 +14,7 @@ class ItemResource extends JsonResource
       'restaurant' => RestaurantResource::make($this->whenLoaded('restaurant')),
       'category' => CategoryResource::make($this->whenLoaded('category')),
       'user' => UserResource::make($this->whenLoaded('user')),
+      'userID' => $this->user_id,
       'title' => $this->title,
       'description' => $this->description,
       'price' => $this->price,
