@@ -7,14 +7,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
-  public function toArray(Request $request): array
-  {
-    // return parent::toArray($request);
-    return [
-      'id' => $this->id,
-      'name' => $this->name,
-      'email' => $this->email,
-      'email_verified_at' => $this->email_verified_at
-    ];
-  }
+    public function toArray(Request $request): array
+    {
+        // return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
+    }
 }

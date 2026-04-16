@@ -10,83 +10,94 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\City;
 use App\Models\Item;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class RestaurantController extends Controller
 {
-  public function create()
-  {
-    return Inertia::render("Restaurant/Create", [
-      'cities' => CityResource::collection(
-        City::all()
-      )
-    ]);
-  }
-
-
-  public function store(StoreRestaurantRequest $request)
-  {
-    $fields = $request->validated();
-
-    if ($request->hasFile('logo')) {
-      $fields['logo'] = Storage::disk('public')->put('restaurant_logo', $request->logo);
+    public function create()
+    {
+        return Inertia::render("Restaurant/Create", [
+            'cities' => CityResource::collection(
+                City::all()
+            )
+        ]);
     }
 
-    Restaurant::create($fields);
-    return Redirect::route('dashboard');
-  }
 
+    public function store(StoreRestaurantRequest $request)
+    {
+        $fields = $request->validated();
 
-  public function show(Restaurant $restaurant)
-  {
-    return Inertia::render('Restaurant/Show', [
-      'items' => DB::table('items')
-        ->where('restaurant_id', $restaurant->id)
-        ->get(['id', 'title', 'description', 'price', 'image']),
-      'restaurantName' => $restaurant->name,
-    ]);
-  }
+        if ($request->hasFile('logo')) {
+            $fields['logo'] = Storage::disk('public')
+                ->put('restaurant_logo', $request->logo);
+        }
 
+        Restaurant::create($fields);
 
-  public function edit(Restaurant $restaurant)
-  {
-    return Inertia::render("Restaurant/Edit", [
-      'restaurant' => new RestaurantResource(
-        Restaurant::where('id', $restaurant->id)->first()
-      )
-    ]);
-  }
-
-
-  public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
-  {
-    $getRestaurant = Restaurant::findOrFail($restaurant->id);
-    $fields = $request->validated();
-
-    if ($request->hasFile('logo') && $request->logo !== null) {
-      if ($getRestaurant['logo'] !== null) {
-        Storage::disk('public')->delete($getRestaurant['logo']);
-      }
-
-      $fields['logo'] = Storage::disk('public')->put('restaurant_logo', $request->logo);
+        return to_route('dashboard');
     }
 
-    if ($request->logo === null) {
-      $fields['logo'] = $getRestaurant['logo'];
+
+    public function show(Restaurant $restaurant)
+    {
+        return Inertia::render('Restaurant/Show', [
+            'items' => ItemResource::collection(
+                Item::where('restaurant_id', $restaurant->id)
+                    ->select(
+                        'id',
+                        'title',
+                        'description',
+                        'price',
+                        'image',
+                        'category_id',
+                    )
+                    ->get()
+            ),
+
+            'restaurantName' => $restaurant->name,
+        ]);
     }
 
-    $restaurant->update($fields);
-    return Redirect::route('dashboard');
-  }
 
-  /**
-   * Remove the specified resource from storage.
-   */
-  public function destroy(Restaurant $restaurant)
-  {
-    //
-  }
+    public function edit(Restaurant $restaurant)
+    {
+        return Inertia::render("Restaurant/Edit", [
+            'restaurant' => new RestaurantResource(
+                Restaurant::where('id', $restaurant->id)->first()
+            )
+        ]);
+    }
+
+
+    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
+    {
+        $getRestaurant = Restaurant::findOrFail($restaurant->id);
+        $fields = $request->validated();
+
+        if ($request->hasFile('logo')) {
+            if ($getRestaurant['logo'] !== null) {
+                Storage::disk('public')->delete($getRestaurant['logo']);
+            }
+            $fields['logo'] = Storage::disk('public')
+                ->put('restaurant_logo', $request->logo);
+        }
+
+        if ($fields['logo'] === null) {
+            $fields['logo'] = $getRestaurant['logo'];
+        }
+
+        $restaurant->update($fields);
+
+        return to_route('dashboard');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Restaurant $restaurant)
+    {
+        //
+    }
 }

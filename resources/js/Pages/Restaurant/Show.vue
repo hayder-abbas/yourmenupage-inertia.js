@@ -5,7 +5,7 @@ import { Head } from "@inertiajs/vue3";
 
 defineOptions({ layout: AppLayout });
 defineProps({
-  items: Array,
+  items: Object,
   restaurantName: String,
 });
 </script>
@@ -103,7 +103,11 @@ defineProps({
         </div>
         <div class="mb-4 md:mb-8 grid sm:grid-cols-2 gap-4">
           <!-- Card Item -->
-          <CardItem v-for="(item, index) in items" :key="index" :item="item" />
+          <CardItem
+            v-for="(item, index) in items.data"
+            :key="index"
+            :item="item"
+          />
         </div>
         <div class="w-full text-center">
           <button

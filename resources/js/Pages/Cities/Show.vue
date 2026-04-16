@@ -8,7 +8,7 @@ import { onUnmounted } from "vue";
 defineOptions({ layout: AppLayout });
 
 defineProps({
-  restaurants: Array,
+  restaurants: Object,
   cityName: String,
 });
 
@@ -36,8 +36,8 @@ onUnmounted(() => {
 
     <div class="h-screen py-6">
       <div
-        v-if="restaurants.length > 0"
-        v-for="(restaurant, index) in restaurants"
+        v-if="restaurants.data.length > 0"
+        v-for="(restaurant, index) in restaurants.data"
         :key="index"
       >
         <CardRestaurant :restaurant="restaurant" />

@@ -15,8 +15,9 @@ const props = defineProps({
 
 const app = useAppStore();
 const page = usePage();
+const item = ref(props.item.data);
 const isAuth = ref(
-  page.props.auth.user && page.props.auth.user.id === props.item.data.userID,
+  page.props.auth.user && page.props.auth.user.id === item.value.userID,
 );
 </script>
 
@@ -24,7 +25,7 @@ const isAuth = ref(
   <div
     class="relative flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-700"
   >
-    <Head title="Show Item" />
+    <Head :title="item.title" />
 
     <div class="w-full md:max-w-2xl lg:max-w-4xl">
       <section
@@ -32,8 +33,8 @@ const isAuth = ref(
       >
         <div class="w-full shadow-xl">
           <img
-            :src="`../storage/${item.data.image}`"
-            :alt="item.data.title"
+            :src="`../storage/${item.image}`"
+            :alt="item.title"
             class="h-80 w-96 sm:h-96 md:h-full md:rounded-lg object-cover"
             loading="lazy"
           />
@@ -43,26 +44,26 @@ const isAuth = ref(
           <h2
             class="mb-2 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
           >
-            {{ item.data.title }}
+            {{ item.title }}
           </h2>
           <div
             class="mb-4 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
           >
-            {{ item.data.price }}
+            {{ item.price }}
             <span class="text-sm text-gray-500 dark:text-gray-400">dinar</span>
           </div>
           <dl>
             <dd
               class="mb-4 font-semibold text-gray-500 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent sm:mb-5 dark:text-gray-400"
             >
-              {{ item.data.description }}
+              {{ item.description }}
             </dd>
           </dl>
           <dl class="flex flex-col">
             <dd
               class="mb-4 font-semibold py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent text-gray-500 sm:mb-5 dark:text-gray-400"
             >
-              #{{ item.data.category.name }}
+              #{{ item.category.name }}
             </dd>
           </dl>
 
@@ -73,7 +74,7 @@ const isAuth = ref(
             <div class="flex items-center gap-4">
               <PrimaryButton type="submit">
                 <Link
-                  :href="route('items.edit', item.data)"
+                  :href="route('items.edit', item)"
                   class="flex items-center"
                 >
                   <EditIcon class="mr-1 -ml-1 w-4 h-4" />
@@ -107,6 +108,6 @@ const isAuth = ref(
       </section>
     </div>
     <!-- Delete Modal -->
-    <DeleteConfirmation :item="item.data" />
+    <DeleteConfirmation :item="item" />
   </div>
 </template>
