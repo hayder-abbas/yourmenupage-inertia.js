@@ -37,7 +37,7 @@ class ItemController extends Controller
 
         Item::create($fields);
 
-        return to_route('dashboard');
+        return to_route('dashboard')->with('status', 'item-created');
     }
 
 
@@ -87,13 +87,13 @@ class ItemController extends Controller
 
         $item->update($fields);
 
-        return to_route('dashboard');
+        return redirect()->back();
     }
 
 
     public function destroy(Item $item)
     {
         $item->delete();
-        return to_route('dashboard');
+        return to_route('dashboard')->with('status', 'item-deleted');
     }
 }

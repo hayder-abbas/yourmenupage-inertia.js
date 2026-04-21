@@ -49,7 +49,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('status', 'profile-updated');
     }
 
 
@@ -68,16 +68,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return to_route('login');
-    }
-
-
-    public function resetImage()
-    {
-        $user = User::findOrFail(Auth::id());
-        User::where('id', Auth::id())->update(['image' => '']);
-        Storage::disk('public')->delete($user['image']);
-
-        return redirect()->back();
+        return to_route('login')->with('status', 'user-deleted');
     }
 }

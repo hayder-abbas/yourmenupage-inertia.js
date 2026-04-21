@@ -7,11 +7,20 @@ import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineEmits(["change"]);
-defineProps({ restaurants: Array, categories: Array });
+
+defineOptions({
+  layout: AppLayout,
+});
+
+defineProps({
+  restaurants: Array,
+  categories: Array,
+});
 
 const form = useForm({
   restaurant_id: "",

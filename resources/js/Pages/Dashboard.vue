@@ -3,13 +3,12 @@ import SideBar from "@/Components/Dashboard/SideBar.vue";
 import TableSection from "@/Components/Dashboard/TableSection.vue";
 import DashboardNav from "@/Components/Dashboard/DashboardNav.vue";
 import CloseIcon from "@/Components/Icons/CloseIcon.vue";
-import { onUnmounted } from "vue";
+import { onUnmounted, reactive, ref } from "vue";
 import { useDashboardStore } from "@/Stores/DashboardStore";
 import { useAppStore } from "@/Stores/AppStore";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
+import Notification from "@/Components/Global/Notification.vue";
 
-const app = useAppStore();
-const dashboard = useDashboardStore();
 defineProps({
   restaurants: Array,
   items: Object,
@@ -24,11 +23,27 @@ onUnmounted(() => {
   dashboard.openRecordDropdown = false;
   app.openDeleteConfirmation = false;
 });
+
+const app = useAppStore();
+const dashboard = useDashboardStore();
+// Message doesn't show after item deleted from dashboard, I need to fix that.
+const status = ref(usePage().props.flash?.status || null);
+const message = reactive({
+  "item-created": "Item created successfully!",
+  "item-deleted": "Item deleted successfully!",
+});
 </script>
 
 <template>
   <div class="relative flex flex-col xl:flex-row">
     <Head title="Dashboard" />
+
+    <!-- Notification Message -->
+    <Notification
+      :status="status"
+      :message="message"
+      @closeNotification="status = null"
+    />
 
     <!-- Main Sidebar -->
     <SideBar :restaurants="restaurants" class="hidden xl:block xl:basis-1/5" />

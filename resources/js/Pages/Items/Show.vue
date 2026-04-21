@@ -5,9 +5,14 @@ import DangerButton from "@/Components/Ui/DangerButton.vue";
 import DeleteConfirmation from "@/Components/Ui/DeleteConfirmation.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { Head, Link, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
+
+defineOptions({
+  layout: AppLayout,
+});
 
 const props = defineProps({
   item: Object,
@@ -23,24 +28,22 @@ const isAuth = ref(
 
 <template>
   <div
-    class="relative flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-700"
+    class="relative flex justify-center items-center min-h-screen p-4 bg-gray-50 dark:bg-gray-700"
   >
     <Head :title="item.title" />
 
     <div class="w-full md:max-w-2xl lg:max-w-4xl">
-      <section
-        class="w-full rounded-lg sm:grid grid-flow-row-dense grid-cols-3"
-      >
-        <div class="w-full shadow-xl">
+      <div class="w-full grid lg:grid-cols-3 rounded-lg">
+        <div class="w-full shadow-xl lg:col-span-1">
           <img
             :src="`../storage/${item.image}`"
             :alt="item.title"
-            class="h-80 w-96 sm:h-96 md:h-full md:rounded-lg object-cover"
+            class="w-full rounded-md object-cover h-full aspect-[4/3] sm:aspect-video"
             loading="lazy"
           />
         </div>
 
-        <div class="sm:col-span-2 py-8 px-4 lg:py-16">
+        <div class="py-8 px-4 lg:py-16 lg:col-span-2">
           <h2
             class="mb-2 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
           >
@@ -105,7 +108,7 @@ const isAuth = ref(
             Back
           </SecondaryButton>
         </div>
-      </section>
+      </div>
     </div>
     <!-- Delete Modal -->
     <DeleteConfirmation :item="item" />

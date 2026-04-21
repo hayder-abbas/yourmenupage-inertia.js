@@ -1,19 +1,20 @@
 <script setup>
 import TrashIcon from "../Icons/TrashIcon.vue";
 import { useAppStore } from "@/Stores/AppStore";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
-const props = defineProps(["item"]);
+const props = defineProps({
+  item: Object,
+});
+
 const app = useAppStore();
 const deleteForm = useForm({});
 
 function deleteItem() {
   deleteForm.delete(route("items.destroy", props.item), {
+    preserveScroll: true,
     onSuccess() {
       app.openDeleteConfirmation = false;
-      router.visit("/dashboard", {
-        preserveScroll: true,
-      });
     },
   });
 }
@@ -31,9 +32,11 @@ function deleteItem() {
         <TrashIcon
           class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
         />
+
         <p class="mb-4 text-gray-500 dark:text-gray-300">
           Are you sure you want to delete this item?
         </p>
+
         <div class="flex justify-center items-center space-x-4">
           <button
             @click="app.openDeleteConfirmation = false"
@@ -42,9 +45,10 @@ function deleteItem() {
           >
             No, cancel
           </button>
+
           <button
             @click="deleteItem"
-            type="submit"
+            type="button"
             class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
           >
             Yes, I'm sure

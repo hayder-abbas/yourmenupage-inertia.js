@@ -1,7 +1,7 @@
 <script setup>
 import TrashIcon from "../Icons/TrashIcon.vue";
 import CameraIcon from "../Icons/CameraIcon.vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
   src: String,
@@ -12,7 +12,7 @@ const form = useForm({});
 
 function resetProfileImage() {
   form.post(route("reset.profile.image"), {
-    onSuccess: () => router.reload(),
+    preserveScroll: true,
   });
 }
 </script>
@@ -40,6 +40,7 @@ function resetProfileImage() {
     />
 
     <button
+      type="button"
       v-if="$page.component === 'Profile/Edit'"
       @click.prevent="resetProfileImage"
       class="absolute bottom-3 left-[6.3em] z-20 p-1 bg-gray-300 hover:bg-gray-400 rounded-full cursor-pointer"

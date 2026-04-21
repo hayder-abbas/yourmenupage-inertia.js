@@ -7,10 +7,15 @@ import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineEmits(["change"]);
+
+defineOptions({
+  layout: AppLayout,
+});
 
 const props = defineProps({
   item: Object,
@@ -32,6 +37,12 @@ const form = useForm({
   _method: "patch",
 });
 
+function onChangeInput(e) {
+  form.image = e.target.files[0];
+  form.previewImage = URL.createObjectURL(e.target.files[0]);
+  src.value = form.previewImage;
+}
+
 watch(
   () => form.restaurant_id,
   (newValue) => {
@@ -46,16 +57,16 @@ watch(
   },
 );
 
-function onChangeInput(e) {
-  form.image = e.target.files[0];
-  form.previewImage = URL.createObjectURL(e.target.files[0]);
-  src.value = form.previewImage;
+function submit() {
+  form.post(route("items.update", item), {
+    preserveScroll: true,
+  });
 }
 </script>
 
 <template>
   <section
-    class="min-h-screen py-8 flex items-center justify-center bg-white dark:bg-gray-900"
+    class="min-h-screen py-8 flex items-center justify-center bg-white dark:bg-gray-800"
   >
     <Head title="Edit Item" />
 
@@ -66,7 +77,7 @@ function onChangeInput(e) {
         </h1>
       </header>
 
-      <form @submit.prevent="form.post(route('items.update', item))">
+      <form @submit.prevent="submit">
         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 mb-5">
           <div class="sm:col-span-2">
             <ImageInput
@@ -144,20 +155,20 @@ function onChangeInput(e) {
             Save
           </PrimaryButton>
 
-          <SecondaryButton>
-            <Link :href="route('dashboard')" as="button"> Cancel </Link>
-          </SecondaryButton>
-
           <Transition
             enter-active-class="transition ease-in-out"
             enter-from-class="opacity-0"
             leave-active-class="transition ease-in-out"
             leave-to-class="opacity-0"
           >
-            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
-              Saved.
+            <p v-if="form.recentlySuccessful" class="font-bold text-green-600">
+              Saved...
             </p>
           </Transition>
+
+          <SecondaryButton v-if="!form.recentlySuccessful">
+            <Link :href="route('dashboard')" as="button"> Cancel </Link>
+          </SecondaryButton>
         </div>
       </form>
     </div>

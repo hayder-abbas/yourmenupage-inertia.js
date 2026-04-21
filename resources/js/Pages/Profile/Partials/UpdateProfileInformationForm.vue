@@ -22,6 +22,7 @@ const form = useForm({
   previewImage: null,
   _method: "patch",
 });
+
 let src = user.image
   ? ref(`/storage/${user.image}`)
   : ref(`/storage/default.png`);
@@ -30,6 +31,12 @@ function onChangeInput(e) {
   form.image = e.target.files[0];
   form.previewImage = URL.createObjectURL(e.target.files[0]);
   src.value = form.previewImage;
+}
+
+function submit() {
+  form.post(route("profile.update"), {
+    preserveScroll: true,
+  });
 }
 </script>
 
@@ -45,10 +52,7 @@ function onChangeInput(e) {
       </p>
     </header>
 
-    <form
-      @submit.prevent="form.post(route('profile.update'))"
-      class="mt-6 space-y-6"
-    >
+    <form @submit.prevent="submit" class="mt-6 space-y-6">
       <div>
         <ImageInput
           @change="onChangeInput($event)"
@@ -98,14 +102,28 @@ function onChangeInput(e) {
             Click here to re-send the verification email.
           </Link>
         </p>
-
         <div
           v-show="status === 'verification-link-sent'"
-          class="mt-2 font-medium text-sm text-green-600"
+          class="mt-2 font-medium text-green-600"
         >
           A new verification link has been sent to your email address.
         </div>
       </div>
+
+      <!-- Status Notification -->
+      <Transition
+        enter-active-class="transition ease-in-out"
+        enter-from-class="opacity-0"
+        leave-active-class="transition ease-in-out"
+        leave-to-class="opacity-0"
+      >
+        <p
+          v-if="status === 'image-reset'"
+          class="mt-2 font-bold text-green-600"
+        >
+          Profile image has been reset.
+        </p>
+      </Transition>
 
       <div class="flex items-center gap-4">
         <PrimaryButton type="submit" :disabled="form.processing">
@@ -118,7 +136,7 @@ function onChangeInput(e) {
           leave-active-class="transition ease-in-out"
           leave-to-class="opacity-0"
         >
-          <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
+          <p v-if="form.recentlySuccessful" class="font-bold text-green-600">
             Saved.
           </p>
         </Transition>

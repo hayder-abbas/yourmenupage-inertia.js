@@ -17,71 +17,77 @@ use Inertia\Inertia;
 
 
 Route::middleware('auth')->group(function () {
-  Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  Route::post('/profile', [ProfileController::class, 'resetImage'])->name('profile.resetImage');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-  Route::get('/dashboard', function (Request $request) {
-    $query = Item::query();
-    $request->validate([
-      'field' => ['in:id,title,category_id,price,restaurant_id'],
-      'direction' => ['in:asc,desc']
-    ]);
+    Route::get('/dashboard', function (Request $request) {
+        $query = Item::query();
+        $request->validate([
+            'field' => ['in:id,title,category_id,price,restaurant_id'],
+            'direction' => ['in:asc,desc']
+        ]);
 
-    if ($request->search) {
-      $query->where('title', 'LIKE', "$request->search%");
-    }
+        if ($request->search) {
+            $query->where('title', 'LIKE', "$request->search%");
+        }
 
-    if ($request->has(['field', 'direction'])) {
-      $query->orderBy($request->field, $request->direction);
-    }
+        if ($request->has(['field', 'direction'])) {
+            $query->orderBy($request->field, $request->direction);
+        }
 
-    return Inertia::render('Dashboard', [
-      'restaurants' => DB::table('restaurants')
-        ->where('user_id', Auth::id())
-        ->select('id', 'name')
-        ->get(),
+        return Inertia::render('Dashboard', [
+            'restaurants' => DB::table('restaurants')
+                ->where('user_id', Auth::id())
+                ->select('id', 'name')
+                ->get(),
 
-      'items' => ItemResource::collection(
-        $query->where('user_id', Auth::id())->paginate(10)
-      ),
+            'items' => ItemResource::collection(
+                $query->where('user_id', Auth::id())->paginate(10)
+            ),
 
-      'filters' => $request->all(['search', 'field', 'direction']),
+            'filters' => $request->all(['search', 'field', 'direction']),
 
-    ]);
-  })->name('dashboard');
+        ]);
+    })->name('dashboard');
 
-  Route::resource('restaurants', RestaurantController::class);
+    Route::resource('restaurants', RestaurantController::class);
 
-  Route::resource('items', ItemController::class);
+    Route::resource('items', ItemController::class);
 
-  Route::post('/resetprofileimage', function () {
-    $getUser = User::findOrFail(Auth::id());
-    User::where('id', Auth::id())->update(['image' => '']);
-    Storage::disk('public')->delete($getUser['image']);
-    return to_route('profile.edit');
-  })->name('reset.profile.image');
+    /**
+     * Reset profile image
+     */
+    Route::post('/resetprofileimage', function () {
+        $user = User::findOrFail(Auth::id());
+
+        if ($user['image'] !== null) {
+            User::where('id', Auth::id())->update(['image' => '']);
+            Storage::disk('public')->delete($user['image']);
+        }
+
+        return to_route('profile.edit')->with('status', 'image-reset');
+    })->name('reset.profile.image');
 });
 
 Route::get('/', function (Request $request) {
-  return Inertia::render('Home', [
-    'canLogin' => Route::has('login'),
-    'canRegister' => Route::has('register'),
-    'restaurants' => Restaurant::query()
-      ->where('id', '>', 0)
-      ->when($request->input('search'), function ($query, $search) {
-        $query->where('name', 'like', "{$search}%");
-      })->get(['id', 'name', 'location']),
-    'filters' => $request->only(['search']),
-  ]);
+    return Inertia::render('Home', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'restaurants' => Restaurant::query()
+            ->where('id', '>', 0)
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "{$search}%");
+            })->get(['id', 'name', 'location']),
+        'filters' => $request->only(['search']),
+    ]);
 })->name('home');
 
 Route::get('/cities', [CityController::class, 'index'])->name('cities');
 Route::get('/cities/{city}', [CityController::class, 'show'])->name('city.show');
 
 Route::get('/restaurants/{restaurant}', [RestaurantController::class, 'show'])
-  ->name('restaurant.show');
+    ->name('restaurant.show');
 
 Route::get('items/{item}', [ItemController::class, 'show'])->name('item.show');
 
