@@ -1,12 +1,12 @@
 <script setup>
+import { onUnmounted, reactive, ref, watchEffect } from "vue";
+import { useDashboardStore } from "@/Stores/DashboardStore";
+import { useAppStore } from "@/Stores/AppStore";
+import { Head, usePage } from "@inertiajs/vue3";
 import SideBar from "@/Components/Dashboard/SideBar.vue";
 import TableSection from "@/Components/Dashboard/TableSection.vue";
 import DashboardNav from "@/Components/Dashboard/DashboardNav.vue";
 import CloseIcon from "@/Components/Icons/CloseIcon.vue";
-import { onUnmounted, reactive, ref } from "vue";
-import { useDashboardStore } from "@/Stores/DashboardStore";
-import { useAppStore } from "@/Stores/AppStore";
-import { Head, usePage } from "@inertiajs/vue3";
 import Notification from "@/Components/Global/Notification.vue";
 
 defineProps({
@@ -26,11 +26,24 @@ onUnmounted(() => {
 
 const app = useAppStore();
 const dashboard = useDashboardStore();
-// Message doesn't show after item deleted from dashboard, I need to fix that.
-const status = ref(usePage().props.flash?.status || null);
+const status = ref(null);
 const message = reactive({
   "item-created": "Item created successfully!",
   "item-deleted": "Item deleted successfully!",
+});
+
+watchEffect(() => {
+  /**
+   * When you delete an item from the Show page,
+   * flash-status becomes "item-deleted", so the notification appears.
+   *
+   * But if you delete an item from the Dashboard page,
+   * flash-status stays null, so no notification is shown.
+   *
+   * `watchEffect` is used to detect changes in flash-status
+   * and update the status-state.
+   */
+  status.value = usePage().props.flash?.status;
 });
 </script>
 
