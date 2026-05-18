@@ -1,17 +1,15 @@
 <script setup>
-import { onUnmounted, reactive, ref, watchEffect } from "vue";
+import { onUnmounted, reactive, watchEffect } from "vue";
 import { useDashboardStore } from "@/Stores/DashboardStore";
 import { useAppStore } from "@/Stores/AppStore";
 import { Head, usePage } from "@inertiajs/vue3";
 import SideBar from "@/Components/Dashboard/SideBar.vue";
-import TableSection from "@/Components/Dashboard/TableSection.vue";
 import DashboardNav from "@/Components/Dashboard/DashboardNav.vue";
 import CloseIcon from "@/Components/Icons/CloseIcon.vue";
 import Notification from "@/Components/Global/Notification.vue";
 
 defineProps({
-  restaurants: Array,
-  items: Object,
+  restaurants: Object,
   filters: Object,
 });
 
@@ -26,10 +24,12 @@ onUnmounted(() => {
 
 const app = useAppStore();
 const dashboard = useDashboardStore();
-const status = ref(null);
-const message = reactive({
-  "item-created": "Item created successfully!",
-  "item-deleted": "Item deleted successfully!",
+const status = reactive({
+  name: null,
+  message: {
+    "restaurant-created": "Restaurant created successfully!",
+    "restaurant-deleted": "Restaurant deleted successfully!",
+  },
 });
 
 watchEffect(() => {
@@ -43,19 +43,18 @@ watchEffect(() => {
    * `watchEffect` is used to detect changes in flash-status
    * and update the status-state.
    */
-  status.value = usePage().props.flash?.status;
+  status.name = usePage().props.flash?.status;
 });
 </script>
 
 <template>
   <div class="relative flex flex-col xl:flex-row">
     <Head title="Dashboard" />
-
     <!-- Notification Message -->
     <Notification
-      :status="status"
-      :message="message"
-      @closeNotification="status = null"
+      :status="status.name"
+      :message="status.message[status.name]"
+      @closeNotification="status.name = null"
     />
 
     <!-- Main Sidebar -->
@@ -84,7 +83,9 @@ watchEffect(() => {
       <!-- Content -->
       <div class="py-4 sm:p-4 h-screen xl:h-auto sm:overflow-auto">
         <!-- Table section -->
-        <TableSection :items="items" :filters="filters" />
+
+        {{ restaurants }}
+        <!-- <TableSection :items="items" :filters="filters" /> -->
       </div>
     </div>
   </div>

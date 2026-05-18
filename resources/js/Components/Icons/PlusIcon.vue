@@ -1,17 +1,7 @@
-<script setup>
-import { defineComponent } from "vue";
-
-defineComponent({
-  name: "PlusIcon",
-});
-</script>
-
 <template>
   <svg
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     fill="none"
     viewBox="0 0 24 24"
   >

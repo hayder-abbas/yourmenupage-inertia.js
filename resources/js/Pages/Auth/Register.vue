@@ -7,7 +7,7 @@ import { useForm } from "@inertiajs/vue3";
 import AppLogo from "@/Components/Global/AppLogo.vue";
 
 const form = useForm({
-  name: "",
+  user_name: "",
   email: "",
   password: "",
   password_confirmation: "",
@@ -45,17 +45,17 @@ const submit = () => {
         </h1>
         <form class="space-y-4 md:space-y-6" @submit.prevent="submit">
           <div>
-            <InputLabel for="name" value="Name" />
+            <InputLabel for="user_name" value="Name" />
             <TextInput
-              id="name"
+              id="user_name"
               type="text"
               class="mt-1 block w-full"
-              v-model="form.name"
+              v-model="form.user_name"
               autofocus
-              autocomplete="name"
+              autocomplete="user_name"
               placeholder="Your name"
             />
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError class="mt-2" :message="form.errors.user_name" />
           </div>
 
           <div class="mt-4">
@@ -113,13 +113,15 @@ const submit = () => {
               <label
                 for="terms"
                 class="font-light text-gray-500 dark:text-gray-300"
-                >I accept the
+              >
+                I accept the
                 <a
                   class="font-medium text-blue-600 hover:underline dark:text-blue-500"
                   href="#"
-                  >Terms and Conditions</a
-                ></label
-              >
+                >
+                  Terms and Conditions
+                </a>
+              </label>
             </div>
           </div>
           <button

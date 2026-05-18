@@ -10,16 +10,15 @@ class ItemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'restaurant' => RestaurantResource::make($this->whenLoaded('restaurant')),
-            'category' => CategoryResource::make($this->whenLoaded('category')),
             'id' => $this->id,
-            'userID' => $this->user_id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'price' => $this->price,
-            'image' => $this->image,
+            'itemTitle' => $this->item_title,
+            'itemDesc' => $this->item_desc,
+            'itemPrice' => $this->item_price,
+            'itemImage' => $this->item_image,
             'createdAt' => $this->created_at?->toFormattedDateString(),
-            'updatedAt' => $this->updated_at?->toFormattedDateString()
+            'updatedAt' => $this->updated_at?->toFormattedDateString(),
+            'restaurantId' => $this->restaurant_id,
+            'categoryId' => $this->category_id
         ];
     }
 }

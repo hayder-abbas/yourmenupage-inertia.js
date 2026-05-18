@@ -7,26 +7,32 @@ import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
+
+defineOptions({
+  layout: AppLayout,
+});
 
 defineProps({
   cities: Object,
 });
 
-let src = ref("/storage/default.png");
 const form = useForm({
-  user_id: usePage().props.auth.user.id,
-  city_id: "",
-  name: "",
-  description: "",
+  rest_name: "",
+  rest_desc: "",
+  rest_logo: "",
   location: "",
-  phone: "",
-  logo: "",
   open_at: "",
   close_at: "",
+  phone: "",
+  user_id: usePage().props.auth.user.id,
+  city_id: "",
   previewLogo: "",
 });
+
+let logoSrc = ref("/storage/default.png");
 
 watch(
   () => form.city_id,
@@ -36,15 +42,19 @@ watch(
 );
 
 function onChangeInput(e) {
-  form.logo = e.target.files[0];
+  form.rest_logo = e.target.files[0];
   form.previewLogo = URL.createObjectURL(e.target.files[0]);
-  src.value = form.previewLogo;
+  logoSrc.value = form.previewLogo;
+}
+
+function submit() {
+  form.post(route("restaurant.store"));
 }
 </script>
 
 <template>
   <!-- Create Restaurant -->
-  <div
+  <section
     class="min-h-screen py-4 lg:py-8 flex items-center justify-center bg-white dark:bg-gray-800"
   >
     <Head title="Create Restaurant" />
@@ -56,95 +66,81 @@ function onChangeInput(e) {
         </h2>
       </header>
 
-      <form @submit.prevent="form.post(route('restaurants.store'))">
+      <form @submit.prevent="submit">
         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <div class="sm:col-span-2">
             <ImageInput
               @change="onChangeInput($event)"
-              :src="src"
-              alt="Restaurant Image"
+              :src="logoSrc"
+              alt="Restaurant Logo"
             />
-            <InputError class="mt-2" :message="form.errors.logo" />
+            <InputError class="mt-2" :message="form.errors.rest_logo" />
           </div>
 
           <div class="w-full">
-            <InputLabel value="Name" for="name" />
+            <InputLabel value="Restaurant Name" for="rest_name" />
             <TextInput
-              v-model="form.name"
+              v-model="form.rest_name"
               type="text"
-              id="name"
+              id="rest_name"
               placeholder="Type restaurant name..."
-              required
             />
-            <InputError :message="form.errors.name" class="mt-2" />
+            <InputError :message="form.errors.rest_name" class="mt-2" />
+          </div>
+
+          <div class="w-full">
+            <InputLabel value="Phone" for="phone" />
+            <TextInput
+              v-model="form.phone"
+              id="phone"
+              placeholder="Restaurant phone..."
+            />
+            <InputError :message="form.errors.phone" class="mt-2" />
           </div>
 
           <div class="w-full">
             <InputLabel value="Location" for="location" />
             <TextInput
               v-model="form.location"
-              type="text"
               id="location"
-              placeholder="Restaurant location"
+              placeholder="Your location here..."
             />
             <InputError :message="form.errors.location" class="mt-2" />
-          </div>
-
-          <div>
-            <InputLabel value="Phone" for="phone" />
-            <TextInput
-              v-model="form.phone"
-              type="text"
-              id="phone"
-              placeholder="Phone number"
-              required
-            />
-            <InputError :message="form.errors.phone" class="mt-2" />
           </div>
 
           <div>
             <InputLabel value="City" for="city" />
             <SelectInput v-model="form.city_id" id="city">
               <option
-                v-for="city in cities.data"
-                :key="city.id"
-                :value="city.id"
-                v-text="city.name"
+                v-for="c in cities"
+                :key="c.id"
+                :value="c.id"
+                v-text="c.cityName"
               ></option>
             </SelectInput>
             <InputError :message="form.errors.city_id" class="mt-2" />
           </div>
 
-          <div>
+          <div class="w-full">
             <InputLabel value="Open at" for="open_at" />
-            <TextInput
-              v-model="form.open_at"
-              type="time"
-              id="open_at"
-              required
-            />
+            <TextInput type="time" id="open_at" v-model="form.open_at" />
             <InputError :message="form.errors.open_at" class="mt-2" />
           </div>
 
-          <div>
+          <div class="w-full">
             <InputLabel value="Close at" for="close_at" />
-            <TextInput
-              v-model="form.close_at"
-              type="time"
-              id="close_at"
-              required
-            />
+            <TextInput type="time" id="close_at" v-model="form.close_at" />
             <InputError :message="form.errors.close_at" class="mt-2" />
           </div>
 
           <div class="sm:col-span-2 mb-5">
-            <InputLabel value="Description" for="description" />
+            <InputLabel value="Description" for="rest_desc" />
             <TextAreaInput
-              v-model="form.description"
-              id="description"
+              v-model="form.rest_desc"
+              id="rest_desc"
               placeholder="Your description here..."
             />
-            <InputError :message="form.errors.description" class="mt-2" />
+            <InputError :message="form.errors.rest_desc" class="mt-2" />
           </div>
         </div>
 
@@ -164,11 +160,11 @@ function onChangeInput(e) {
             leave-to-class="opacity-0"
           >
             <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
-              Created.
+              Created...
             </p>
           </Transition>
         </div>
       </form>
     </div>
-  </div>
+  </section>
 </template>

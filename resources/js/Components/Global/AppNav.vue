@@ -101,15 +101,15 @@ onUnmounted(() => {
           </li>
           <li>
             <NavLink
-              :href="route('cities')"
-              :active="route().current('cities')"
+              :href="route('city.index')"
+              :active="route().current('city.index')"
             >
-              Cities
+              All cities
             </NavLink>
           </li>
           <li>
             <NavLink :href="route('about')" :active="route().current('about')">
-              About
+              About us
             </NavLink>
           </li>
         </ul>

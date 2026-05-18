@@ -3,27 +3,34 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
 class StoreRestaurantRequest extends FormRequest
 {
-  public function authorize(): bool
-  {
-    return true;
-  }
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-  public function rules(): array
-  {
-    return [
-      'user_id' => ['required', 'exists:users,id'],
-      'city_id' => ['required', 'exists:cities,id'],
-      'name' => ['required', 'string', 'max:50'],
-      'description' => ['required', 'string', 'max:255'],
-      'location' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', 'max:11'],
-      'logo' => [File::image(), 'nullable'],
-      'open_at' => ['required'],
-      'close_at' => ['required']
-    ];
-  }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'rest_name' => ['required', 'string', 'max:50'],
+            'rest_desc' => ['nullable', 'string', 'max:255'],
+            'rest_logo' => ['nullable', 'image'],
+            'location' => ['required', 'string', 'max:255'],
+            'open_at' => ['required', 'string', 'max:5'],
+            'close_at' => ['required', 'string', 'max:5'],
+            'phone' => ['required', 'string', 'max:15'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'city_id' => ['required', 'integer', 'exists:cities,id']
+        ];
+    }
 }

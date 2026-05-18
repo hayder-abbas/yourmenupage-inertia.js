@@ -8,27 +8,27 @@ use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
-  protected $rootView = 'app';
+    protected $rootView = 'app';
 
-  public function version(Request $request): string|null
-  {
-    return parent::version($request);
-  }
+    public function version(Request $request): string|null
+    {
+        return parent::version($request);
+    }
 
-  public function share(Request $request): array
-  {
-    return [
-      ...parent::share($request),
-      'auth' => [
-        'user' => $request->user(),
-      ],
-      'flash' => [
-        'status' => fn() => $request->session()->get('status'),
-      ],
-      'ziggy' => fn() => [
-        ...(new Ziggy)->toArray(),
-        'location' => $request->url(),
-      ],
-    ];
-  }
+    public function share(Request $request): array
+    {
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $request->user(),
+            ],
+            'flash' => [
+                'status' => fn() => $request->session()->get('status'),
+            ],
+            'ziggy' => fn() => [
+                ...(new Ziggy)->toArray(),
+                'location' => $request->url(),
+            ],
+        ];
+    }
 }

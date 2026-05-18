@@ -9,32 +9,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
-  use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-  protected $with = ['restaurant', 'user', 'category'];
+    protected $fillable = [
+        'item_title',
+        'item_desc',
+        'item_price',
+        'item_image',
+        'restaurant_id',
+        'category_id'
+    ];
 
-  protected $fillable = [
-    'restaurant_id',
-    'user_id',
-    'category_id',
-    'title',
-    'description',
-    'price',
-    'image',
-  ];
+    public function restaurant(): BelongsTo
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 
-  public function restaurant(): BelongsTo
-  {
-    return $this->belongsTo(Restaurant::class);
-  }
-
-  public function user(): BelongsTo
-  {
-    return $this->belongsTo(User::class);
-  }
-
-  public function category(): BelongsTo
-  {
-    return $this->belongsTo(Category::class);
-  }
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

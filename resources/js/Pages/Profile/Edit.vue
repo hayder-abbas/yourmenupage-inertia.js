@@ -5,7 +5,7 @@ import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
 import { Head } from "@inertiajs/vue3";
 import { useAppStore } from "@/Stores/AppStore";
-import { onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 
 defineOptions({ layout: AppLayout });
 
@@ -15,6 +15,11 @@ defineProps({
 });
 
 const app = useAppStore();
+
+onMounted(() => {
+  app.openUserMenu = false;
+  app.openHamburgerMenu = false;
+});
 
 onUnmounted(() => {
   app.openUserMenu = false;

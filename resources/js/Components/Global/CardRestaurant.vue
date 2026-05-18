@@ -1,47 +1,60 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import { reactive, ref } from "vue";
+import PhoneIcon from "../Icons/PhoneIcon.vue";
+import MapPinIcon from "../Icons/MapPinIcon.vue";
 
-defineProps({
-  restaurant: {
-    type: Object,
-    required: true,
-  },
+const props = defineProps({
+  restaurant: Object,
 });
+
+const restData = reactive(props.restaurant);
+const imgSrc = restData.restLogo
+  ? ref(`../storage/${restData.restLogo}`)
+  : ref("../storage/default.png");
 </script>
 
 <template>
   <Link
-    :href="route('restaurant.show', restaurant)"
-    class="w-full flex border border-gray-200 mb-5 rounded-md md:hover:shadow-[0_0_60px_-15px_rgba(0,0,0,0.3)] dark:text-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800"
+    :href="route('restaurant.show', restData)"
+    class="w-full flex rounded-md border border-gray-200 dark:border-gray-600 hover:shadow-[0_0_20px_4px_#eee] dark:hover:shadow-[0_0_20px_4px_#333] dark:text-white dark:bg-gray-900 dark:hover:bg-gray-800"
   >
     <img
-      :src="`../storage/${restaurant.logo}`"
-      :alt="restaurant.name"
-      class="w-[6rem] h-auto rounded-bl-md rounded-tl-md"
+      :src="imgSrc"
+      :alt="restData.restName"
+      class="w-[6rem] sm:w-[10rem] aspect-square object-cover h-auto rounded-s-md"
       loading="lazy"
     />
 
-    <div class="flex flex-col sm:grow p-5">
-      <!-- Name -->
-      <div
-        v-text="restaurant.name"
-        class="text-xl font-medium mb-3 text-blue-500 hover:underline overflow-hidden"
-      ></div>
-      <!-- Location -->
-      <div
-        v-text="restaurant.location"
-        class="text-sm mb-3 min-h-[2rem] overflow-hidden"
-      ></div>
-      <!-- Phone -->
-      <div v-text="restaurant.phone" class="text-sm overflow-hidden"></div>
+    <div class="flex flex-col text-xl sm:grow p-5">
+      <div class="font-bold mb-2 text-blue-500">
+        {{ restData.restName }}
+      </div>
+      <div class="flex items-center mb-2">
+        <MapPinIcon class="w-4 h-4 mr-2" />
+        {{ restData.location }}
+      </div>
+      <div class="flex items-center mb-2">
+        <PhoneIcon class="w-4 h-4 mr-2" />
+        <div>
+          <div v-for="phone in restData.phones" :key="phone.id">
+            {{ phone.phoneNumber }}
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="p-5 sm:flex items-end hidden">
-      <button
-        type="button"
-        class="py-2 px-4 rounded-md border border-gray-300 hover:bg-blue-500 hover:text-white hover:border-none"
+
+    <div class="w-32 p-4">
+      <div
+        class="text-center text-sm font-bold px-2 py-1 rounded-xl"
+        :class="
+          restData.isOpen
+            ? 'bg-green-100 text-green-600'
+            : 'bg-red-100 text-red-600'
+        "
       >
-        Show Menu
-      </button>
+        {{ restData.isOpen ? "Open now" : "Closed" }}
+      </div>
     </div>
   </Link>
 </template>

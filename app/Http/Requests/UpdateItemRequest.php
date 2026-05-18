@@ -3,24 +3,31 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
 class UpdateItemRequest extends FormRequest
 {
-  public function authorize(): bool
-  {
-    return true;
-  }
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-  public function rules(): array
-  {
-    return [
-      'restaurant_id' => ['required', 'exists:restaurants,id'],
-      'category_id' => ['required', 'exists:categories,id'],
-      'title' => ['required', 'string', 'max:255'],
-      'description' => ['string', 'max:255'],
-      'price' => ['required', 'integer'],
-      'image' => ['nullable', File::image()],
-    ];
-  }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'item_title' => ['required', 'string', 'max:50'],
+            'item_desc' => ['nullable', 'string', 'max:255'],
+            'item_price' => ['required', 'integer'],
+            'item_image' => ['nullable', 'image'],
+            'restaurant_id' => ['required', 'integer', 'exists:restaurants,id'],
+            'category_id' => ['required', 'integer', 'exists:categories,id']
+        ];
+    }
 }

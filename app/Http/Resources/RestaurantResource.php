@@ -11,16 +11,18 @@ class RestaurantResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
+            'restName' => $this->rest_name,
+            'restDesc' => $this->rest_desc,
+            'restLogo' => $this->rest_logo,
             'location' => $this->location,
-            'phone' => $this->phone,
-            'logo' => $this->logo,
-            'openAt' => $this->open_at,
-            'closeAt' => $this->close_at,
-            // 'city' => CityResource::make($this->whenLoaded('city')),
-            // 'createdAt' => $this->created_at?->toFormattedDateString(),
-            // 'updatedAt' => $this->updated_at?->toFormattedDateString(),
+            'openAt' => $this->open_at?->format('h:i A'),
+            'closeAt' => $this->close_at?->format('h:i A'),
+            'userId' => $this->user_id,
+            'cityId' => $this->city_id,
+            'isOpen' => $this->is_open,
+            'phones' => RestaurantPhoneResource::collection(
+                $this->whenLoaded('restaurantPhones')
+            )
         ];
     }
 }

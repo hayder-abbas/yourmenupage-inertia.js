@@ -3,25 +3,30 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
 class UpdateRestaurantRequest extends FormRequest
 {
-  public function authorize(): bool
-  {
-    return true;
-  }
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-  public function rules(): array
-  {
-    return [
-      'name' => ['required', 'string', 'max:50'],
-      'description' => ['required', 'string'],
-      'location' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', 'max:11'],
-      'logo' => ['nullable', File::image()],
-      'open_at' => ['required'],
-      'close_at' => ['required']
-    ];
-  }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'rest_name' => ['required', 'string', 'max:50'],
+            'rest_desc' => ['nullable', 'string', 'max:255'],
+            'rest_logo' => ['image', 'nullable'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'city_id' => ['required', 'integer', 'exists:cities,id']
+        ];
+    }
 }

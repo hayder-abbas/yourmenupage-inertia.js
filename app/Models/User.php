@@ -10,35 +10,31 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-  use HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
-  protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'image',
-  ];
-
-  protected $hidden = [
-    'password',
-    'remember_token',
-  ];
-
-  public function restaurants(): HasMany
-  {
-    return $this->hasMany(Restaurant::class);
-  }
-
-  public function items(): HasMany
-  {
-    return $this->hasMany(Item::class);
-  }
-
-  protected function casts(): array
-  {
-    return [
-      'email_verified_at' => 'datetime',
-      'password' => 'hashed',
+    protected $fillable = [
+        'email',
+        'user_name',
+        'user_image',
+        'password',
+        'rul'
     ];
-  }
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function restaurants(): HasMany
+    {
+        return $this->hasMany(Restaurant::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
 }

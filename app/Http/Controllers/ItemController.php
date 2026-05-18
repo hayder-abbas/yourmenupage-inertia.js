@@ -5,94 +5,79 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
+use App\Http\Resources\RestaurantResource;
+use App\Models\Category;
+use App\Models\Restaurant;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ItemController extends Controller
 {
-    public function create()
-    {
-        return Inertia::render('Items/Create', [
-            'restaurants' => DB::table('restaurants')
-                ->where('user_id', Auth::id())
-                ->get(['id', 'name']),
-
-            'categories' => DB::table('categories')
-                ->get(['id', 'name']),
-        ]);
-    }
-
-
     public function store(StoreItemRequest $request)
     {
         $fields = $request->validated();
+        $path = "item_image/" . $request->restaurant_id;
 
-        if ($request->hasFile('image')) {
-            $fields['image'] = Storage::disk('public')
-                ->put('item_image', $request->image);
+        if ($request->hasFile('item_image')) {
+            $fields['item_image'] = Storage::disk('public')
+                ->put($path, $request->item_image);
         }
-
         Item::create($fields);
-
-        return to_route('dashboard')->with('status', 'item-created');
+        return redirect()->back()->with('status', 'item-created');
     }
 
 
     public function show(Item $item)
     {
-        return Inertia::render('Items/Show', [
-            'item' => new ItemResource(
-                Item::findOrFail($item->id)
-            )
+        return Inertia::render('Item/Show', [
+            'item' => new ItemResource($item)
         ]);
     }
 
 
     public function edit(Item $item)
     {
-        return Inertia::render('Items/Edit', [
-            'item' => new ItemResource(
-                Item::findOrFail($item->id)
+        return Inertia::render('Item/Edit', [
+            'item' => new ItemResource($item),
+            'restaurants' => RestaurantResource::collection(
+                Restaurant::where('user_id', Auth::id())
+                    ->get(['id', 'rest_name'])
             ),
-
-            'restaurants' => DB::table('restaurants')
-                ->where('user_id', Auth::id())
-                ->get(['id', 'name']),
-
-            'categories' => DB::table('categories')
-                ->get(['id', 'name']),
+            'categories' => CategoryResource::collection(
+                Category::all('id', 'cat_name')
+            ),
         ]);
     }
 
 
     public function update(UpdateItemRequest $request, Item $item)
     {
-        $getItem = Item::findOrFail($item->id);
         $fields = $request->validated();
+        $path = "item_image/" . $request->restaurant_id;
 
-        if ($request->hasFile('image')) {
-            if ($getItem['image'] !== null) {
-                Storage::disk('public')->delete($getItem['image']);
+        if ($request->hasFile('item_image')) {
+            // Delete old image first
+            if ($item->item_image) {
+                Storage::disk('public')->delete($item['item_image']);
             }
-            $fields['image'] = Storage::disk('public')
-                ->put('item_image', $request->image);
-        }
-
-        if ($fields['image'] === null) {
-            $fields['image'] = $getItem['image'];
+            $fields['item_image'] = Storage::disk('public')
+                ->put($path, $request->item_image);
+        } else {
+            // Keep existing image if no new one uploaded
+            unset($fields['item_image']);
         }
 
         $item->update($fields);
-
-        return redirect()->back();
+        return to_route('item.show', $item)->with('status', 'item-updated');
     }
 
 
     public function destroy(Item $item)
     {
+        dd("You should delete item image also!!");
         $item->delete();
         return to_route('dashboard')->with('status', 'item-deleted');
     }

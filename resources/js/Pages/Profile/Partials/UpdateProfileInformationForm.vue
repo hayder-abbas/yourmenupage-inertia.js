@@ -16,19 +16,19 @@ defineEmits(["change"]);
 
 const user = usePage().props.auth.user;
 const form = useForm({
-  name: user.name,
+  user_name: user.user_name,
   email: user.email,
-  image: null,
+  user_image: null,
   previewImage: null,
   _method: "patch",
 });
 
-let src = user.image
-  ? ref(`/storage/${user.image}`)
+let src = user.user_image
+  ? ref(`/storage/${user.user_image}`)
   : ref(`/storage/default.png`);
 
 function onChangeInput(e) {
-  form.image = e.target.files[0];
+  form.user_image = e.target.files[0];
   form.previewImage = URL.createObjectURL(e.target.files[0]);
   src.value = form.previewImage;
 }
@@ -56,24 +56,25 @@ function submit() {
       <div>
         <ImageInput
           @change="onChangeInput($event)"
+          name="user_image"
           :src="src"
           alt="User Image"
         />
-        <InputError class="mt-2" :message="form.errors.image" />
+        <InputError class="mt-2" :message="form.errors.user_image" />
       </div>
 
       <div>
-        <InputLabel for="name" value="Name" />
+        <InputLabel for="user_name" value="User Name" />
 
         <TextInput
-          id="name"
+          id="user_name"
+          name="user_name"
           type="text"
           class="mt-1 block w-full"
-          v-model="form.name"
-          required
+          v-model="form.user_name"
         />
 
-        <InputError class="mt-2" :message="form.errors.name" />
+        <InputError class="mt-2" :message="form.errors.user_name" />
       </div>
 
       <div>

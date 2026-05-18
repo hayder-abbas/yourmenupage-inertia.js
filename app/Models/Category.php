@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $fillable = ['category'];
+    protected $fillable = ['cat_name'];
 
-  public function items(): HasMany
-  {
-    return $this->hasMany(Item::class);
-  }
+    public function items(): HasMany
+    {
+        return $this->hasMany(Item::class);
+    }
 }

@@ -8,7 +8,7 @@ import AppFooter from "@/Components/Global/AppFooter.vue";
     <!-- Page Heading -->
     <header>
       <div
-        class="max-w-3xl md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-0"
+        class="max-w-3xl md:max-w-2xl lg:max-w-4xl xl:max-w-7xl mx-auto px-4 md:px-0"
       >
         <AppNav />
       </div>

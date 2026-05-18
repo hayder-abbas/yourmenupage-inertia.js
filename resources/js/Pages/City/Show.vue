@@ -21,27 +21,22 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    class="w-full md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-0"
-  >
+  <div class="w-full md:max-w-2xl lg:max-w-4xl mx-auto px-4 md:px-0">
     <Head :title="`${cityName} - Restaurants`" />
 
-    <div class="py-6 text-gray-900 dark:text-gray-50">
+    <div class="py-8 text-gray-900 dark:text-white">
       <div>Restaurant menus in</div>
-      <h1
-        class="text-gray-900 text-4xl font-bold dark:text-gray-50"
-        v-text="cityName"
-      ></h1>
+      <h1 class="text-4xl font-bold">{{ cityName }}</h1>
     </div>
 
-    <div class="h-screen py-6">
-      <div
-        v-if="restaurants.data.length > 0"
-        v-for="(restaurant, index) in restaurants.data"
+    <div class="h-screen flex flex-col gap-4">
+      <CardRestaurant
+        v-if="restaurants.length > 0"
+        v-for="(r, index) in restaurants"
         :key="index"
-      >
-        <CardRestaurant :restaurant="restaurant" />
-      </div>
+        :restaurant="r"
+      />
+
       <div v-else>
         <p class="text-center text-xl text-gray-900 py-8 dark:text-gray-50">
           No Restaurants yet!

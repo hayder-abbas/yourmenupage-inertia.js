@@ -1,7 +1,6 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import AppLogo from "../Global/AppLogo.vue";
-import EditIcon from "../Icons/EditIcon.vue";
 import PlusIcon from "../Icons/PlusIcon.vue";
 
 defineProps({
@@ -19,34 +18,24 @@ defineProps({
       </div>
     </div>
 
-    <!-- Restaurants list -->
-    <div class="p-4 mb-5">
-      <h5 class="text-gray-50 text-lg py-2">Restaurans</h5>
-
-      <ul>
-        <li v-for="r in restaurants" :key="r.id">
-          <Link
-            :href="route('restaurant.show', r)"
-            class="flex items-center justify-between text-gray-400 mb-2 px-4 py-1 hover:bg-gray-800"
-          >
-            {{ r.name }}
-            <Link
-              :href="route('restaurants.edit', r)"
-              class="bg-blue-600 p-1 rounded-md hover:bg-blue-700"
-            >
-              <EditIcon class="w-4 h-4 text-white" />
-            </Link>
-          </Link>
-        </li>
-      </ul>
-
+    <div class="flex flex-col p-4 mb-6">
       <!-- Creat a new restaurant -->
       <Link
-        :href="route('restaurants.create')"
-        class="text-gray-50 bg-blue-600 hover:bg-blue-700 rounded-md py-2 block text-center"
+        :href="route('restaurant.create')"
+        class="flex justify-center items-center px-1 py-2 mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
       >
-        <PlusIcon class="inline" />
-        Add restaurant
+        <PlusIcon class="w-5 h-5" />
+        New restaurant
+      </Link>
+
+      <!-- Restaurants -->
+      <Link
+        v-for="r in restaurants"
+        :key="r.id"
+        :href="route('restaurant.show', r)"
+        class="flex px-4 py-2 mb-2 rounded-md text-blue-600 bg-white"
+      >
+        {{ r.restName }}
       </Link>
     </div>
   </aside>

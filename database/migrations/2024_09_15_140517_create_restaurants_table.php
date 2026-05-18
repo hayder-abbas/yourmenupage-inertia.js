@@ -6,25 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-  public function up(): void
-  {
-    Schema::create('restaurants', function (Blueprint $table) {
-      $table->id();
-      $table->foreignId('user_id')->constrained();
-      $table->foreignId('city_id')->constrained();
-      $table->string('name', 100);
-      $table->string('description');
-      $table->string('location');
-      $table->string('phone', 11);
-      $table->string('logo')->nullable();
-      $table->time('open_at');
-      $table->time('close_at');
-      $table->timestamps();
-    });
-  }
+    public function up(): void
+    {
+        Schema::create('restaurants', function (Blueprint $table) {
+            $table->id();
+            $table->string('rest_name', 50);
+            $table->string('rest_desc')->nullable();
+            $table->string('rest_logo')->nullable();
+            $table->string('location');
+            $table->time('open_at');
+            $table->time('close_at');
+            $table->timestamps();
 
-  public function down(): void
-  {
-    Schema::dropIfExists('restaurants');
-  }
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('city_id')
+                ->constrained();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('restaurants');
+    }
 };

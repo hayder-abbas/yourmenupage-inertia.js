@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class City extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $fillable = [
-    'city',
-    'logo'
-  ];
+    protected $fillable = [
+        'city_name',
+        'city_image'
+    ];
 
-  public function restaurants(): HasMany
-  {
-    return $this->hasMany(Restaurant::class);
-  }
+    public function restaurants(): HasMany
+    {
+        return $this->hasMany(Restaurant::class);
+    }
 }

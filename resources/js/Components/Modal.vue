@@ -11,7 +11,7 @@ const props = withDefaults(
     show: false,
     maxWidth: "2xl",
     closeable: true,
-  }
+  },
 );
 
 const emit = defineEmits(["close"]);
@@ -24,20 +24,20 @@ watch(
     } else {
       document.body.style.overflow = "visible";
     }
-  }
+  },
 );
 
-const close = () => {
+function close() {
   if (props.closeable) {
     emit("close");
   }
-};
+}
 
-const closeOnEscape = (e: KeyboardEvent) => {
+function closeOnEscape(e: KeyboardEvent) {
   if (e.key === "Escape" && props.show) {
     close();
   }
-};
+}
 
 onMounted(() => document.addEventListener("keydown", closeOnEscape));
 
@@ -92,7 +92,7 @@ const maxWidthClass = computed(() => {
         >
           <div
             v-show="show"
-            class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
+            class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto dark:bg-gray-800"
             :class="maxWidthClass"
           >
             <slot v-if="show" />

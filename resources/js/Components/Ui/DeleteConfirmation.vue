@@ -11,7 +11,7 @@ const app = useAppStore();
 const deleteForm = useForm({});
 
 function deleteItem() {
-  deleteForm.delete(route("items.destroy", props.item), {
+  deleteForm.delete(route("item.destroy", props.item), {
     preserveScroll: true,
     onSuccess() {
       app.openDeleteConfirmation = false;

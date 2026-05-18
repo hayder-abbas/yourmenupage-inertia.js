@@ -28,18 +28,17 @@ class ProfileController extends Controller
         $user = User::findOrFail(Auth::id());
         $fields = $request->validated();
 
-        if ($request->hasFile('image')) {
-            if ($user['image'] !== null) {
-                Storage::disk('public')->delete($user['image']);
+        if ($request->hasFile('user_image')) {
+            if ($user['user_image'] !== null) {
+                Storage::disk('public')->delete($user['user_image']);
             }
-            $fields['image'] = Storage::disk('public')
-                ->put('user_image', $request->image);
+            $fields['user_image'] = Storage::disk('public')
+                ->put('user_image', $request->user_image);
         }
 
-        if ($fields['image'] === null) {
-            $fields['image'] = $user['image'];
+        if ($fields['user_image'] === null) {
+            $fields['user_image'] = $user['user_image'];
         }
-
 
         $request->user()->fill($fields);
 
