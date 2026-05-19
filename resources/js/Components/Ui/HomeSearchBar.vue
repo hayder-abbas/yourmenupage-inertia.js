@@ -57,7 +57,7 @@ watch(
           class="block p-2 text-left hover:bg-blue-300 dark:hover:bg-gray-500 rounded-sm"
         >
           <span class="block font-bold text-blue-600 dark:text-gray-50">
-            {{ restaurant.name }}
+            {{ restaurant.restName }}
           </span>
           <span class="text-sm text-gray-500 dark:text-gray-700">
             {{ restaurant.location }}

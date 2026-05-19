@@ -71,14 +71,27 @@ class ItemController extends Controller
         }
 
         $item->update($fields);
-        return to_route('item.show', $item)->with('status', 'item-updated');
+        return to_route('restaurant.show', $item->restaurant_id)
+            ->with('status', 'item-updated');
     }
 
 
     public function destroy(Item $item)
     {
-        dd("You should delete item image also!!");
         $item->delete();
-        return to_route('dashboard')->with('status', 'item-deleted');
+        return to_route('restaurant.show', $item->restaurant_id)
+            ->with('status', 'item-deleted');
+    }
+
+
+    public function hardDelete(Item $item)
+    {
+        if ($item['item_image']) {
+            Storage::disk('public')->delete($item['item_image']);
+        }
+
+        $item->hardDelete();
+        return to_route('restaurant.show', $item->restaurant_id)
+            ->with('status', 'item-deleted');
     }
 }

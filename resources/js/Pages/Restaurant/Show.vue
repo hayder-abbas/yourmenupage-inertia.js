@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, usePage } from "@inertiajs/vue3";
-import { reactive, ref } from "vue";
+import { reactive, ref, watchEffect } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PhoneIcon from "@/Components/Icons/PhoneIcon.vue";
 import MapPinIcon from "@/Components/Icons/MapPinIcon.vue";
@@ -24,12 +24,17 @@ const logoSrc = restData.restLogo
   : ref("/storage/default.png");
 
 const status = reactive({
-  name: usePage().props.flash?.status,
+  name: null,
   message: {
     "restaurant-updated": "Restaurant updated successfully!",
     "item-created": "Item created successfully!",
     "item-updated": "Item updated successfully!",
+    "item-deleted": "Item deleted successfully!",
   },
+});
+
+watchEffect(() => {
+  status.name = usePage().props.flash?.status;
 });
 </script>
 
