@@ -4,7 +4,12 @@ import Checkbox from "@/Components/Ui/Checkbox.vue";
 import InputError from "@/Components/Ui/InputError.vue";
 import InputLabel from "@/Components/Ui/InputLabel.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 import { useForm } from "@inertiajs/vue3";
+
+defineOptions({
+  layout: AppLayout,
+});
 
 defineProps({
   canResetPassword: Boolean,
@@ -29,7 +34,7 @@ const submit = () => {
 <template>
   <!-- Login form -->
   <section
-    class="min-h-screen p-4 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900"
+    class="min-h-screen p-4 flex flex-col items-center justify-center dark:bg-gray-800"
   >
     <Head title="Login Page" />
 
@@ -43,7 +48,7 @@ const submit = () => {
     </div>
 
     <div
-      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+      class="w-full bg-white rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1

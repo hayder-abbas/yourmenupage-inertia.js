@@ -5,6 +5,11 @@ import TextInput from "@/Components/Ui/TextInput.vue";
 import Checkbox from "@/Components/Ui/Checkbox.vue";
 import { useForm } from "@inertiajs/vue3";
 import AppLogo from "@/Components/Global/AppLogo.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+
+defineOptions({
+  layout: AppLayout,
+});
 
 const form = useForm({
   user_name: "",
@@ -25,7 +30,7 @@ const submit = () => {
 
 <template>
   <section
-    class="min-h-screen p-4 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900"
+    class="min-h-screen p-4 flex flex-col items-center justify-center dark:bg-gray-800"
   >
     <Head title="Create Account Form" />
 
@@ -35,7 +40,7 @@ const submit = () => {
     </div>
 
     <div
-      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+      class="w-full bg-white rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1
