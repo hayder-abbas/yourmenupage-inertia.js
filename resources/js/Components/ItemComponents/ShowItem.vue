@@ -11,6 +11,7 @@ import { ref } from "vue";
 
 const props = defineProps({
   item: Object,
+  can: Object,
 });
 
 const openingShowItemForm = ref(false);
@@ -83,7 +84,7 @@ function cancelingDeleteItem() {
 
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-4">
-                <PrimaryButton type="submit">
+                <PrimaryButton v-if="can.manageItems" type="submit">
                   <Link
                     :href="route('item.edit', item)"
                     class="flex items-center"
@@ -96,7 +97,10 @@ function cancelingDeleteItem() {
                 <SecondaryButton @click="closeModal"> Close </SecondaryButton>
               </div>
 
-              <DangerButton @click="deleteItemConfirmation = true">
+              <DangerButton
+                v-if="can.manageItems"
+                @click="deleteItemConfirmation = true"
+              >
                 <TrashIcon class="w-4 h-4 mr-1.5 -ml-1" />
                 Move to trash
               </DangerButton>

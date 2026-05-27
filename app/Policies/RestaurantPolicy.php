@@ -7,7 +7,7 @@ use App\Models\User;
 
 class RestaurantPolicy
 {
-    public function viewAny(?User $user): bool
+    public function view(?User $user, Restaurant $restaurant): bool
     {
         return true;
     }
@@ -26,6 +26,12 @@ class RestaurantPolicy
 
 
     public function delete(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id === $restaurant->user_id;
+    }
+
+
+    public function manageItems(User $user, Restaurant $restaurant): bool
     {
         return $user->id === $restaurant->user_id;
     }

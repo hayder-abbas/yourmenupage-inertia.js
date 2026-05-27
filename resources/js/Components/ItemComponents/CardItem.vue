@@ -4,6 +4,7 @@ import ShowItem from "../ItemComponents/ShowItem.vue";
 
 const props = defineProps({
   item: Object,
+  can: Object,
 });
 
 const imgSrc = props.item.itemImage
@@ -39,7 +40,7 @@ const imgSrc = props.item.itemImage
         class="flex justify-between font-semibold text-slate-900 dark:text-gray-400"
       >
         <div>{{ item.itemPrice }}</div>
-        <ShowItem :item="item" />
+        <ShowItem :item="item" :can="can" />
       </div>
     </div>
   </div>

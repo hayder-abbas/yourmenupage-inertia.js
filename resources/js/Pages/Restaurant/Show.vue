@@ -16,6 +16,7 @@ const props = defineProps({
   restaurant: Object,
   items: Array,
   categories: Array,
+  can: Object,
 });
 
 const restData = reactive(props.restaurant);
@@ -83,9 +84,13 @@ watchEffect(() => {
 
         <div class="flex justify-end flex-col sm:flex-row gap-2">
           <!-- Add Item Form -->
-          <CreateItemForm :restID="restData.id" :categories="categories" />
+          <CreateItemForm
+            v-if="can.manageItems"
+            :restID="restData.id"
+            :categories="categories"
+          />
           <!-- Edit Restaurant Form -->
-          <PrimaryButton>
+          <PrimaryButton v-if="can.update">
             <EditIcon class="w-5 h-5 mr-2" />
             <Link :href="route('restaurant.edit', restData)">
               Edit Restaurant
@@ -100,7 +105,12 @@ watchEffect(() => {
         <h2 class="font-bold text-3xl mb-6">⭐ Popular Items</h2>
         <!-- Items -->
         <div class="grid xl:grid-cols-2 gap-4">
-          <CardItem v-for="item in items" :key="item.id" :item="item" />
+          <CardItem
+            v-for="item in items"
+            :key="item.id"
+            :item="item"
+            :can="can"
+          />
         </div>
       </article>
 

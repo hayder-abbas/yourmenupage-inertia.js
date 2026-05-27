@@ -11,8 +11,10 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Item;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -57,16 +59,18 @@ class RestaurantController extends Controller
 
     public function show(Restaurant $restaurant)
     {
-        Gate::authorize('viewAny', $restaurant);
-
-        $restaurant->load('items');
+        Gate::authorize('view', $restaurant);
 
         return Inertia::render('Restaurant/Show', [
             'restaurant' => new RestaurantResource($restaurant),
             'items' => ItemResource::collection($restaurant->items),
             'categories' => CategoryResource::collection(
                 Category::all('id', 'cat_name')
-            )
+            ),
+            'can' => [
+                'update' => Gate::allows('update', $restaurant),
+                'manageItems' => Gate::allows('manageItems', $restaurant)
+            ]
         ]);
     }
 
