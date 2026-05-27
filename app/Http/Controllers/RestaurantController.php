@@ -15,6 +15,7 @@ use App\Models\Item;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -65,7 +66,7 @@ class RestaurantController extends Controller
             'restaurant' => new RestaurantResource($restaurant),
             'items' => ItemResource::collection($restaurant->items),
             'categories' => CategoryResource::collection(
-                Category::all('id', 'cat_name')
+                Cache::remember('categories', 3600, fn() => Category::all('id', 'cat_name'))
             ),
             'can' => [
                 'update' => Gate::allows('update', $restaurant),
