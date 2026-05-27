@@ -1,9 +1,15 @@
 <script setup>
 import DropdownLink from "./DropdownLink.vue";
-import { onUnmounted } from "vue";
+import { onUnmounted, ref } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
+import { usePage } from "@inertiajs/vue3";
 
 const app = useAppStore();
+const user = ref(usePage().props.auth.user);
+const userImg = user.value.user_image
+  ? ref(`/storage/${user.value.user_image}`)
+  : ref("/storage/default.png");
+
 onUnmounted(() => {
   app.openUserMenu = false;
 });
@@ -21,11 +27,7 @@ onUnmounted(() => {
       >
         <img
           class="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-600"
-          :src="
-            $page.props.auth.user.image
-              ? `/storage/${$page.props.auth.user.image}`
-              : '/storage/default.png'
-          "
+          :src="userImg"
           alt="user photo"
           loading="lazy"
         />

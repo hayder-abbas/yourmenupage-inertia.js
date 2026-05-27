@@ -13,21 +13,17 @@ const props = defineProps({
 </script>
 
 <template>
-  <section
-    class="min-h-screen py-8 flex flex-col items-center justify-center bg-white dark:bg-gray-800"
-  >
+  <div class="min-h-screen py-8 flex flex-col dark:bg-gray-800">
     <Head :title="`Edit ${restaurant.restName}`" />
 
     <!-- Update Restaurant Form -->
-    <div class="p-4 mb-12 md:p-0 w-full md:max-w-2xl xl:max-w-4xl">
+    <section>
       <UpdateRestaurantInfoForm :restaurant="restaurant" :cities="cities" />
-    </div>
+    </section>
 
     <!-- Delete Restaurant Form -->
-    <div
-      class="p-4 sm:p-8 w-full md:max-w-2xl xl:max-w-4xl bg-white dark:bg-gray-900 shadow md:rounded-lg"
-    >
-      <DeleteRestaurantForm class="max-w-xl" :restaurant="restaurant" />
-    </div>
-  </section>
+    <section>
+      <DeleteRestaurantForm :restaurant="restaurant" />
+    </section>
+  </div>
 </template>

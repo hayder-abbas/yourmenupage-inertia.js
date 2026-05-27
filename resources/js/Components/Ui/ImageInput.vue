@@ -3,7 +3,7 @@ import TrashIcon from "../Icons/TrashIcon.vue";
 import CameraIcon from "../Icons/CameraIcon.vue";
 import { useForm } from "@inertiajs/vue3";
 
-const props = defineProps({
+defineProps({
   src: String,
   alt: String,
 });
@@ -11,9 +11,11 @@ const props = defineProps({
 const form = useForm({});
 
 function resetProfileImage() {
-  form.post(route("reset.profile.image"), {
-    preserveScroll: true,
-  });
+  if (confirm("Are you sure?")) {
+    form.post(route("reset.profile.image"), {
+      preserveScroll: true,
+    });
+  }
 }
 </script>
 

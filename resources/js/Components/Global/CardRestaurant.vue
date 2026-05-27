@@ -36,11 +36,7 @@ const imgSrc = restData.restLogo
       </div>
       <div class="flex items-center mb-2">
         <PhoneIcon class="w-4 h-4 mr-2" />
-        <div>
-          <div v-for="phone in restData.phones" :key="phone.id">
-            {{ phone.phoneNumber }}
-          </div>
-        </div>
+        {{ restData.restPhone }}
       </div>
     </div>
 

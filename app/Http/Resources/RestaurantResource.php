@@ -12,6 +12,7 @@ class RestaurantResource extends JsonResource
         return [
             'id' => $this->id,
             'restName' => $this->rest_name,
+            'restPhone' => $this->rest_phone,
             'restDesc' => $this->rest_desc,
             'restLogo' => $this->rest_logo,
             'location' => $this->location,
@@ -20,9 +21,6 @@ class RestaurantResource extends JsonResource
             'userId' => $this->user_id,
             'cityId' => $this->city_id,
             'isOpen' => $this->is_open,
-            'phones' => RestaurantPhoneResource::collection(
-                $this->whenLoaded('restaurantPhones')
-            )
         ];
     }
 }

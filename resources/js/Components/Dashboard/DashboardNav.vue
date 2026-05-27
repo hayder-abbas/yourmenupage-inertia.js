@@ -4,10 +4,16 @@ import BarsIcon from "../Icons/BarsIcon.vue";
 import DropdownLink from "../Global/DropdownLink.vue";
 import { useDark, useToggle } from "@vueuse/core";
 import { useDashboardStore } from "@/Stores/DashboardStore";
+import { ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
 const dashboard = useDashboardStore();
+const user = ref(usePage().props.auth.user);
+const userImg = user.value.user_image
+  ? ref(`/storage/${user.value.user_image}`)
+  : ref("/storage/default.png");
 </script>
 
 <template>
@@ -46,11 +52,7 @@ const dashboard = useDashboardStore();
             >
               <img
                 class="w-8 h-8 p-1 rounded-full bg-gray-50 dark:bg-gray-600"
-                :src="
-                  $page.props.auth.user.image
-                    ? `/storage/${$page.props.auth.user.image}`
-                    : '/storage/default.png'
-                "
+                :src="userImg"
                 alt="user photo"
                 loading="lazy"
               />

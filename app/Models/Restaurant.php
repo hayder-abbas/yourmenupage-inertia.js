@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 class Restaurant extends Model
 {
     use HasFactory;
 
-    protected $with = ['restaurantPhones'];
-
     protected $fillable = [
         'rest_name',
+        'rest_phone',
         'rest_desc',
         'rest_logo',
         'location',
@@ -51,11 +51,6 @@ class Restaurant extends Model
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
-    }
-
-    public function restaurantPhones(): HasMany
-    {
-        return $this->hasMany(RestaurantPhone::class);
     }
 
     public function items(): HasMany

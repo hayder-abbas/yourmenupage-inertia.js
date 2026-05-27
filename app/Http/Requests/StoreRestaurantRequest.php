@@ -23,12 +23,12 @@ class StoreRestaurantRequest extends FormRequest
     {
         return [
             'rest_name' => ['required', 'string', 'max:50'],
+            'rest_phone' => ['required', 'string', 'max:15'],
             'rest_desc' => ['nullable', 'string', 'max:255'],
             'rest_logo' => ['nullable', 'image'],
             'location' => ['required', 'string', 'max:255'],
             'open_at' => ['required', 'string', 'max:5'],
             'close_at' => ['required', 'string', 'max:5'],
-            'phone' => ['required', 'string', 'max:15'],
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'city_id' => ['required', 'integer', 'exists:cities,id']
         ];

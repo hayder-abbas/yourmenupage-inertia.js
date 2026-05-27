@@ -23,6 +23,7 @@ class UpdateRestaurantRequest extends FormRequest
     {
         return [
             'rest_name' => ['required', 'string', 'max:50'],
+            'rest_phone' => ['required', 'string', 'max:15'],
             'rest_desc' => ['nullable', 'string', 'max:255'],
             'rest_logo' => ['image', 'nullable'],
             'user_id' => ['required', 'integer', 'exists:users,id'],

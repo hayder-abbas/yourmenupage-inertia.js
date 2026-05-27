@@ -26,6 +26,7 @@ const logoSrc = restData.restLogo
 const status = reactive({
   name: null,
   message: {
+    "restaurant-created": "Restaurant created successfully!",
     "restaurant-updated": "Restaurant updated successfully!",
     "item-created": "Item created successfully!",
     "item-updated": "Item updated successfully!",
@@ -42,7 +43,7 @@ watchEffect(() => {
   <section
     class="mb-8 lg:px-0 mx-auto w-full md:max-w-2xl lg:max-w-4xl xl:max-w-7xl"
   >
-    <Head :title="`${restData.restName} Menu`" />
+    <Head :title="restData.restName" />
     <!-- Notification Message -->
     <Notification
       :status="status.name"
@@ -72,11 +73,7 @@ watchEffect(() => {
           </div>
           <div class="flex items-center mb-2">
             <PhoneIcon class="w-4 h-4 mr-2" />
-            <div>
-              <div v-for="phone in restData.phones" :key="phone.id">
-                {{ phone.phoneNumber }}
-              </div>
-            </div>
+            {{ restData.restPhone }}
           </div>
           <div class="mb-2">
             <div class="text-green-600">Open: {{ restData.openAt }}</div>

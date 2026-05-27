@@ -11,15 +11,17 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\RestaurantPhone;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class RestaurantController extends Controller
 {
     public function create()
     {
+        Gate::authorize('create', Restaurant::class);
+
         return Inertia::render("Restaurant/Create", [
             'cities' => CityResource::collection(City::all())
         ]);
@@ -28,27 +30,35 @@ class RestaurantController extends Controller
 
     public function store(StoreRestaurantRequest $request)
     {
-        $fields = $request->validated();
-        $newFields = array_filter($fields, function ($key) {
-            return $key !== 'phone';
-        }, ARRAY_FILTER_USE_KEY);
+        Gate::authorize('create', Restaurant::class);
 
-        if ($request->hasFile('rest_logo')) {
-            $newFields['rest_logo'] = Storage::disk('public')
-                ->put('restaurant_logo', $request->rest_logo);
+        $fields = $request->validated();
+        $logoPath = null;
+
+        try {
+            if ($request->hasFile('rest_logo')) {
+                $logoPath = $request->file('rest_logo')
+                    ->store('restaurant_logo', 'public');
+                $fields['rest_logo'] = $logoPath;
+            }
+
+            $restaurant = Restaurant::create($fields);
+        } catch (\Exception $ex) {
+            if ($logoPath) {
+                Storage::disk('public')->delete($logoPath);
+            }
+            throw $ex;
         }
 
-        $newRestaurant = Restaurant::create($newFields);
-        RestaurantPhone::create([
-            'phone_number' => $request->phone,
-            'restaurant_id' => $newRestaurant->id
-        ]);
-        return to_route('dashboard')->with('status', 'restaurant-created');
+        return to_route('restaurant.show', $restaurant)
+            ->with('status', 'restaurant-created');
     }
 
 
     public function show(Restaurant $restaurant)
     {
+        Gate::authorize('viewAny', $restaurant);
+
         $restaurant->load('items');
 
         return Inertia::render('Restaurant/Show', [
@@ -63,6 +73,8 @@ class RestaurantController extends Controller
 
     public function edit(Restaurant $restaurant)
     {
+        Gate::authorize('update', $restaurant);
+
         return Inertia::render("Restaurant/Edit", [
             'restaurant' => new RestaurantResource($restaurant),
             'cities' => CityResource::collection(
@@ -74,20 +86,37 @@ class RestaurantController extends Controller
 
     public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
     {
+        Gate::authorize('update', $restaurant);
+
         $fields = $request->validated();
+        $newLogo = null;
+        $oldLogo = $restaurant->rest_logo; // capture before update
 
-        if ($request->hasFile('rest_logo')) {
-            if ($restaurant['rest_logo'] !== null) {
-                Storage::disk('public')->delete($restaurant['rest_logo']);
+        try {
+            if ($request->hasFile('rest_logo')) {
+                // 1. Store new logo (may throw exception)
+                $newLogo = $request->file('rest_logo')
+                    ->store('restaurant_logo', 'public');
+                $fields['rest_logo'] = $newLogo;
+            } else {
+                // 2. If no new logo, remove the key to keep existing one
+                unset($fields['rest_logo']);
             }
-            $fields['rest_logo'] = Storage::disk('public')
-                ->put('restaurant_logo', $request->rest_logo);
-        }
-        if ($fields['rest_logo'] === null) {
-            $fields['rest_logo'] = $restaurant['rest_logo'];
+            // 3. Update the restaurant (database operation)
+            $restaurant->update($fields);
+
+            // 4. Delete old logo only after successful update
+            if ($newLogo && $oldLogo) {
+                Storage::disk('public')->delete($oldLogo);
+            }
+        } catch (\Exception $ex) {
+            // If anything failed after storing the new logo, clean it up
+            if ($newLogo) {
+                Storage::disk('public')->delete($newLogo);
+            }
+            throw $ex;
         }
 
-        $restaurant->update($fields);
         return to_route('restaurant.show', $restaurant)
             ->with('status', 'restaurant-updated');
     }
@@ -95,15 +124,23 @@ class RestaurantController extends Controller
 
     public function destroy(Request $request, Restaurant $restaurant)
     {
-        dd("You should delete items image also!!");
+        Gate::authorize('delete', $restaurant);
 
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
-        if ($restaurant['rest_logo'] !== null) {
-            Storage::disk('public')->delete($restaurant['rest_logo']);
-        }
+
         $restaurant->delete();
+
+        if ($restaurant->rest_logo) {
+            Storage::disk('public')->delete($restaurant->rest_logo);
+        }
+
+        $itemImageDir = 'item_image/' . $restaurant->id;
+        if (Storage::disk('public')->exists($itemImageDir)) {
+            Storage::disk('public')->deleteDirectory($itemImageDir);
+        }
+
         return to_route('dashboard')->with('status', 'restaurant-deleted');
     }
 }

@@ -69,4 +69,17 @@ class ProfileController extends Controller
 
         return to_route('login')->with('status', 'user-deleted');
     }
+
+
+    public function resetProfileImg()
+    {
+        $user = User::findOrFail(Auth::id());
+
+        if ($user->user_image) {
+            User::where('id', Auth::id())->update(['user_image' => '']);
+            Storage::disk('public')->delete($user->user_image);
+        }
+
+        return redirect()->back()->with('status', 'profile-image-deleted');
+    }
 }

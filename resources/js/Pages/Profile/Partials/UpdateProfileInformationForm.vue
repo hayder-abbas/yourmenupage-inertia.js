@@ -1,11 +1,12 @@
 <script setup>
+import Notification from "@/Components/Global/Notification.vue";
 import ImageInput from "@/Components/Ui/ImageInput.vue";
 import InputError from "@/Components/Ui/InputError.vue";
 import InputLabel from "@/Components/Ui/InputLabel.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { reactive, ref, watchEffect } from "vue";
 
 const props = defineProps({
   mustVerifyEmail: Boolean,
@@ -14,23 +15,29 @@ const props = defineProps({
 
 defineEmits(["change"]);
 
-const user = usePage().props.auth.user;
+const user = ref(usePage().props.auth.user);
 const form = useForm({
-  user_name: user.user_name,
-  email: user.email,
+  user_name: user.value.user_name,
+  email: user.value.email,
   user_image: null,
-  previewImage: null,
   _method: "patch",
 });
-
-let src = user.user_image
-  ? ref(`/storage/${user.user_image}`)
+const status = reactive({
+  name: null,
+  message: {
+    "profile-updated": "Profile updated successfully!",
+    "profile-image-deleted": "Profile image deleted successfully!",
+  },
+});
+let previewImage = user.value.user_image
+  ? ref(`/storage/${user.value.user_image}`)
   : ref(`/storage/default.png`);
 
 function onChangeInput(e) {
-  form.user_image = e.target.files[0];
-  form.previewImage = URL.createObjectURL(e.target.files[0]);
-  src.value = form.previewImage;
+  const file = e.target.files[0];
+  if (!file) return;
+  form.user_image = file;
+  previewImage.value = URL.createObjectURL(file);
 }
 
 function submit() {
@@ -38,10 +45,21 @@ function submit() {
     preserveScroll: true,
   });
 }
+
+watchEffect(() => {
+  status.name = props.status;
+});
 </script>
 
 <template>
   <section>
+    <!-- Notification Message -->
+    <Notification
+      :status="status.name"
+      :message="status.message[status.name]"
+      @closeNotification="status.name = null"
+    />
+
     <header>
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-300">
         Profile Information
@@ -57,7 +75,7 @@ function submit() {
         <ImageInput
           @change="onChangeInput($event)"
           name="user_image"
-          :src="src"
+          :src="previewImage"
           alt="User Image"
         />
         <InputError class="mt-2" :message="form.errors.user_image" />

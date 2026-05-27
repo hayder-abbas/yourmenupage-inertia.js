@@ -24,6 +24,7 @@ const form = useForm({
   user_id: usePage().props.auth.user.id,
   city_id: restData.cityId,
   rest_name: restData.restName,
+  rest_phone: restData.restPhone,
   rest_desc: restData.restDesc,
   rest_logo: null,
   _method: "Patch",
@@ -49,81 +50,95 @@ function submit() {
 </script>
 
 <template>
-  <header>
-    <h1 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-      Edit your restaurant
-    </h1>
-  </header>
+  <div class="p-4 md:p-0 mb-12 mx-auto md:max-w-2xl">
+    <header>
+      <h1 class="p-4 mb-4 text-center text-3xl font-bold dark:text-white">
+        Edit your restaurant
+      </h1>
+    </header>
 
-  <form @submit.prevent="submit">
-    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-      <div class="sm:col-span-2">
-        <ImageInput
-          @change="onChangeInput($event)"
-          alt="Restaurant logo"
-          :src="previewLogo"
-        />
-        <InputError class="mt-2" :message="form.errors.rest_logo" />
+    <form @submit.prevent="submit">
+      <div class="flex flex-col gap-4 mb-6">
+        <div class="text-center">
+          <ImageInput
+            @change="onChangeInput($event)"
+            alt="Restaurant logo"
+            :src="previewLogo"
+          />
+          <InputError class="mt-2" :message="form.errors.rest_logo" />
+        </div>
+
+        <div>
+          <InputLabel value="Restaurant Name" for="rest_name" />
+          <TextInput
+            v-model="form.rest_name"
+            type="text"
+            id="rest_name"
+            placeholder="Type restaurant name..."
+            required
+          />
+          <InputError :message="form.errors.rest_name" class="mt-2" />
+        </div>
+
+        <div>
+          <InputLabel value="Phone" for="phone" />
+          <TextInput id="phone" v-model="form.rest_phone" />
+          <InputError :message="form.errors.rest_phone" class="mt-2" />
+        </div>
+
+        <div>
+          <InputLabel value="City" for="city" />
+          <SelectInput v-model="form.city_id" id="city">
+            <option
+              v-for="(c, index) in cities"
+              :key="index"
+              :value="c.id"
+              v-text="c.cityName"
+            ></option>
+          </SelectInput>
+          <InputError :message="form.errors.city_id" class="mt-2" />
+        </div>
+
+        <!-- <div class="w-full">
+          <InputLabel value="Phone" for="phone" />
+          <TextInput id="phone" />
+          <InputError :message="form.errors.phone" class="mt-2" />
+        </div> -->
+
+        <div class="sm:col-span-2 mb-5">
+          <InputLabel value="Description" for="rest_desc" />
+          <TextAreaInput
+            v-model="form.rest_desc"
+            id="rest_desc"
+            placeholder="Your description here..."
+            required
+          />
+          <InputError :message="form.errors.rest_desc" class="mt-2" />
+        </div>
       </div>
 
-      <div class="w-full">
-        <InputLabel value="Restaurant Name" for="rest_name" />
-        <TextInput
-          v-model="form.rest_name"
-          type="text"
-          id="rest_name"
-          placeholder="Type restaurant name..."
-          required
-        />
-        <InputError :message="form.errors.rest_name" class="mt-2" />
+      <div class="flex flex-col sm:flex-row sm:justify-end gap-4">
+        <SecondaryButton>
+          <Link :href="route('restaurant.show', restData)" as="button">
+            Cancel
+          </Link>
+        </SecondaryButton>
+
+        <PrimaryButton type="submit" :disabled="form.processing">
+          Save
+        </PrimaryButton>
+
+        <Transition
+          enter-active-class="transition ease-in-out"
+          enter-from-class="opacity-0"
+          leave-active-class="transition ease-in-out"
+          leave-to-class="opacity-0"
+        >
+          <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
+            Saved...
+          </p>
+        </Transition>
       </div>
-
-      <div>
-        <InputLabel value="City" for="city" />
-        <SelectInput v-model="form.city_id" id="city">
-          <option
-            v-for="(c, index) in cities"
-            :key="index"
-            :value="c.id"
-            v-text="c.cityName"
-          ></option>
-        </SelectInput>
-        <InputError :message="form.errors.city_id" class="mt-2" />
-      </div>
-
-      <div class="sm:col-span-2 mb-5">
-        <InputLabel value="Description" for="rest_desc" />
-        <TextAreaInput
-          v-model="form.rest_desc"
-          id="rest_desc"
-          placeholder="Your description here..."
-          required
-        />
-        <InputError :message="form.errors.rest_desc" class="mt-2" />
-      </div>
-    </div>
-
-    <div class="flex items-center gap-4">
-      <PrimaryButton type="submit" :disabled="form.processing">
-        Save
-      </PrimaryButton>
-
-      <SecondaryButton>
-        <Link :href="route('restaurant.show', restData)" as="button">
-          Cancel
-        </Link>
-      </SecondaryButton>
-
-      <Transition
-        enter-active-class="transition ease-in-out"
-        enter-from-class="opacity-0"
-        leave-active-class="transition ease-in-out"
-        leave-to-class="opacity-0"
-      >
-        <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
-          Saved...
-        </p>
-      </Transition>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>

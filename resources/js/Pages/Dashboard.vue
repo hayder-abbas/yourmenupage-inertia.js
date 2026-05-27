@@ -27,22 +27,11 @@ const dashboard = useDashboardStore();
 const status = reactive({
   name: null,
   message: {
-    "restaurant-created": "Restaurant created successfully!",
     "restaurant-deleted": "Restaurant deleted successfully!",
   },
 });
 
 watchEffect(() => {
-  /**
-   * When you delete an item from the Show page,
-   * flash-status becomes "item-deleted", so the notification appears.
-   *
-   * But if you delete an item from the Dashboard page,
-   * flash-status stays null, so no notification is shown.
-   *
-   * `watchEffect` is used to detect changes in flash-status
-   * and update the status-state.
-   */
   status.name = usePage().props.flash?.status;
 });
 </script>

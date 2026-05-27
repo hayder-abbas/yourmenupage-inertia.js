@@ -21,18 +21,17 @@ defineProps({
 
 const form = useForm({
   rest_name: "",
+  rest_phone: "",
   rest_desc: "",
   rest_logo: "",
   location: "",
   open_at: "",
   close_at: "",
-  phone: "",
   user_id: usePage().props.auth.user.id,
-  city_id: "",
-  previewLogo: "",
+  city_id: null,
 });
 
-let logoSrc = ref("/storage/default.png");
+let previewLogo = ref("/storage/default.png");
 
 watch(
   () => form.city_id,
@@ -42,9 +41,10 @@ watch(
 );
 
 function onChangeInput(e) {
-  form.rest_logo = e.target.files[0];
-  form.previewLogo = URL.createObjectURL(e.target.files[0]);
-  logoSrc.value = form.previewLogo;
+  const file = e.target.files[0];
+  if (!file) return;
+  form.rest_logo = file;
+  previewLogo.value = URL.createObjectURL(e.target.files[0]);
 }
 
 function submit() {
@@ -71,7 +71,7 @@ function submit() {
           <div class="sm:col-span-2">
             <ImageInput
               @change="onChangeInput($event)"
-              :src="logoSrc"
+              :src="previewLogo"
               alt="Restaurant Logo"
             />
             <InputError class="mt-2" :message="form.errors.rest_logo" />
@@ -91,11 +91,11 @@ function submit() {
           <div class="w-full">
             <InputLabel value="Phone" for="phone" />
             <TextInput
-              v-model="form.phone"
+              v-model="form.rest_phone"
               id="phone"
               placeholder="Restaurant phone..."
             />
-            <InputError :message="form.errors.phone" class="mt-2" />
+            <InputError :message="form.errors.rest_phone" class="mt-2" />
           </div>
 
           <div class="w-full">

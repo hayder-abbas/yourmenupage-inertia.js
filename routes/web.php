@@ -7,11 +7,9 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Item;
 use App\Models\Restaurant;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 
@@ -19,6 +17,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/resetprofileimage', [ProfileController::class, 'resetProfileImg'])
+        ->name('reset.profile.image');
+
+    Route::resource('restaurant', RestaurantController::class)
+        ->except('index', 'show');
+    Route::resource('item', ItemController::class)
+        ->except('index', 'create', 'show');
 
     Route::get('/dashboard', function (Request $request) {
         $query = Item::query();
@@ -26,7 +31,6 @@ Route::middleware('auth')->group(function () {
             'field' => ['in:id,item_title,item_price,restaurant_id,category_id'],
             'direction' => ['in:asc,desc']
         ]);
-
         if ($request->search) {
             $query->where('item_title', 'like', "$request->search%");
         }
@@ -43,21 +47,6 @@ Route::middleware('auth')->group(function () {
 
         ]);
     })->name('dashboard');
-
-    Route::resource('restaurant', RestaurantController::class);
-    Route::resource('item', ItemController::class);
-
-    /**
-     * Reset profile image
-     */
-    Route::post('/resetprofileimage', function () {
-        $user = User::findOrFail(Auth::id());
-        if ($user['user_image'] !== null) {
-            User::where('id', Auth::id())->update(['user_image' => '']);
-            Storage::disk('public')->delete($user['user_image']);
-        }
-        return to_route('profile.edit')->with('status', 'image-reset');
-    })->name('reset.profile.image');
 });
 
 Route::get('/', function (Request $request) {
@@ -75,16 +64,10 @@ Route::get('/', function (Request $request) {
     ]);
 })->name('home');
 
-Route::get('/city', [CityController::class, 'index'])
-    ->name('city.index');
-Route::get('/city/{city}', [CityController::class, 'show'])
-    ->name('city.show');
+Route::resource('city', CityController::class)->only('index', 'show');
 
-Route::get('/restaurants/{restaurant}', [RestaurantController::class, 'show'])
+Route::get('/restaurant/{restaurant}', [RestaurantController::class, 'show'])
     ->name('restaurant.show');
-
-Route::get('items/{item}', [ItemController::class, 'show'])
-    ->name('item.show');
 
 Route::inertia('/about', 'About')->name('about');
 
