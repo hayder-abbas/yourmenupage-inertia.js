@@ -6,8 +6,8 @@ import { usePage } from "@inertiajs/vue3";
 
 const app = useAppStore();
 const user = ref(usePage().props.auth.user);
-const userImg = user.value.user_image
-  ? ref(`/storage/${user.value.user_image}`)
+const userImg = user.value?.user_image
+  ? ref(`/storage/${user.value?.user_image}`)
   : ref("/storage/default.png");
 
 onUnmounted(() => {
