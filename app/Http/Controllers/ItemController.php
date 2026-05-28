@@ -11,6 +11,7 @@ use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -54,7 +55,7 @@ class ItemController extends Controller
                     ->get(['id', 'rest_name'])
             ),
             'categories' => CategoryResource::collection(
-                Category::all('id', 'cat_name')
+                Cache::remember('categories', 3600, fn() => Category::all('id', 'cat_name'))
             ),
         ]);
     }
