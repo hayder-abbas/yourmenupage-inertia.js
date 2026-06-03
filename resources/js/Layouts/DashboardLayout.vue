@@ -3,58 +3,61 @@ import AppFooter from "@/Components/Global/AppFooter.vue";
 import SideBar from "@/Components/Dashboard/SideBar.vue";
 import CloseIcon from "@/Components/Icons/CloseIcon.vue";
 import DashboardNav from "@/Components/Dashboard/DashboardNav.vue";
-import { useAppStore } from "@/Stores/AppStore";
 import { useDashboardStore } from "@/Stores/DashboardStore";
-import { onUnmounted } from "vue";
+import { onUnmounted, ref } from "vue";
 
 defineProps({
   restaurants: Object,
   filters: Object,
 });
 
-const app = useAppStore();
 const dashboard = useDashboardStore();
+const openDashboardSidebar = ref(false);
+
+function toggleSidbar() {
+  openDashboardSidebar.value = !openDashboardSidebar.value;
+}
 
 onUnmounted(() => {
-  dashboard.openDashboardSidebar = false;
   dashboard.openDashboardUserMenu = false;
-  app.openDeleteConfirmation = false;
 });
 </script>
 
 <template>
-  <div class="relative flex flex-col xl:flex-row">
-    <!-- Fixed Sidebar -->
-    <SideBar :restaurants="restaurants" class="hidden xl:block xl:basis-1/5" />
+  <div class="flex flex-col">
+    <div class="h-screen xl:grid xl:grid-cols-10">
+      <!-- Fixed Sidebar -->
+      <SideBar
+        :restaurants="restaurants"
+        class="hidden xl:block xl:col-span-2"
+      />
 
-    <!-- Floating Sidebar -->
-    <SideBar
-      :restaurants="restaurants"
-      class="fixed top-0 left-0 z-50 xl:hidden w-64 duration-300"
-      :class="{ '-translate-x-full': !dashboard.openDashboardSidebar }"
-    >
-      <template #close_button>
-        <CloseIcon
-          @click="
-            dashboard.openDashboardSidebar = !dashboard.openDashboardSidebar
-          "
-          class="text-gray-50 cursor-pointer"
-        />
-      </template>
-    </SideBar>
+      <!-- Floating Sidebar -->
+      <SideBar
+        :restaurants="restaurants"
+        class="absolute top-0 left-0 xl:hidden w-80"
+        :class="{ '-translate-x-full': !openDashboardSidebar }"
+      >
+        <template #close_button>
+          <CloseIcon
+            @click="toggleSidbar"
+            class="text-gray-50 cursor-pointer"
+          />
+        </template>
+      </SideBar>
 
-    <!-- Page Content -->
-    <div class="flex flex-col w-full xl:basis-4/5 bg-gray-50 dark:bg-gray-800">
-      <!-- Navbar -->
-      <DashboardNav />
+      <div class="flex flex-col dark:bg-gray-800">
+        <!-- Navbar -->
+        <DashboardNav @toggle="toggleSidbar" />
 
-      <!-- Dashboard Content -->
-      <main class="min-h-dvh">
-        <slot />
-      </main>
+        <!-- Dashboard Content -->
+        <main class="min-h-dvh">
+          <slot />
+        </main>
+      </div>
     </div>
 
-    <!-- Page Footer -->
+    <!-- Footer -->
     <AppFooter />
   </div>
 </template>

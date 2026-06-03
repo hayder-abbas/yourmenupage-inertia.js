@@ -26,7 +26,7 @@ const userImg = user.value?.user_image
 </script>
 
 <template>
-  <aside class="h-dvh bg-gray-900">
+  <aside class="h-screen duration-300 bg-gray-900">
     <!-- LOGO -->
     <div class="absolute w-full flex justify-between items-center p-4">
       <AppLogo />
