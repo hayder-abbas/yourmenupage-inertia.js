@@ -46,7 +46,7 @@ onUnmounted(() => {
         </template>
       </SideBar>
 
-      <div class="flex flex-col dark:bg-gray-800">
+      <div class="flex flex-col xl:col-span-8 dark:bg-gray-800">
         <!-- Navbar -->
         <DashboardNav @toggle="toggleSidbar" />
 
