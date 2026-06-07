@@ -13,7 +13,7 @@ import { Link } from "@inertiajs/vue3";
 
       <Link
         href="https://hayderabbasdev.web.app"
-        class="hover:underline text-blue-500 font-bold"
+        class="hover:underline text-amber-400 font-bold"
       >
         https://hayderabbasdev.web.app
       </Link>

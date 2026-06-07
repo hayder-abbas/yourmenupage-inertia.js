@@ -25,7 +25,7 @@ const imgSrc = props.item.itemImage
     </div>
 
     <div class="w-full flex flex-col justify-between p-4 leading-normal">
-      <div class="mb-2 font-bold tracking-tight text-blue-500 dark:text-white">
+      <div class="mb-2 text-lg font-bold tracking-tight text-amber-400">
         {{ item.itemTitle }}
       </div>
 

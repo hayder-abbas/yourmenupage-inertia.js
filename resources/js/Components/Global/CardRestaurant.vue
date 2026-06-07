@@ -27,7 +27,7 @@ const imgSrc = restData.restLogo
     />
 
     <div class="flex flex-col text-xl sm:grow p-5">
-      <div class="font-bold mb-2 text-blue-500">
+      <div class="font-bold mb-2 text-amber-400">
         {{ restData.restName }}
       </div>
       <div class="flex items-center mb-2">

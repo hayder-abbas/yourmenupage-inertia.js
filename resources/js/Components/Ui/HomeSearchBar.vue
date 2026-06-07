@@ -54,9 +54,9 @@ watch(
           v-for="restaurant in restaurants"
           :key="restaurant.id"
           :href="route('restaurants.show', restaurant)"
-          class="block p-2 text-left hover:bg-blue-300 dark:hover:bg-gray-500 rounded-sm"
+          class="block p-2 text-left hover:bg-gray-200 dark:hover:bg-gray-400 rounded-sm"
         >
-          <span class="block font-bold text-blue-600 dark:text-gray-50">
+          <span class="block font-bold">
             {{ restaurant.restName }}
           </span>
           <span class="text-sm text-gray-500 dark:text-gray-700">

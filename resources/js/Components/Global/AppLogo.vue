@@ -3,5 +3,7 @@ import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-  <Link href="/" class="font-extrabold italic"> YourMenuPage </Link>
+  <Link href="/" class="font-bold italic">
+    YourMenu<span class="text-amber-400 font-extrabold">Page</span>
+  </Link>
 </template>
