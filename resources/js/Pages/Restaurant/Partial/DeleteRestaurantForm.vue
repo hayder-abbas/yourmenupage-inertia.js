@@ -25,7 +25,7 @@ function confirmRestaurantDeletion() {
 }
 
 function deleteRestaurant() {
-  form.delete(route("restaurant.destroy", props.restaurant), {
+  form.delete(route("restaurants.destroy", props.restaurant), {
     preserveScroll: true,
     onSuccess: () => closeModal(),
     onError: () => passwordInput.value.focus(),

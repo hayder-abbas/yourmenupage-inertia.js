@@ -13,6 +13,7 @@ use App\Models\Restaurant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -95,7 +96,7 @@ class ItemController extends Controller
             throw $ex;
         }
 
-        return to_route('restaurant.show', $item->restaurant_id)
+        return to_route('restaurants.show', $item->restaurant_id)
             ->with('status', 'item-updated');
     }
 
@@ -106,8 +107,32 @@ class ItemController extends Controller
 
         $item->delete();
 
-        return to_route('restaurant.show', $item->restaurant_id)
+        return to_route('restaurants.show', $item->restaurant_id)
             ->with('status', 'item-deleted');
+    }
+
+
+    public function trashed()
+    {
+        return Inertia::render('Item/Trashed', [
+            'trashedItems' => ItemResource::collection(
+                Item::onlyTrashed()
+                    ->whereHas('restaurant', function ($query) {
+                        $query->where('user_id', Auth::id());
+                    })
+                    ->get()
+            ),
+        ]);
+    }
+
+
+    public function restore(Item $item)
+    {
+        Gate::authorize('restore', $item);
+
+        $item->restore();
+
+        return to_route('items.trashed')->with('status', 'item-restored');
     }
 
 
@@ -116,11 +141,14 @@ class ItemController extends Controller
         Gate::authorize('forceDelete', $item);
 
         if ($item->item_image) {
-            Storage::disk('public')->delete($item->item_image);
+            try {
+                Storage::disk('public')->delete($item->item_image);
+            } catch (\Exception $ex) {
+                Log::warning('Failed to delete item image: ' . $ex->getMessage());
+            }
         }
+        $item->forceDelete();
 
-        $item->hardDelete();
-
-        return redirect()->back()->with('status', 'item-deleted');
+        return to_route('items.trashed')->with('status', 'item-deleted');
     }
 }

@@ -28,7 +28,14 @@ onUnmounted(() => {
   >
     <div class="relative flex flex-wrap items-center justify-between">
       <!-- LOGO -->
-      <AppLogo />
+      <AppLogo
+        class="text-3xl"
+        :class="
+          $page.component === 'Home'
+            ? 'text-white'
+            : 'text-gray-900 dark:text-white'
+        "
+      />
 
       <div class="flex items-center gap-4 lg:order-2">
         <div class="hidden md:flex gap-4 items-center">
@@ -101,8 +108,8 @@ onUnmounted(() => {
           </li>
           <li>
             <NavLink
-              :href="route('city.index')"
-              :active="route().current('city.index')"
+              :href="route('cities.index')"
+              :active="route().current('cities.index')"
             >
               All cities
             </NavLink>

@@ -62,9 +62,9 @@ function cancelingDeleteItem() {
               class="mb-4 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
             >
               {{ item.itemPrice }}
-              <span class="text-sm text-gray-500 dark:text-gray-400"
-                >dinar</span
-              >
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                dinar
+              </span>
             </div>
 
             <div
@@ -86,10 +86,10 @@ function cancelingDeleteItem() {
               <div class="flex items-center gap-4">
                 <PrimaryButton v-if="can.manageItems" type="submit">
                   <Link
-                    :href="route('item.edit', item)"
+                    :href="route('items.edit', item)"
                     class="flex items-center"
                   >
-                    <EditIcon class="mr-1 -ml-1 w-4 h-4" />
+                    <EditIcon class="mr-1 w-5 h-5" />
                     Edit
                   </Link>
                 </PrimaryButton>
@@ -101,8 +101,8 @@ function cancelingDeleteItem() {
                 v-if="can.manageItems"
                 @click="deleteItemConfirmation = true"
               >
-                <TrashIcon class="w-4 h-4 mr-1.5 -ml-1" />
-                Move to trash
+                <TrashIcon class="w-5 h-5 mr-1" />
+                Trash
               </DangerButton>
             </div>
           </div>

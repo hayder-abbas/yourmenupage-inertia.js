@@ -26,10 +26,10 @@ const userImg = user.value?.user_image
 </script>
 
 <template>
-  <aside class="h-screen duration-300 bg-gray-900">
+  <aside class="h-full duration-300 bg-gray-900">
     <!-- LOGO -->
     <div class="absolute w-full flex justify-between items-center p-4">
-      <AppLogo />
+      <AppLogo class="text-white text-2xl" />
       <!-- Close button -->
       <div class="flex items-center">
         <slot name="close_button"></slot>
@@ -37,7 +37,7 @@ const userImg = user.value?.user_image
     </div>
 
     <div class="h-full pt-14 flex flex-col justify-between">
-      <div class="flex flex-col p-4">
+      <div class="min-h-36 overflow-scroll flex flex-col p-4">
         <div class="flex flex-col gap-1 mb-4 border-b border-b-gray-600">
           <Link
             :href="route('dashboard')"
@@ -49,7 +49,7 @@ const userImg = user.value?.user_image
 
           <!-- Creat a new restaurant -->
           <Link
-            :href="route('restaurant.create')"
+            :href="route('restaurants.create')"
             class="flex items-center gap-2 p-2 text-white font-bold rounded-md hover:bg-gray-800"
           >
             <PlusIcon class="w-5 h-5" />
@@ -61,7 +61,7 @@ const userImg = user.value?.user_image
         <Link
           v-for="r in restaurants"
           :key="r.id"
-          :href="route('restaurant.show', r)"
+          :href="route('restaurants.show', r)"
           class="text-white font-bold p-2 hover:bg-gray-800 rounded-md"
         >
           {{ r.restName }}
@@ -72,7 +72,7 @@ const userImg = user.value?.user_image
         <!-- Trash -->
         <div class="p-4">
           <Link
-            href="#"
+            :href="route('items.trashed')"
             class="flex items-center gap-2 p-2 text-white font-bold rounded-md hover:bg-gray-800"
           >
             <TrashIcon class="w-5 h-5" />

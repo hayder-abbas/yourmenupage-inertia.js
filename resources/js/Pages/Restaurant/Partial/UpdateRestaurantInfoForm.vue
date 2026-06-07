@@ -45,7 +45,7 @@ function onChangeInput(e) {
 }
 
 function submit() {
-  form.post(route("restaurant.update", restData));
+  form.post(route("restaurants.update", restData));
 }
 </script>
 
@@ -99,12 +99,6 @@ function submit() {
           <InputError :message="form.errors.city_id" class="mt-2" />
         </div>
 
-        <!-- <div class="w-full">
-          <InputLabel value="Phone" for="phone" />
-          <TextInput id="phone" />
-          <InputError :message="form.errors.phone" class="mt-2" />
-        </div> -->
-
         <div class="sm:col-span-2 mb-5">
           <InputLabel value="Description" for="rest_desc" />
           <TextAreaInput
@@ -119,7 +113,7 @@ function submit() {
 
       <div class="flex flex-col sm:flex-row sm:justify-end gap-4">
         <SecondaryButton>
-          <Link :href="route('restaurant.show', restData)" as="button">
+          <Link :href="route('restaurants.show', restData)" as="button">
             Cancel
           </Link>
         </SecondaryButton>

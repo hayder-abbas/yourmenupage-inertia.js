@@ -50,7 +50,7 @@ function openAddItemForm() {
 }
 
 function addItem() {
-  form.post(route("item.store"), {
+  form.post(route("items.store"), {
     preserveScroll: true,
     onSuccess: () => {
       closeModal();

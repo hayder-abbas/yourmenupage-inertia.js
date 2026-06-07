@@ -16,7 +16,7 @@ const props = defineProps({
 <template>
   <Head title="Home" />
   <!-- Hero -->
-  <AppHero :restaurants="restaurants" :filters="filters" />
+  <AppHero :restaurants="restaurants.data" :filters="filters" />
 
   <!-- How it works -->
   <section

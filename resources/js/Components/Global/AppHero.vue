@@ -2,7 +2,7 @@
 import HomeSearchBar from "../Ui/HomeSearchBar.vue";
 
 defineProps({
-  restaurants: Object,
+  restaurants: Array,
   filters: Object,
 });
 </script>

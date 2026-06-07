@@ -16,7 +16,7 @@ const imgSrc = restData.restLogo
 
 <template>
   <Link
-    :href="route('restaurant.show', restData)"
+    :href="route('restaurants.show', restData)"
     class="w-full flex rounded-md border border-gray-200 dark:border-gray-600 hover:shadow-[0_0_20px_4px_#eee] dark:hover:shadow-[0_0_20px_4px_#333] dark:text-white dark:bg-gray-900 dark:hover:bg-gray-800"
   >
     <img

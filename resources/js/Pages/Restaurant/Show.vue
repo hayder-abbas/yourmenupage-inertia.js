@@ -9,6 +9,7 @@ import Notification from "@/Components/Global/Notification.vue";
 import CreateItemForm from "@/Components/ItemComponents/CreateItemForm.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import CardItem from "@/Components/ItemComponents/CardItem.vue";
+import ShowItem from "@/Components/ItemComponents/ShowItem.vue";
 
 defineOptions({ layout: AppLayout });
 
@@ -92,7 +93,7 @@ watchEffect(() => {
           <!-- Edit Restaurant Form -->
           <PrimaryButton v-if="can.update">
             <EditIcon class="w-5 h-5 mr-2" />
-            <Link :href="route('restaurant.edit', restData)">
+            <Link :href="route('restaurants.edit', restData)">
               Edit Restaurant
             </Link>
           </PrimaryButton>
@@ -110,7 +111,9 @@ watchEffect(() => {
             :key="item.id"
             :item="item"
             :can="can"
-          />
+          >
+            <ShowItem :item="item" :can="can" />
+          </CardItem>
         </div>
       </article>
 

@@ -11,10 +11,8 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Item;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -53,7 +51,7 @@ class RestaurantController extends Controller
             throw $ex;
         }
 
-        return to_route('restaurant.show', $restaurant)
+        return to_route('restaurants.show', $restaurant)
             ->with('status', 'restaurant-created');
     }
 
@@ -122,7 +120,7 @@ class RestaurantController extends Controller
             throw $ex;
         }
 
-        return to_route('restaurant.show', $restaurant)
+        return to_route('restaurants.show', $restaurant)
             ->with('status', 'restaurant-updated');
     }
 

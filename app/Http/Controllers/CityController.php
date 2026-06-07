@@ -21,8 +21,6 @@ class CityController extends Controller
 
     public function show(City $city)
     {
-        $city->load('restaurants');
-
         return Inertia::render('City/Show', [
             'restaurants' => RestaurantResource::collection($city->restaurants),
             'cityName' => $city->city_name

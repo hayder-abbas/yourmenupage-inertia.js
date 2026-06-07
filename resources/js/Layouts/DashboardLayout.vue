@@ -5,13 +5,10 @@ import CloseIcon from "@/Components/Icons/CloseIcon.vue";
 import DashboardNav from "@/Components/Dashboard/DashboardNav.vue";
 import { useDashboardStore } from "@/Stores/DashboardStore";
 import { onUnmounted, ref } from "vue";
-
-defineProps({
-  restaurants: Object,
-  filters: Object,
-});
+import { storeToRefs } from "pinia";
 
 const dashboard = useDashboardStore();
+const { userRestaurants } = storeToRefs(dashboard);
 const openDashboardSidebar = ref(false);
 
 function toggleSidbar() {
@@ -24,18 +21,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div class="h-screen xl:grid xl:grid-cols-10">
+  <div>
+    <div class="xl:grid xl:grid-cols-10">
       <!-- Fixed Sidebar -->
       <SideBar
-        :restaurants="restaurants"
+        :restaurants="userRestaurants"
         class="hidden xl:block xl:col-span-2"
       />
 
       <!-- Floating Sidebar -->
       <SideBar
-        :restaurants="restaurants"
-        class="absolute top-0 left-0 xl:hidden w-80"
+        :restaurants="userRestaurants"
+        class="fixed md:absolute top-0 left-0 xl:hidden w-80"
         :class="{ '-translate-x-full': !openDashboardSidebar }"
       >
         <template #close_button>
@@ -46,15 +43,12 @@ onUnmounted(() => {
         </template>
       </SideBar>
 
-      <div class="flex flex-col xl:col-span-8 dark:bg-gray-800">
+      <!-- Dashboard Content -->
+      <main class="min-h-screen xl:col-span-8 dark:bg-gray-800">
         <!-- Navbar -->
         <DashboardNav @toggle="toggleSidbar" />
-
-        <!-- Dashboard Content -->
-        <main class="min-h-dvh">
-          <slot />
-        </main>
-      </div>
+        <slot />
+      </main>
     </div>
 
     <!-- Footer -->

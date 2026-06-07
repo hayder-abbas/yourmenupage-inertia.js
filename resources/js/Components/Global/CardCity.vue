@@ -8,7 +8,7 @@ defineProps({
 
 <template>
   <Link
-    :href="route('city.show', city)"
+    :href="route('cities.show', city)"
     class="relative w-full lg:w-72 rounded-md hover:shadow-[-10px_20px_30px_0_rgba(0,0,0,0.6)] hover:scale-105 duration-300 hover:z-10"
   >
     <img

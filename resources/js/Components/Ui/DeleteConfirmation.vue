@@ -1,17 +1,20 @@
 <script setup>
-import TrashIcon from "../Icons/TrashIcon.vue";
 import { useForm } from "@inertiajs/vue3";
+import TrashIcon from "../Icons/TrashIcon.vue";
 
 const props = defineProps({
   item: Object,
   show: Boolean,
+  forceDelete: Boolean,
 });
 
 const emit = defineEmits(["close"]);
-const deleteForm = useForm({});
+const form = useForm({});
 
 function deleteItem() {
-  deleteForm.delete(route("item.destroy", props.item), {
+  const url = props.forceDelete ? "items.forceDelete" : "items.destroy";
+
+  form.delete(route(url, props.item), {
     preserveScroll: true,
     onSuccess() {
       close();
@@ -53,6 +56,7 @@ function close() {
           </button>
 
           <button
+            :disabled="form.processing"
             @click="deleteItem"
             type="button"
             class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"

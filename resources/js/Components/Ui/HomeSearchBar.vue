@@ -5,7 +5,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
-  restaurants: Object,
+  restaurants: Array,
   filters: Object,
 });
 
@@ -53,7 +53,7 @@ watch(
         <Link
           v-for="restaurant in restaurants"
           :key="restaurant.id"
-          :href="route('restaurant.show', restaurant)"
+          :href="route('restaurants.show', restaurant)"
           class="block p-2 text-left hover:bg-blue-300 dark:hover:bg-gray-500 rounded-sm"
         >
           <span class="block font-bold text-blue-600 dark:text-gray-50">

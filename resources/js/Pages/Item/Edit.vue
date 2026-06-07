@@ -51,7 +51,7 @@ watch(
 );
 
 function updateItem() {
-  form.post(route("item.update", props.item));
+  form.post(route("items.update", props.item));
 }
 </script>
 
@@ -125,7 +125,7 @@ function updateItem() {
         </div>
 
         <div class="flex justify-end items-center p-4 mb-4">
-          <Link :href="route('restaurant.show', item.restaurantId)">
+          <Link :href="route('restaurants.show', item.restaurantId)">
             <SecondaryButton> Cancel </SecondaryButton>
           </Link>
 
