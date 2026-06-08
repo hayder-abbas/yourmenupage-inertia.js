@@ -4,11 +4,11 @@ import DarkModeButton from "@/Components/Ui/DarkModeButton.vue";
 import NavLink from "./NavLink.vue";
 import Dropdown from "./Dropdown.vue";
 import HamburgerIcon from "../Icons/HamburgerIcon.vue";
+import SecondaryButton from "../Ui/SecondaryButton.vue";
 import { useDark, useToggle } from "@vueuse/core";
 import { onUnmounted } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { Link } from "@inertiajs/vue3";
-import PrimaryButton from "../Ui/PrimaryButton.vue";
 
 const app = useAppStore();
 const isDark = useDark(true);
@@ -46,24 +46,19 @@ onUnmounted(() => {
             class="text-gray-900 dark:text-white"
             :class="{ 'text-white': $page.component === 'Home' }"
           />
-
-          <Link
-            v-if="!$page.props.auth.user"
-            :href="route('login')"
-            class="text-xl font-bold text-gray-900 dark:text-gray-50 hover:text-blue-500 dark:hover:text-blue-500"
-            :class="
-              $page.component === 'Home' ? 'text-gray-50' : 'text-gray-900'
-            "
-          >
-            <PrimaryButton> Log in </PrimaryButton>
-          </Link>
+          <!-- Login button outside the dropdown -->
+          <SecondaryButton>
+            <Link v-if="!$page.props.auth.user" :href="route('login')">
+              Log in
+            </Link>
+          </SecondaryButton>
         </div>
 
         <!-- Dropdown User -->
         <Dropdown />
-        <button
+
+        <div
           @click="app.openHamburgerMenu = !app.openHamburgerMenu"
-          type="button"
           class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           :class="
             $page.component === 'Home'
@@ -72,7 +67,7 @@ onUnmounted(() => {
           "
         >
           <HamburgerIcon class="w-5 h-5" />
-        </button>
+        </div>
       </div>
 
       <!-- Links -->
@@ -87,13 +82,13 @@ onUnmounted(() => {
           class="flex flex-col font-medium p-4 lg:p-0 mt-4 rounded-lg bg-gray-50 dark:bg-gray-600 lg:bg-transparent lg:dark:bg-transparent lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:mt-0"
         >
           <li class="flex justify-between mb-4 items-center md:hidden">
-            <Link
-              v-if="!$page.props.auth.user"
-              :href="route('login')"
-              class="text-xl font-bold text-gray-900 dark:text-gray-50"
-            >
-              <PrimaryButton> Log in </PrimaryButton>
-            </Link>
+            <!-- Login button inside the dropdown -->
+            <SecondaryButton>
+              <Link v-if="!$page.props.auth.user" :href="route('login')">
+                Log in
+              </Link>
+            </SecondaryButton>
+
             <!-- Dark mode button -->
             <DarkModeButton
               @click="toggleDark()"
