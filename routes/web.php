@@ -1,16 +1,12 @@
 <?php
 
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
-use App\Http\Resources\RestaurantResource;
-use App\Models\Restaurant;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 
 Route::middleware('auth')->group(function () {
@@ -33,30 +29,7 @@ Route::middleware('auth')->group(function () {
         ->except(['index', 'show']);
 
     /** Dashboard Route **/
-    Route::get('/dashboard', function (Request $request) {
-        /** @todo: Search/Filter Items **/
-        // $query = Item::query();
-        // $request->validate([
-        //     'field' => ['in:id,item_title,item_price,restaurant_id,category_id'],
-        //     'direction' => ['in:asc,desc']
-        // ]);
-        // if ($request->search) {
-        //     $query->where('item_title', 'like', "$request->search%");
-        // }
-        // if ($request->has(['field', 'direction'])) {
-        //     $query->orderBy($request->field, $request->direction);
-        // }
-
-        return Inertia::render('Dashboard', [
-            'restaurants' => RestaurantResource::collection(
-                Restaurant::where('user_id', Auth::id())
-                    ->select('id', 'rest_name')
-                    ->get()
-            ),
-            'filters' => $request->all(['search', 'field', 'direction']),
-
-        ]);
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 /** Home Route **/
