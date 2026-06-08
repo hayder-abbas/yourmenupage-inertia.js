@@ -1,21 +1,18 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import AppLogo from "./AppLogo.vue";
 </script>
 
 <template>
-  <footer class="shadow bg-slate-900">
-    <div
-      class="flex flex-col justify-center items-center gap-4 w-full max-w-screen-xl mx-auto px-4 py-10"
-    >
-      <div class="font-bold italic text-2xl sm:text-3xl text-white">
-        YourMenuPage
-      </div>
+  <footer class="bg-gray-900">
+    <div class="flex flex-col justify-center items-center gap-4 w-full py-10">
+      <AppLogo class="text-2xl text-white" />
 
       <Link
         href="https://hayderabbasdev.web.app"
-        class="hover:underline text-amber-400 font-bold"
+        class="hover:underline text-white font-bold"
       >
-        https://hayderabbasdev.web.app
+        hayderabbasdev.web.app
       </Link>
 
       <div
