@@ -36,7 +36,7 @@ const submit = () => {
 
     <!-- Logo -->
     <div class="p-6">
-      <AppLogo />
+      <AppLogo class="text-3xl dark:text-white" />
     </div>
 
     <div

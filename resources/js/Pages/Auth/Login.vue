@@ -40,7 +40,7 @@ const submit = () => {
 
     <!-- Logo -->
     <div class="p-6">
-      <AppLogo />
+      <AppLogo class="text-3xl dark:text-white" />
     </div>
 
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
