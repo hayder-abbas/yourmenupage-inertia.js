@@ -6,14 +6,14 @@ import Dropdown from "./Dropdown.vue";
 import HamburgerIcon from "../Icons/HamburgerIcon.vue";
 import SecondaryButton from "../Ui/SecondaryButton.vue";
 import { useDark, useToggle } from "@vueuse/core";
-import { onUnmounted, ref } from "vue";
+import { computed, onUnmounted } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { Link, usePage } from "@inertiajs/vue3";
 
 const app = useAppStore();
 const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
-const isAuth = ref(usePage().props.auth?.user || null);
+const isAuth = computed(() => usePage().props.auth.user);
 
 onUnmounted(() => {
   app.openHamburgerMenu = false;
