@@ -6,13 +6,14 @@ import Dropdown from "./Dropdown.vue";
 import HamburgerIcon from "../Icons/HamburgerIcon.vue";
 import SecondaryButton from "../Ui/SecondaryButton.vue";
 import { useDark, useToggle } from "@vueuse/core";
-import { onUnmounted } from "vue";
+import { onUnmounted, ref } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 
 const app = useAppStore();
 const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
+const isAuth = ref(usePage().props.auth?.user || null);
 
 onUnmounted(() => {
   app.openHamburgerMenu = false;
@@ -47,10 +48,8 @@ onUnmounted(() => {
             :class="{ 'text-white': $page.component === 'Home' }"
           />
           <!-- Login button outside the dropdown -->
-          <SecondaryButton>
-            <Link v-if="!$page.props.auth.user" :href="route('login')">
-              Log in
-            </Link>
+          <SecondaryButton v-if="!isAuth">
+            <Link :href="route('login')"> Sign in </Link>
           </SecondaryButton>
         </div>
 
@@ -83,10 +82,8 @@ onUnmounted(() => {
         >
           <li class="flex justify-between mb-4 items-center md:hidden">
             <!-- Login button inside the dropdown -->
-            <SecondaryButton>
-              <Link v-if="!$page.props.auth.user" :href="route('login')">
-                Log in
-              </Link>
+            <SecondaryButton v-if="!isAuth">
+              <Link :href="route('login')"> Log in </Link>
             </SecondaryButton>
 
             <!-- Dark mode button -->
