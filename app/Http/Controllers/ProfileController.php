@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,11 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    public function __construct(
+        private UserService $service
+    ) {}
+
+
     public function edit(Request $request): Response
     {
         return Inertia::render('Profile/Edit', [
@@ -25,48 +31,14 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = User::findOrFail(Auth::id());
-        $fields = $request->validated();
-
-        if ($request->hasFile('user_image')) {
-            if ($user['user_image'] !== null) {
-                Storage::disk('public')->delete($user['user_image']);
-            }
-            $fields['user_image'] = Storage::disk('public')
-                ->put('user_image', $request->user_image);
-        }
-
-        if ($fields['user_image'] === null) {
-            $fields['user_image'] = $user['user_image'];
-        }
-
-        $request->user()->fill($fields);
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
+        $this->service->userUpdate($request);
         return redirect()->back()->with('status', 'profile-updated');
     }
 
 
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        $this->service->deleteUser($request);
         return to_route('login')->with('status', 'user-deleted');
     }
 
