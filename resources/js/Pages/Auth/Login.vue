@@ -3,6 +3,7 @@ import AppLogo from "@/Components/Global/AppLogo.vue";
 import Checkbox from "@/Components/Ui/Checkbox.vue";
 import InputError from "@/Components/Ui/InputError.vue";
 import InputLabel from "@/Components/Ui/InputLabel.vue";
+import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { useForm } from "@inertiajs/vue3";
@@ -32,11 +33,11 @@ const submit = () => {
 </script>
 
 <template>
-  <!-- Login form -->
+  <!-- Sign-in form -->
   <section
     class="min-h-screen p-4 flex flex-col items-center justify-center dark:bg-gray-800"
   >
-    <Head title="Login Page" />
+    <Head title="Sign-in Page" />
 
     <!-- Logo -->
     <div class="p-6">
@@ -56,7 +57,7 @@ const submit = () => {
         >
           Sign in to your account
         </h1>
-        <form class="space-y-4 md:space-y-6" @submit.prevent="submit">
+        <form @submit.prevent="submit" class="space-y-4 md:space-y-6">
           <div>
             <InputLabel for="email" value="Email" />
 
@@ -87,6 +88,7 @@ const submit = () => {
 
             <InputError class="mt-2" :message="form.errors.password" />
           </div>
+
           <div class="flex items-center justify-between">
             <div class="flex items-start">
               <div class="flex items-center h-5">
@@ -103,6 +105,8 @@ const submit = () => {
                 </label>
               </div>
             </div>
+
+            <!-- Forgot password link -->
             <Link
               v-if="canResetPassword"
               :href="route('password.request')"
@@ -111,14 +115,17 @@ const submit = () => {
               Forgot password?
             </Link>
           </div>
-          <button
+
+          <PrimaryButton
             type="submit"
-            class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            class="w-full"
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           >
             Sign in
-          </button>
+          </PrimaryButton>
+
+          <!-- Sign up link -->
           <p class="text-sm font-light text-gray-500 dark:text-gray-400">
             Don't have an account yet?
             <Link

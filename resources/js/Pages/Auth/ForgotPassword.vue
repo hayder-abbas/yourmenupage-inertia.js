@@ -13,9 +13,9 @@ const form = useForm({
   email: "",
 });
 
-// const submit = () => {
-//   form.post(route("password.email"));
-// };
+function submit() {
+  form.post(route("password.email"));
+}
 </script>
 
 <template>
@@ -38,7 +38,7 @@ const form = useForm({
           {{ status }}
         </div>
 
-        <form @submit.prevent="form.post(route('password.email'))">
+        <form @submit.prevent="submit">
           <div>
             <InputLabel for="email" value="Email" />
 
@@ -56,6 +56,7 @@ const form = useForm({
 
           <div class="flex items-center justify-end mt-4">
             <PrimaryButton
+              type="submit"
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
             >
