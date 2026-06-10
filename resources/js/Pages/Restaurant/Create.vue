@@ -48,7 +48,7 @@ function onChangeInput(e) {
 }
 
 function submit() {
-  form.post(route("restaurant.store"));
+  form.post(route("restaurants.store"));
 }
 </script>
 
