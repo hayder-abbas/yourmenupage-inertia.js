@@ -11,7 +11,7 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\City;
-use Illuminate\Support\Facades\Storage;
+use App\Services\RestaurantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -19,10 +19,14 @@ use Inertia\Inertia;
 
 class RestaurantController extends Controller
 {
+    public function __construct(
+        private RestaurantService $service
+    ) {}
+
+
     public function create()
     {
         Gate::authorize('create', Restaurant::class);
-
         return Inertia::render("Restaurant/Create", [
             'cities' => CityResource::collection(City::all())
         ]);
@@ -32,25 +36,7 @@ class RestaurantController extends Controller
     public function store(StoreRestaurantRequest $request)
     {
         Gate::authorize('create', Restaurant::class);
-
-        $fields = $request->validated();
-        $logoPath = null;
-
-        try {
-            if ($request->hasFile('rest_logo')) {
-                $logoPath = $request->file('rest_logo')
-                    ->store('restaurant_logo', 'public');
-                $fields['rest_logo'] = $logoPath;
-            }
-
-            $restaurant = Restaurant::create($fields);
-        } catch (\Exception $ex) {
-            if ($logoPath) {
-                Storage::disk('public')->delete($logoPath);
-            }
-            throw $ex;
-        }
-
+        $restaurant = $this->service->createRestaurant($request);
         return to_route('restaurants.show', $restaurant)
             ->with('status', 'restaurant-created');
     }
@@ -59,7 +45,6 @@ class RestaurantController extends Controller
     public function show(Restaurant $restaurant)
     {
         Gate::authorize('view', $restaurant);
-
         return Inertia::render('Restaurant/Show', [
             'restaurant' => new RestaurantResource($restaurant),
             'items' => ItemResource::collection($restaurant->items),
@@ -77,7 +62,6 @@ class RestaurantController extends Controller
     public function edit(Restaurant $restaurant)
     {
         Gate::authorize('update', $restaurant);
-
         return Inertia::render("Restaurant/Edit", [
             'restaurant' => new RestaurantResource($restaurant),
             'cities' => CityResource::collection(
@@ -90,36 +74,7 @@ class RestaurantController extends Controller
     public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
     {
         Gate::authorize('update', $restaurant);
-
-        $fields = $request->validated();
-        $newLogo = null;
-        $oldLogo = $restaurant->rest_logo; // capture before update
-
-        try {
-            if ($request->hasFile('rest_logo')) {
-                // 1. Store new logo (may throw exception)
-                $newLogo = $request->file('rest_logo')
-                    ->store('restaurant_logo', 'public');
-                $fields['rest_logo'] = $newLogo;
-            } else {
-                // 2. If no new logo, remove the key to keep existing one
-                unset($fields['rest_logo']);
-            }
-            // 3. Update the restaurant (database operation)
-            $restaurant->update($fields);
-
-            // 4. Delete old logo only after successful update
-            if ($newLogo && $oldLogo) {
-                Storage::disk('public')->delete($oldLogo);
-            }
-        } catch (\Exception $ex) {
-            // If anything failed after storing the new logo, clean it up
-            if ($newLogo) {
-                Storage::disk('public')->delete($newLogo);
-            }
-            throw $ex;
-        }
-
+        $this->service->updateRestaurant($request, $restaurant);
         return to_route('restaurants.show', $restaurant)
             ->with('status', 'restaurant-updated');
     }
@@ -128,22 +83,7 @@ class RestaurantController extends Controller
     public function destroy(Request $request, Restaurant $restaurant)
     {
         Gate::authorize('delete', $restaurant);
-
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $restaurant->delete();
-
-        if ($restaurant->rest_logo) {
-            Storage::disk('public')->delete($restaurant->rest_logo);
-        }
-
-        $itemImageDir = 'item_image/' . $restaurant->id;
-        if (Storage::disk('public')->exists($itemImageDir)) {
-            Storage::disk('public')->deleteDirectory($itemImageDir);
-        }
-
+        $this->service->destroyRestaurant($request, $restaurant);
         return to_route('dashboard')->with('status', 'restaurant-deleted');
     }
 }
