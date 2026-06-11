@@ -29,7 +29,7 @@ onUnmounted(() => {
       <h1 class="text-4xl font-bold">{{ cityName }}</h1>
     </div>
 
-    <div class="h-screen flex flex-col gap-4">
+    <div class="flex flex-col gap-4 py-4">
       <CardRestaurant
         v-if="restaurants.length > 0"
         v-for="(r, index) in restaurants"
