@@ -8,6 +8,7 @@ import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
+import CloseIcon from "../Icons/CloseIcon.vue";
 
 const props = defineProps({
   item: Object,
@@ -42,61 +43,38 @@ function cancelingDeleteItem() {
     <Modal :show="openingShowItemForm" @close="closeModal">
       <div class="relative flex min-h-screen sm:p-4 dark:bg-gray-700">
         <div class="w-full md:w-2xl lg:w-6xl rounded-lg">
-          <div class="w-full rounded-t-md mb-6">
+          <div class="relative w-full rounded-t-md">
             <img
               :src="imgSrc"
               :alt="item.itemTitle"
-              class="w-full h-full rounded-t-md object-cover aspect-video"
+              class="w-full h-full rounded-t-md aspect-video"
               loading="lazy"
             />
+            <div
+              class="absolute top-0 left-0 bg-gradient-to-b rounded-t-md from-gray-800 w-full h-[50%] z-10"
+            >
+              <div @click="closeModal" class="p-2 w-fit cursor-pointer">
+                <CloseIcon class="w-10 h-10 text-white z-30" />
+              </div>
+            </div>
           </div>
 
           <div class="py-8 px-4 lg:py-16 lg:col-span-2">
-            <h2
-              class="mb-2 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
-            >
+            <h2 class="text-xl font-bold text-gray-900 mb-2 dark:text-white">
               {{ item.itemTitle }}
             </h2>
 
-            <div
-              class="mb-4 text-xl font-bold leading-none text-gray-900 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent md:text-2xl dark:text-white"
-            >
-              {{ item.itemPrice }}
-              <span class="text-sm text-gray-500 dark:text-gray-400">
-                dinar
-              </span>
-            </div>
-
-            <div
-              class="mb-4 font-semibold text-gray-500 py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent sm:mb-5 dark:text-gray-400"
-            >
+            <div class="text-gray-600 mb-2 dark:text-white">
               {{ item.itemDesc }}
             </div>
 
-            <div class="flex flex-col mb-8">
-              <div
-                class="font-semibold py-3 border border-b-gray-400 border-l-transparent border-r-transparent border-t-transparent text-gray-500 sm:mb-5 dark:text-gray-400"
-              >
-                <!-- #{{ item.category.name }} -->
-                Category name
-              </div>
+            <div class="font-bold text-xl mb-2 text-gray-900 dark:text-white">
+              {{ item.itemPrice }}
+              <span class="text-sm text-gray-600 dark:text-white"> dinar </span>
             </div>
 
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <PrimaryButton v-if="can.manageItems" type="submit">
-                  <Link
-                    :href="route('items.edit', item)"
-                    class="flex items-center"
-                  >
-                    <EditIcon class="mr-1 w-5 h-5" />
-                    Edit
-                  </Link>
-                </PrimaryButton>
-
-                <SecondaryButton @click="closeModal"> Close </SecondaryButton>
-              </div>
-
+            <!-- Actions buttons -->
+            <div class="flex items-center justify-end gap-2 py-6">
               <DangerButton
                 v-if="can.manageItems"
                 @click="deleteItemConfirmation = true"
@@ -104,6 +82,16 @@ function cancelingDeleteItem() {
                 <TrashIcon class="w-5 h-5 mr-1" />
                 Trash
               </DangerButton>
+
+              <PrimaryButton v-if="can.manageItems" type="submit">
+                <Link
+                  :href="route('items.edit', item)"
+                  class="flex items-center"
+                >
+                  <EditIcon class="mr-1 w-5 h-5" />
+                  Edit
+                </Link>
+              </PrimaryButton>
             </div>
           </div>
         </div>
