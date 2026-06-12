@@ -1,18 +1,22 @@
 <script setup>
 import CardRestaurant from "@/Components/Global/CardRestaurant.vue";
+import Pagination from "@/Components/Global/Pagination.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { Head } from "@inertiajs/vue3";
-import { onUnmounted } from "vue";
+import { onUnmounted, ref } from "vue";
 
 defineOptions({ layout: AppLayout });
 
-defineProps({
+const props = defineProps({
   restaurants: Object,
   cityName: String,
 });
 
 const app = useAppStore();
+const restData = ref(props.restaurants.data);
+const restLinks = ref(props.restaurants.links);
+const restMeta = ref(props.restaurants.meta);
 
 onUnmounted(() => {
   app.openUserMenu = false;
@@ -30,12 +34,21 @@ onUnmounted(() => {
     </div>
 
     <div class="flex flex-col gap-4 py-4">
-      <CardRestaurant
-        v-if="restaurants.length > 0"
-        v-for="(r, index) in restaurants"
-        :key="index"
-        :restaurant="r"
-      />
+      <div class="p-4 text-xl text-gray-500 dark:text-white">
+        {{ restMeta.from }} - {{ restMeta.to }} of {{ restMeta.total }}
+      </div>
+
+      <div v-if="restData.length > 0" class="flex flex-col gap-4">
+        <!-- Restaurant -->
+        <CardRestaurant
+          v-for="(r, index) in restData"
+          :key="index"
+          :restaurant="r"
+        />
+
+        <!-- Pagination -->
+        <Pagination :meta="restMeta" :links="restLinks" />
+      </div>
 
       <div v-else>
         <p class="text-center text-xl text-gray-900 py-8 dark:text-gray-50">
