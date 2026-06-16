@@ -7,22 +7,23 @@ import DashboardIcon from "../Icons/DashboardIcon.vue";
 import TrashIcon from "../Icons/TrashIcon.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { useDark, useToggle } from "@vueuse/core";
-import { useDashboardStore } from "@/Stores/DashboardStore.js";
 import { ref } from "vue";
 
 defineProps({
   restaurants: Object,
 });
 
-const dashboard = useDashboardStore();
-
 const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
-
 const user = ref(usePage().props.auth?.user);
+const dashAuthLinks = ref(false);
 const userImg = user.value?.user_image
   ? ref(`/storage/${user.value?.user_image}`)
   : ref("/storage/default.png");
+
+function handleDashAuthLinks() {
+  dashAuthLinks.value = !dashAuthLinks.value;
+}
 </script>
 
 <template>
@@ -31,9 +32,7 @@ const userImg = user.value?.user_image
     <div class="absolute w-full flex justify-between items-center p-4">
       <AppLogo class="text-white text-2xl" />
       <!-- Close button -->
-      <div class="flex items-center">
-        <slot name="close_button"></slot>
-      </div>
+      <slot name="close_button"></slot>
     </div>
 
     <div class="h-full pt-14 flex flex-col justify-between">
@@ -61,10 +60,10 @@ const userImg = user.value?.user_image
         <Link
           v-for="r in restaurants"
           :key="r.id"
+          v-text="r.restName"
           :href="route('restaurants.show', r)"
           class="text-white font-bold p-2 hover:bg-gray-800 rounded-md"
         >
-          {{ r.restName }}
         </Link>
       </div>
 
@@ -89,10 +88,7 @@ const userImg = user.value?.user_image
               class="relative flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse"
             >
               <button
-                @click="
-                  dashboard.openDashboardUserMenu =
-                    !dashboard.openDashboardUserMenu
-                "
+                @click="handleDashAuthLinks"
                 type="button"
                 class="flex bg-gray-800 rounded-full md:me-0"
               >
@@ -106,27 +102,33 @@ const userImg = user.value?.user_image
 
               <div
                 class="absolute bottom-20 left-0 z-50 w-[14rem] text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                :class="{ hidden: !dashboard.openDashboardUserMenu }"
+                :class="{ hidden: !dashAuthLinks }"
               >
                 <div class="px-4 py-3">
-                  <div class="block text-sm text-gray-900 dark:text-white">
-                    {{ $page.props.auth.user.user_name }}
-                  </div>
+                  <!-- User name -->
                   <div
+                    v-text="user.user_name"
+                    class="block text-sm text-gray-900 dark:text-white"
+                  ></div>
+                  <!-- User email -->
+                  <div
+                    v-text="user.email"
                     class="block text-sm text-gray-500 truncate dark:text-gray-400"
-                  >
-                    {{ $page.props.auth.user.email }}
-                  </div>
+                  ></div>
                 </div>
                 <ul class="py-2">
                   <li>
-                    <DropdownLink :href="route('profile.edit')">
+                    <DropdownLink
+                      :href="route('profile.edit')"
+                      @click="handleDashAuthLinks"
+                    >
                       Profile
                     </DropdownLink>
                   </li>
                   <li>
                     <DropdownLink
                       :href="route('logout')"
+                      @click="handleDashAuthLinks"
                       method="post"
                       as="button"
                     >

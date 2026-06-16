@@ -2,9 +2,7 @@
 import CardRestaurant from "@/Components/Global/CardRestaurant.vue";
 import Pagination from "@/Components/Global/Pagination.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { useAppStore } from "@/Stores/AppStore";
 import { Head } from "@inertiajs/vue3";
-import { onUnmounted, ref } from "vue";
 
 defineOptions({ layout: AppLayout });
 
@@ -13,15 +11,9 @@ const props = defineProps({
   cityName: String,
 });
 
-const app = useAppStore();
 const restData = ref(props.restaurants.data);
 const restLinks = ref(props.restaurants.links);
 const restMeta = ref(props.restaurants.meta);
-
-onUnmounted(() => {
-  app.openUserMenu = false;
-  app.openHamburgerMenu = false;
-});
 </script>
 
 <template>

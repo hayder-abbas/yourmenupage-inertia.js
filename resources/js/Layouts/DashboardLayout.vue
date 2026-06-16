@@ -4,7 +4,7 @@ import SideBar from "@/Components/Dashboard/SideBar.vue";
 import CloseIcon from "@/Components/Icons/CloseIcon.vue";
 import DashboardNav from "@/Components/Dashboard/DashboardNav.vue";
 import { useDashboardStore } from "@/Stores/DashboardStore";
-import { onUnmounted, ref } from "vue";
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 
 const dashboard = useDashboardStore();
@@ -14,10 +14,6 @@ const openDashboardSidebar = ref(false);
 function toggleSidbar() {
   openDashboardSidebar.value = !openDashboardSidebar.value;
 }
-
-onUnmounted(() => {
-  dashboard.openDashboardUserMenu = false;
-});
 </script>
 
 <template>
@@ -36,10 +32,7 @@ onUnmounted(() => {
         :class="{ '-translate-x-full': !openDashboardSidebar }"
       >
         <template #close_button>
-          <CloseIcon
-            @click="toggleSidbar"
-            class="text-gray-50 cursor-pointer"
-          />
+          <CloseIcon @click="toggleSidbar" class="w-8 h-8 text-gray-50" />
         </template>
       </SideBar>
 

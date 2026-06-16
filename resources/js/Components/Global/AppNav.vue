@@ -6,18 +6,17 @@ import Dropdown from "./Dropdown.vue";
 import HamburgerIcon from "../Icons/HamburgerIcon.vue";
 import SecondaryButton from "../Ui/SecondaryButton.vue";
 import { useDark, useToggle } from "@vueuse/core";
-import { computed, onUnmounted } from "vue";
-import { useAppStore } from "@/Stores/AppStore";
+import { computed, ref } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 
-const app = useAppStore();
 const isDark = useDark(true);
 const toggleDark = useToggle(isDark);
 const isAuth = computed(() => usePage().props.auth.user);
+const toggleLinksBar = ref(false);
 
-onUnmounted(() => {
-  app.openHamburgerMenu = false;
-});
+function handleToggleLinksBar() {
+  toggleLinksBar.value = !toggleLinksBar.value;
+}
 </script>
 
 <template>
@@ -57,7 +56,7 @@ onUnmounted(() => {
         <Dropdown />
 
         <div
-          @click="app.openHamburgerMenu = !app.openHamburgerMenu"
+          @click="handleToggleLinksBar"
           class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           :class="
             $page.component === 'Home'
@@ -73,7 +72,7 @@ onUnmounted(() => {
       <div
         class="items-center justify-end flex-grow mr-5 w-full lg:flex lg:w-auto lg:order-1"
         :class="{
-          hidden: !app.openHamburgerMenu,
+          hidden: !toggleLinksBar,
           'absolute top-10 lg:relative lg:top-0': $page.component === 'Home',
         }"
       >
@@ -94,7 +93,11 @@ onUnmounted(() => {
             />
           </li>
           <li>
-            <NavLink :href="route('home')" :active="route().current('home')">
+            <NavLink
+              :href="route('home')"
+              :active="route().current('home')"
+              @click="handleToggleLinksBar"
+            >
               Home
             </NavLink>
           </li>
@@ -102,12 +105,17 @@ onUnmounted(() => {
             <NavLink
               :href="route('cities.index')"
               :active="route().current('cities.index')"
+              @click="handleToggleLinksBar"
             >
               All cities
             </NavLink>
           </li>
           <li>
-            <NavLink :href="route('about')" :active="route().current('about')">
+            <NavLink
+              :href="route('about')"
+              :active="route().current('about')"
+              @click="handleToggleLinksBar"
+            >
               About us
             </NavLink>
           </li>
