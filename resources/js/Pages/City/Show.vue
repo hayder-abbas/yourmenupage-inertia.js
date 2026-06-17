@@ -3,6 +3,7 @@ import CardRestaurant from "@/Components/Global/CardRestaurant.vue";
 import Pagination from "@/Components/Global/Pagination.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 defineOptions({ layout: AppLayout });
 
