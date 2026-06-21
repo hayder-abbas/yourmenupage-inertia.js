@@ -6,6 +6,7 @@ import { renderToString } from "@vue/server-renderer";
 import createServer from "@inertiajs/vue3/server";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import { VueReCaptcha } from "vue-recaptcha-v3";
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
@@ -23,13 +24,19 @@ createServer((page) =>
                 import.meta.glob("./Pages/**/*.vue"),
             ),
         setup({ App, props, plugin }) {
-            return createSSRApp({ render: () => h(App, props) })
-                .use(plugin)
-                .use(pinia)
-                .use(ZiggyVue, {
-                    ...page.props.ziggy,
-                    location: new URL(page.props.ziggy.location),
-                });
+            return (
+                createSSRApp({ render: () => h(App, props) })
+                    .use(plugin)
+                    // Initialize reCAPTCHA using the Inertia shared prop
+                    .use(VueReCaptcha, {
+                        siteKey: props.initialPage.props.recaptcha_site_key,
+                    })
+                    .use(pinia)
+                    .use(ZiggyVue, {
+                        ...page.props.ziggy,
+                        location: new URL(page.props.ziggy.location),
+                    })
+            );
         },
     }),
 );

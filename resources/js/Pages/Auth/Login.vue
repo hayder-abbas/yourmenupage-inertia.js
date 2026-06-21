@@ -6,6 +6,7 @@ import InputLabel from "@/Components/Ui/InputLabel.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 defineOptions({
@@ -17,19 +18,27 @@ defineProps({
   status: String,
 });
 
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const form = useForm({
   email: "",
   password: "",
   remember: false,
+  captcha_token: null, // Holds the generated token
 });
 
-const submit = () => {
+async function submit() {
+  // 1. Wait for reCAPTCHA to load
+  await recaptchaLoaded();
+
+  // 2. Execute and get the token (the string 'login' is the action name)
+  form.captcha_token = await executeRecaptcha("login");
+
   form.post(route("login"), {
     onFinish: () => {
       form.reset("password");
     },
   });
-};
+}
 </script>
 
 <template>
@@ -86,6 +95,10 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.password" />
+          </div>
+
+          <div v-if="form.errors.captcha_token" class="text-sm text-red-600">
+            {{ form.errors.captcha_token }}
           </div>
 
           <div class="flex items-center justify-between">

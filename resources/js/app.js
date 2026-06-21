@@ -7,6 +7,7 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import { VueReCaptcha } from "vue-recaptcha-v3";
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
@@ -21,11 +22,17 @@ createInertiaApp({
             import.meta.glob("./Pages/**/*.vue"),
         ),
     setup({ el, App, props, plugin }) {
-        return createSSRApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(ZiggyVue)
-            .use(pinia)
-            .mount(el);
+        return (
+            createSSRApp({ render: () => h(App, props) })
+                .use(plugin)
+                // Initialize reCAPTCHA using the Inertia shared prop
+                .use(VueReCaptcha, {
+                    siteKey: props.initialPage.props.recaptcha_site_key,
+                })
+                .use(ZiggyVue)
+                .use(pinia)
+                .mount(el)
+        );
     },
     progress: {
         color: "#4B5563",
