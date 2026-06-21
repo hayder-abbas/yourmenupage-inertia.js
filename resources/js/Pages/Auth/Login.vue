@@ -6,7 +6,7 @@ import InputLabel from "@/Components/Ui/InputLabel.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 defineOptions({
   layout: AppLayout,
@@ -66,7 +66,6 @@ const submit = () => {
               type="email"
               class="mt-1 block w-full"
               v-model="form.email"
-              autofocus
               autocomplete="username"
               placeholder="name@company.com"
             />

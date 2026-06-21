@@ -1,15 +1,16 @@
 <script setup>
 import { Head, Link, usePage } from "@inertiajs/vue3";
 import { reactive, ref, watchEffect } from "vue";
+import { toTimeUTC } from "@/helpers";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PhoneIcon from "@/Components/Icons/PhoneIcon.vue";
 import MapPinIcon from "@/Components/Icons/MapPinIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import Notification from "@/Components/Global/Notification.vue";
-import CreateItemForm from "@/Components/ItemComponents/CreateItemForm.vue";
+import CreateItemForm from "@/Components/Item/CreateItemForm.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
-import CardItem from "@/Components/ItemComponents/CardItem.vue";
-import ShowItem from "@/Components/ItemComponents/ShowItem.vue";
+import CardItem from "@/Components/Item/CardItem.vue";
+import ShowItem from "@/Components/Item/ShowItem.vue";
 
 defineOptions({ layout: AppLayout });
 
@@ -21,6 +22,8 @@ const props = defineProps({
 });
 
 const restData = reactive(props.restaurant);
+const openAt = ref(toTimeUTC(restData.openAt, true));
+const closeAt = ref(toTimeUTC(restData.closeAt, true));
 const logoSrc = restData.restLogo
   ? ref(`/storage/${restData.restLogo}`)
   : ref("/storage/default.png");
@@ -66,20 +69,31 @@ watchEffect(() => {
 
       <header class="w-full md:basis-2/3 xl:basis-4/5 dark:text-white">
         <div class="flex-1">
-          <h1 class="font-extrabold text-3xl mb-2">
-            {{ restData.restName }}
-          </h1>
-          <div class="mb-2">{{ restData.restDesc }}</div>
+          <!-- Restaurant name -->
+          <h1
+            v-text="restData.restName"
+            class="font-extrabold text-3xl mb-2"
+          ></h1>
+          <!-- Restaurant description -->
+          <div v-text="restData.restDesc" class="mb-2"></div>
+          <!-- Restaurant location -->
           <div class="flex items-center gap-2 mb-2">
-            <MapPinIcon class="w-4 h-4" /> {{ restData.location }}
+            <MapPinIcon class="w-4 h-4" />
+            <span v-text="restData.location"></span>
           </div>
+          <!-- Restaurant phone -->
           <div class="flex items-center mb-2">
             <PhoneIcon class="w-4 h-4 mr-2" />
-            {{ restData.restPhone }}
+            <span v-text="restData.restPhone"></span>
           </div>
+          <!-- Restaurant open/close -->
           <div class="mb-2">
-            <div class="text-green-600">Open: {{ restData.openAt }}</div>
-            <div class="text-red-600">Close: {{ restData.closeAt }}</div>
+            <div class="text-green-600">
+              Open: <span v-text="openAt"></span>
+            </div>
+            <div class="text-red-600">
+              Close: <span v-text="closeAt"></span>
+            </div>
           </div>
         </div>
 
@@ -117,6 +131,7 @@ watchEffect(() => {
         </div>
       </article>
 
+      <!-- Order section for future -->
       <aside class="hidden lg:col-span-2 xl:col-span-2 lg:block">
         <!-- Cart -->
         <div

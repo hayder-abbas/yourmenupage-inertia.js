@@ -8,7 +8,7 @@ import SelectInput from "@/Components/Ui/SelectInput.vue";
 import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, useForm, usePage } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 defineOptions({
@@ -68,7 +68,7 @@ function submit() {
 
       <form @submit.prevent="submit">
         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-          <div class="sm:col-span-2">
+          <div class="sm:col-span-2 text-center">
             <ImageInput
               @change="onChangeInput($event)"
               :src="previewLogo"

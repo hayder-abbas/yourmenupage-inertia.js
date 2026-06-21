@@ -4,14 +4,12 @@ namespace App\Services;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class UserService
+class UpdateUser
 {
-    public function userUpdate(ProfileUpdateRequest $request)
+    public function update(ProfileUpdateRequest $request)
     {
         $user = User::findOrFail(Auth::id());
         $fields = $request->validated();
@@ -45,28 +43,5 @@ class UserService
             }
             throw $ex;
         }
-    }
-
-
-    public function deleteUser(Request $request)
-    {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-        Auth::logout();
-        $user->delete();
-
-        try {
-            if ($user->user_image) {
-                Storage::disk('public')->delete($user->user_image);
-            }
-        } catch (\Exception $ex) {
-            Log::warning('Failed to delete user image: ' . $ex->getMessage());
-        }
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
     }
 }

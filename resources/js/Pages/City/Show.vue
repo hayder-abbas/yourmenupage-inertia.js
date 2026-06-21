@@ -23,12 +23,14 @@ const restMeta = ref(props.restaurants.meta);
 
     <div class="py-8 text-gray-900 dark:text-white">
       <div>Restaurant menus in</div>
-      <h1 class="text-4xl font-bold">{{ cityName }}</h1>
+      <!-- City Name -->
+      <h1 v-text="cityName" class="text-4xl font-bold"></h1>
     </div>
 
     <div class="flex flex-col gap-4 py-4">
       <div class="p-4 text-xl text-gray-500 dark:text-white">
-        {{ restMeta.from }} - {{ restMeta.to }} of {{ restMeta.total }}
+        {{ restMeta.from || 0 }} - {{ restMeta.to || 0 }} of
+        {{ restMeta.total }}
       </div>
 
       <div v-if="restData.length > 0" class="flex flex-col gap-4">

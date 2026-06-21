@@ -11,7 +11,9 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\City;
-use App\Services\RestaurantService;
+use App\Services\CreateRestaurant;
+use App\Services\DeleteRestaurant;
+use App\Services\UpdateRestaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -19,11 +21,6 @@ use Inertia\Inertia;
 
 class RestaurantController extends Controller
 {
-    public function __construct(
-        private RestaurantService $service
-    ) {}
-
-
     public function create()
     {
         Gate::authorize('create', Restaurant::class);
@@ -33,10 +30,10 @@ class RestaurantController extends Controller
     }
 
 
-    public function store(StoreRestaurantRequest $request)
+    public function store(StoreRestaurantRequest $request, CreateRestaurant $service)
     {
         Gate::authorize('create', Restaurant::class);
-        $restaurant = $this->service->createRestaurant($request);
+        $restaurant = $service->create($request);
         return to_route('restaurants.show', $restaurant)
             ->with('status', 'restaurant-created');
     }
@@ -71,19 +68,19 @@ class RestaurantController extends Controller
     }
 
 
-    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
+    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant, UpdateRestaurant $service)
     {
         Gate::authorize('update', $restaurant);
-        $this->service->updateRestaurant($request, $restaurant);
+        $service->update($request, $restaurant);
         return to_route('restaurants.show', $restaurant)
             ->with('status', 'restaurant-updated');
     }
 
 
-    public function destroy(Request $request, Restaurant $restaurant)
+    public function destroy(Request $request, Restaurant $restaurant, DeleteRestaurant $service)
     {
         Gate::authorize('delete', $restaurant);
-        $this->service->destroyRestaurant($request, $restaurant);
+        $service->delete($request, $restaurant);
         return to_route('dashboard')->with('status', 'restaurant-deleted');
     }
 }

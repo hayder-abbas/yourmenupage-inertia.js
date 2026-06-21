@@ -36,7 +36,7 @@ function handleDashAuthLinks() {
     </div>
 
     <div class="h-full pt-14 flex flex-col justify-between">
-      <div class="min-h-36 overflow-scroll flex flex-col p-4">
+      <div class="min-h-36 overflow-auto flex flex-col p-4">
         <div class="flex flex-col gap-1 mb-4 border-b border-b-gray-600">
           <Link
             :href="route('dashboard')"

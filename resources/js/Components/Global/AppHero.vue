@@ -1,5 +1,5 @@
 <script setup>
-import HomeSearchBar from "../Ui/HomeSearchBar.vue";
+import HomeSearchBar from "./HomeSearchBar.vue";
 
 defineProps({
   restaurants: Array,

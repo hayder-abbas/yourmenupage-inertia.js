@@ -10,7 +10,10 @@ use App\Http\Resources\ItemResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Category;
 use App\Models\Restaurant;
+use App\Services\CreateItem;
+use App\Services\ForceDeleteItem;
 use App\Services\ItemService;
+use App\Services\UpdateItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -18,15 +21,10 @@ use Inertia\Inertia;
 
 class ItemController extends Controller
 {
-    public function __construct(
-        private ItemService $service
-    ) {}
-
-
-    public function store(StoreItemRequest $request)
+    public function store(StoreItemRequest $request, CreateItem $service)
     {
         Gate::authorize('create', Item::class);
-        $this->service->createItem($request);
+        $service->create($request);
         return redirect()->back()->with('status', 'item-created');
     }
 
@@ -47,10 +45,10 @@ class ItemController extends Controller
     }
 
 
-    public function update(UpdateItemRequest $request, Item $item)
+    public function update(UpdateItemRequest $request, Item $item, UpdateItem $service)
     {
         Gate::authorize('update', $item);
-        $this->service->updateItem($request, $item);
+        $service->update($request, $item);
         return to_route('restaurants.show', $item->restaurant_id)
             ->with('status', 'item-updated');
     }
@@ -87,10 +85,10 @@ class ItemController extends Controller
     }
 
 
-    public function forceDelete(Item $item)
+    public function forceDelete(Item $item, ForceDeleteItem $service)
     {
         Gate::authorize('forceDelete', $item);
-        $this->service->forceDeleteItem($item);
+        $service->forceDelete($item);
         return to_route('items.trashed')->with('status', 'item-deleted');
     }
 }

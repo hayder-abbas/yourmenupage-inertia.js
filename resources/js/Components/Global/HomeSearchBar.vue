@@ -1,11 +1,11 @@
 <script setup>
-import SearchIcon from "@/Components/Icons/SearchIcon.vue";
 import { ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
-import { router } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import SearchIcon from "../Icons/SearchIcon.vue";
 
 const props = defineProps({
-  restaurants: Object,
+  restaurants: Array,
   filters: Object,
 });
 
@@ -19,47 +19,49 @@ watch(
       router.get(
         "/",
         { search: value },
-        { preserveState: true, preserveScroll: true, replace: true }
+        { preserveState: true, preserveScroll: true, replace: true },
       );
       searchList.value = true;
     } else {
       searchList.value = false;
     }
-  }, 500)
+  }, 500),
 );
 </script>
 
 <template>
   <div>
-    <form class="max-w-xl mx-auto relative">
+    <form class="max-w-3xl mx-auto relative">
       <div class="relative">
-        <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-        >
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3">
           <SearchIcon class="w-4 h-4 text-gray-500 dark:text-gray-50" />
         </div>
         <input
           v-model="search"
           type="search"
-          name="search"
-          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 dark:border-gray-500 dark:placeholder:text-gray-50 rounded-lg bg-gray-50 dark:bg-gray-400 focus:ring-blue-500 focus:border-blue-500"
+          class="block w-full p-4 ps-10 text-gray-900 dark:placeholder:text-gray-50 rounded-lg bg-gray-50 dark:bg-gray-400 focus:outline-none focus:border-transparent"
           placeholder="Search Restaurants..."
         />
       </div>
 
-      <div v-if="searchList" class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-14 left-0 w-full">
+      <div
+        v-if="searchList"
+        class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-14 left-0 w-full"
+      >
         <Link
-          v-for="restaurant in restaurants.data"
+          v-for="restaurant in restaurants"
           :key="restaurant.id"
-          :href="route('items.menu', restaurant.id)"
-          class="block p-2 text-left hover:bg-primary-500 text-gray-900 hover:text-gray-50 rounded-sm"
+          :href="route('restaurants.show', restaurant)"
+          class="block p-2 text-left hover:bg-gray-200 dark:hover:bg-gray-400 rounded-sm"
         >
-          <h5 class="">
-            {{ restaurant.name }}
-          </h5>
-          <p class="text-sm text-gray-500 dark:text-gray-700">
-            {{ restaurant.location }}
-          </p>
+          <!-- Restaurant name -->
+          <span v-text="restaurant.restName" class="block font-bold"> </span>
+          <!-- Restaurant location -->
+          <span
+            v-text="restaurant.location"
+            class="text-sm text-gray-500 dark:text-gray-700"
+          >
+          </span>
         </Link>
       </div>
     </form>

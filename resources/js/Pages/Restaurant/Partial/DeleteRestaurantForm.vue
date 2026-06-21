@@ -42,7 +42,7 @@ function closeModal() {
 
 <template>
   <div
-    class="p-4 sm:p-8 mx-auto md:max-w-2xl dark:bg-gray-900 shadow-lg md:rounded-lg space-y-6"
+    class="p-4 sm:p-8 mx-auto md:max-w-2xl xl:max-w-4xl dark:bg-gray-900 shadow-lg md:rounded-lg space-y-6"
   >
     <header>
       <h2 class="text-lg font-medium text-gray-900">Delete Account</h2>

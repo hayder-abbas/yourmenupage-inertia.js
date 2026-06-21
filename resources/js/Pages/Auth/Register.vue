@@ -3,7 +3,7 @@ import InputError from "@/Components/Ui/InputError.vue";
 import InputLabel from "@/Components/Ui/InputLabel.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import Checkbox from "@/Components/Ui/Checkbox.vue";
-import { useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 import AppLogo from "@/Components/Global/AppLogo.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
@@ -57,7 +57,6 @@ const submit = () => {
               type="text"
               class="mt-1 block w-full"
               v-model="form.user_name"
-              autofocus
               autocomplete="user_name"
               placeholder="Your name"
             />
