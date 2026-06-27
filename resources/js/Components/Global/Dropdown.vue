@@ -1,9 +1,9 @@
 <script setup>
 import DropdownLink from "./DropdownLink.vue";
 import { usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
-const user = ref(usePage().props.auth?.user);
+const user = computed(() => usePage().props.auth?.user);
 const authLinks = ref(false);
 const userImg = user.value?.user_image
   ? ref(`/storage/${user.value?.user_image}`)
@@ -31,23 +31,24 @@ function handleAuthLinks() {
           loading="lazy"
         />
       </button>
+
       <!-- Auth links dropdown -->
       <div
         class="absolute top-10 right-0 z-50 w-[13rem] text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
         :class="{ hidden: !authLinks }"
       >
+        <!-- User info -->
         <div class="px-4 py-3">
-          <!-- User name -->
           <div
             v-text="user.user_name"
             class="block text-sm text-gray-900 dark:text-white"
           ></div>
-          <!-- User email -->
           <div
             v-text="user.email"
             class="block text-sm text-gray-500 truncate dark:text-gray-400"
           ></div>
         </div>
+
         <ul class="py-2">
           <li>
             <DropdownLink :href="route('dashboard')" @click="handleAuthLinks">

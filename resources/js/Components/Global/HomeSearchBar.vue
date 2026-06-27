@@ -9,8 +9,8 @@ const props = defineProps({
   filters: Object,
 });
 
-let search = ref();
-let searchList = ref(false);
+const search = ref();
+const isSearchResult = ref(false);
 
 watch(
   () => search.value,
@@ -21,9 +21,9 @@ watch(
         { search: value },
         { preserveState: true, preserveScroll: true, replace: true },
       );
-      searchList.value = true;
+      isSearchResult.value = true;
     } else {
-      searchList.value = false;
+      isSearchResult.value = false;
     }
   }, 500),
 );
@@ -31,22 +31,23 @@ watch(
 
 <template>
   <div>
-    <form class="max-w-3xl mx-auto relative">
-      <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3">
+    <form class="max-w-2xl mx-auto relative">
+      <div>
+        <div class="absolute inset-y-0 start-0 flex items-center ps-4">
           <SearchIcon class="w-4 h-4 text-gray-500 dark:text-gray-50" />
         </div>
+
         <input
           v-model="search"
           type="search"
-          class="block w-full p-4 ps-10 text-gray-900 dark:placeholder:text-gray-50 rounded-lg bg-gray-50 dark:bg-gray-400 focus:outline-none focus:border-transparent"
+          class="block w-full p-4 ps-12 text-gray-900 dark:placeholder:text-gray-50 rounded-lg bg-gray-50 dark:bg-gray-400 focus:outline-none focus:border-transparent"
           placeholder="Search Restaurants..."
         />
       </div>
 
       <div
-        v-if="searchList"
-        class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-14 left-0 w-full"
+        v-if="isSearchResult"
+        class="bg-gray-50 dark:bg-gray-400 p-2 rounded-md absolute top-16 left-0 w-full"
       >
         <Link
           v-for="restaurant in restaurants"
@@ -55,13 +56,12 @@ watch(
           class="block p-2 text-left hover:bg-gray-200 dark:hover:bg-gray-400 rounded-sm"
         >
           <!-- Restaurant name -->
-          <span v-text="restaurant.restName" class="block font-bold"> </span>
+          <div v-text="restaurant.restName" class="font-bold"></div>
           <!-- Restaurant location -->
-          <span
+          <div
             v-text="restaurant.location"
             class="text-sm text-gray-500 dark:text-gray-700"
-          >
-          </span>
+          ></div>
         </Link>
       </div>
     </form>

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->string('rest_name', 50);
-            $table->string('rest_phone', 15);
+            $table->string('rest_phone', 20);
             $table->string('rest_desc')->nullable();
             $table->string('rest_logo')->nullable();
             $table->string('location');

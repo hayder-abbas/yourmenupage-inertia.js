@@ -28,14 +28,14 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request, UpdateUser $service): RedirectResponse
     {
         $service->update($request);
-        return redirect()->back()->with('status', 'profile-updated');
+        return redirect('/profile')->with('status', 'profile-updated');
     }
 
 
     public function destroy(Request $request, DeleteUser $service): RedirectResponse
     {
         $service->delete($request);
-        return to_route('login')->with('status', 'user-deleted');
+        return redirect('login')->with('status', 'user-deleted');
     }
 
 
@@ -46,6 +46,6 @@ class ProfileController extends Controller
             User::where('id', Auth::id())->update(['user_image' => '']);
             Storage::disk('public')->delete($user->user_image);
         }
-        return redirect()->back()->with('status', 'profile-image-deleted');
+        return redirect('/profile')->with('status', 'profile-image-deleted');
     }
 }
