@@ -19,9 +19,8 @@ class HomeController extends Controller
                 Restaurant::query()
                     ->select('id', 'rest_name', 'location')
                     ->when($request->input('search'), function ($query, $search) {
-                        $query->where('rest_name', 'like', "%{$search}%");
-                    })
-                    ->paginate(10)
+                        $query->where('rest_name', 'like', '%' . trim($search) . '%');
+                    })->limit(10)->get()
             ),
             'filters' => $request->only(['search']),
         ]);
