@@ -12,108 +12,82 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+        Storage::fake('public');
+    }
+
+
     public function test_profile_page_is_displayed(): void
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
-
-        $response = $this
-            ->actingAs($user)
-            ->get('/profile');
+        $response = $this->get('/profile');
 
         $response->assertOk();
     }
 
     public function test_profile_information_can_be_updated(): void
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
+        $response = $this->patch('/profile', [
+            'user_name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'user_name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
+        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+        $this->user->refresh();
 
-        $user->refresh();
-
-        $this->assertSame('Test User', $user->user_name);
-        $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame('Test User', $this->user->user_name);
+        $this->assertSame('test@example.com', $this->user->email);
+        $this->assertNull($this->user->email_verified_at);
     }
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
+        $response = $this->patch('/profile', [
+            'user_name' => 'Test User',
+            'email' => $this->user->email,
+        ]);
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'user_name' => 'Test User',
-                'email' => $user->email,
-            ]);
+        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($user->refresh()->email_verified_at);
+        $this->assertNotNull($this->user->refresh()->email_verified_at);
     }
 
     public function test_user_can_delete_their_account(): void
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
+        $response = $this->delete('/profile', [
+            'password' => 'password',
+        ]);
 
-        $response = $this
-            ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/login');
+        $response->assertSessionHasNoErrors()->assertRedirect('/login');
 
         $this->assertGuest();
-        $this->assertNull($user->fresh());
+        $this->assertNull($this->user->fresh());
     }
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
-
         $response = $this
-            ->actingAs($user)
             ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
+            ->delete('/profile', ['password' => 'wrong-password']);
 
         $response
             ->assertSessionHasErrors('password')
             ->assertRedirect('/profile');
 
-        $this->assertNotNull($user->fresh());
+        $this->assertNotNull($this->user->fresh());
     }
 
     public function test_user_image_can_be_uploaded(): void
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
-
-        Storage::fake('public');
         $file = UploadedFile::fake()->image('user.jpg');
 
         $response = $this
-            ->actingAs($user)
             ->from('/profile')
             ->patch('/profile', [
                 'user_name' => 'Test User',
@@ -121,24 +95,21 @@ class ProfileTest extends TestCase
                 'user_image' => $file,
             ]);
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-        Storage::disk('public')->assertExists('user_image/' . $file->hashName());
+        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
+
+        $this->assertTrue(
+            Storage::disk('public')->exists('user_image/' . $file->hashName())
+        );
     }
 
     public function test_reset_profile_image()
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
-
         $response = $this
-            ->actingAs($user)
             ->from('/profile')
             ->post('/reset/profile/image');
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
+
+        $this->assertNull($this->user->refresh()->user_image);
     }
 }

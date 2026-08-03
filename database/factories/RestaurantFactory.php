@@ -24,8 +24,8 @@ class RestaurantFactory extends Factory
             'rest_name' => fake()->name(),
             'rest_phone' => fake()->phoneNumber(),
             'location' => fake()->streetAddress(),
-            'open_at' => fake()->time(),
-            'close_at' => fake()->time(),
+            'open_at' => fake()->time('H:i'),
+            'close_at' => fake()->time('H:i'),
         ];
     }
 }
