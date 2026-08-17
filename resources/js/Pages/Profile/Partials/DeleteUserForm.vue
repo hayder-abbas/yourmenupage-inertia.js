@@ -17,7 +17,6 @@ const form = useForm({
 
 const confirmUserDeletion = () => {
   confirmingUserDeletion.value = true;
-
   nextTick(() => passwordInput.value.focus());
 };
 
@@ -39,7 +38,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <section class="space-y-6">
+  <section class="space-y-6 max-w-xl mx-auto">
     <header>
       <h2 class="text-lg font-medium text-gray-900">Delete Account</h2>
 
@@ -50,7 +49,9 @@ const closeModal = () => {
       </p>
     </header>
 
-    <DangerButton @click="confirmUserDeletion">Delete Account</DangerButton>
+    <DangerButton class="w-full md:w-1/2" @click="confirmUserDeletion"
+      >Delete Account</DangerButton
+    >
 
     <Modal :show="confirmingUserDeletion" @close="closeModal">
       <div class="p-6">

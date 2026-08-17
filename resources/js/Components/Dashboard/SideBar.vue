@@ -1,153 +1,188 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import AppLogo from "../Global/AppLogo.vue";
-import PlusIcon from "../Icons/PlusIcon.vue";
-import DropdownLink from "../Global/DropdownLink.vue";
-import DarkModeButton from "../Ui/DarkModeButton.vue";
-import DashboardIcon from "../Icons/DashboardIcon.vue";
-import TrashIcon from "../Icons/TrashIcon.vue";
-import { Link, usePage } from "@inertiajs/vue3";
-import { useDark, useToggle } from "@vueuse/core";
-import { ref } from "vue";
 
 defineProps({
   restaurants: Object,
+  open: { type: Boolean, default: false },
 });
 
-const isDark = useDark(true);
-const toggleDark = useToggle(isDark);
-const user = ref(usePage().props.auth?.user);
-const dashAuthLinks = ref(false);
-const userImg = user.value?.user_image
-  ? ref(`/storage/${user.value?.user_image}`)
-  : ref("/storage/default.png");
-
-function handleDashAuthLinks() {
-  dashAuthLinks.value = !dashAuthLinks.value;
-}
+defineEmits(["close"]);
 </script>
 
 <template>
-  <aside class="h-full duration-300 bg-gray-900">
-    <!-- LOGO -->
-    <div class="absolute w-full flex justify-between items-center p-4">
-      <AppLogo class="text-white text-2xl" />
-      <!-- Close button -->
-      <slot name="close_button"></slot>
+  <aside
+    class="fixed top-0 left-0 z-40 w-64 h-full bg-white dark:bg-[#0B0C11] dark:text-slate-50 border-r border-slate-200 dark:border-slate-900 flex flex-col transform transition-transform duration-300 lg:translate-x-0"
+    :class="open ? 'translate-x-0' : '-translate-x-full'"
+  >
+    <!-- Logo -->
+    <div
+      class="flex justify-between items-center gap-3 px-5 pt-5 pb-4 border-b border-slate-100 dark:border-slate-900"
+    >
+      <AppLogo class="text-lg" />
+      <button
+        class="lg:hidden w-8 h-8 rounded-lg bg-slate-100 dark:bg-[#0b0c11] hover:bg-slate-200 grid place-items-center text-slate-500 transition"
+        @click="$emit('close')"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
 
-    <div class="h-full pt-14 flex flex-col justify-between">
-      <div class="min-h-36 overflow-auto flex flex-col p-4">
-        <div class="flex flex-col gap-1 mb-4 border-b border-b-gray-600">
-          <Link
-            :href="route('dashboard')"
-            class="flex items-center gap-2 text-white font-bold p-2 rounded-md hover:bg-gray-800"
-          >
-            <DashboardIcon class="w-5 h-5" />
-            Dashboard
-          </Link>
-
-          <!-- Creat a new restaurant -->
-          <Link
-            :href="route('restaurants.create')"
-            class="flex items-center gap-2 p-2 text-white font-bold rounded-md hover:bg-gray-800"
-          >
-            <PlusIcon class="w-5 h-5" />
-            New restaurant
-          </Link>
-        </div>
-
-        <!-- Restaurants -->
-        <Link
-          v-for="r in restaurants"
-          :key="r.id"
-          v-text="r.restName"
-          :href="route('restaurants.show', r)"
-          class="text-white font-bold p-2 hover:bg-gray-800 rounded-md"
+    <!-- Nav -->
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+      <div>
+        <p
+          class="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400"
         >
-        </Link>
+          Overview
+        </p>
+        <ul class="space-y-1">
+          <li>
+            <Link
+              :href="route('dashboard')"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-orange-50 text-orange-600 dark:bg-[#302420] font-semibold text-sm"
+            >
+              <i class="fa-solid fa-gauge-high w-5 text-center"></i>
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+            >
+              <i class="fa-solid fa-chart-line w-5 text-center"></i>
+              Analytics
+            </a>
+          </li>
+        </ul>
       </div>
 
       <div>
-        <!-- Trash -->
-        <div class="p-4">
-          <Link
-            :href="route('items.trashed')"
-            class="flex items-center gap-2 p-2 text-white font-bold rounded-md hover:bg-gray-800"
-          >
-            <TrashIcon class="w-5 h-5" />
-            Trash
-          </Link>
-        </div>
-
-        <div
-          class="flex justify-between items-center p-4 gap-4 border-t border-t-slate-600 lg:order-2"
+        <p
+          class="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400"
         >
-          <!-- Dropdown menu -->
-          <div class="flex justify-end">
-            <div
-              class="relative flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse"
+          Management
+        </p>
+        <ul class="space-y-1">
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
             >
-              <button
-                @click="handleDashAuthLinks"
-                type="button"
-                class="flex bg-gray-800 rounded-full md:me-0"
+              <i class="fa-solid fa-receipt w-5 text-center"></i>
+              Orders
+              <span
+                class="ml-auto text-[10px] font-bold bg-red-100 text-red-600 dark:bg-[#302420] rounded-full px-2 py-0.5"
               >
-                <img
-                  class="w-14 h-14 rounded-full object-cover aspect-square"
-                  :src="userImg"
-                  alt="user photo"
-                  loading="lazy"
-                />
-              </button>
-
-              <div
-                class="absolute bottom-20 left-0 z-50 w-[14rem] text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                :class="{ hidden: !dashAuthLinks }"
-              >
-                <div class="px-4 py-3">
-                  <!-- User name -->
-                  <div
-                    v-text="user.user_name"
-                    class="block text-sm text-gray-900 dark:text-white"
-                  ></div>
-                  <!-- User email -->
-                  <div
-                    v-text="user.email"
-                    class="block text-sm text-gray-500 truncate dark:text-gray-400"
-                  ></div>
-                </div>
-                <ul class="py-2">
-                  <li>
-                    <DropdownLink
-                      :href="route('profile.edit')"
-                      @click="handleDashAuthLinks"
-                    >
-                      Profile
-                    </DropdownLink>
-                  </li>
-                  <li>
-                    <DropdownLink
-                      :href="route('logout')"
-                      @click="handleDashAuthLinks"
-                      method="post"
-                      as="button"
-                    >
-                      Sign out
-                    </DropdownLink>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dark mode button -->
-          <DarkModeButton
-            @click="toggleDark()"
-            :isDark="isDark"
-            class="text-white"
-          />
-        </div>
+                12
+              </span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+            >
+              <i class="fa-solid fa-bowl-food w-5 text-center"></i>
+              Menu Items
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+            >
+              <i class="fa-solid fa-user-group w-5 text-center"></i>
+              Customers
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+            >
+              <i class="fa-solid fa-calendar-check w-5 text-center"></i>
+              Reservations
+            </a>
+          </li>
+        </ul>
       </div>
+
+      <div>
+        <p
+          class="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400"
+        >
+          Insights
+        </p>
+        <ul class="space-y-1">
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+            >
+              <i class="fa-solid fa-star w-5 text-center"></i>
+              Reviews
+              <span
+                class="ml-auto text-[10px] font-bold bg-emerald-100 text-emerald-600 dark:bg-[#172c2c] rounded-full px-2 py-0.5"
+              >
+                4.8
+              </span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+            >
+              <i class="fa-solid fa-tag w-5 text-center"></i>
+              Promotions
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Bottom -->
+    <div
+      class="px-3 pb-4 space-y-1 border-t border-slate-100 dark:border-slate-900 pt-3"
+    >
+      <a
+        href="#"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-500 font-medium text-sm transition"
+      >
+        <i class="fa-solid fa-gear w-5 text-center"></i> Settings
+      </a>
+      <Link
+        :href="route('items.trashed')"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-[#302420] font-medium text-sm transition"
+      >
+        <i class="fa-solid fa-trash w-5 text-center"></i> Trash
+      </Link>
     </div>
   </aside>
 </template>
+
+<style scoped>
+:root {
+  --scrollbar-thumb: #f1f5f9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --scrollbar-thumb: #13141c;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f46600;
+}
+</style>

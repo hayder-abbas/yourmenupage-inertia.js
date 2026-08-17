@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DeleteRestaurant
@@ -14,7 +17,11 @@ class DeleteRestaurant
             'password' => ['required', 'current_password'],
         ]);
 
-        $restaurant->delete();
+        DB::transaction(function () use ($restaurant) {
+            $restaurant->delete();
+            $user = User::findOrFail(Auth::id());
+            $user->update(['has_restaurant' => 0]);
+        });
 
         if ($restaurant->rest_logo) {
             Storage::disk('public')->delete($restaurant->rest_logo);

@@ -31,16 +31,15 @@ defineProps({
           <UpdateProfileInformationForm
             :must-verify-email="mustVerifyEmail"
             :status="status"
-            class="max-w-xl"
           />
         </div>
 
         <div class="p-4 sm:p-8 bg-white dark:bg-gray-900 shadow md:rounded-lg">
-          <UpdatePasswordForm class="max-w-xl" />
+          <UpdatePasswordForm />
         </div>
 
         <div class="p-4 sm:p-8 bg-white dark:bg-gray-900 shadow md:rounded-lg">
-          <DeleteUserForm class="max-w-xl" />
+          <DeleteUserForm />
         </div>
       </div>
     </div>

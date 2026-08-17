@@ -5,8 +5,8 @@ import { computed, ref } from "vue";
 
 const user = computed(() => usePage().props.auth?.user);
 const authLinks = ref(false);
-const userImg = user.value?.user_image
-  ? ref(`/storage/${user.value?.user_image}`)
+const userImg = user.value?.userImage
+  ? ref(`/storage/${user.value?.userImage}`)
   : ref("/storage/default.png");
 
 function handleAuthLinks() {
@@ -40,7 +40,7 @@ function handleAuthLinks() {
         <!-- User info -->
         <div class="px-4 py-3">
           <div
-            v-text="user.user_name"
+            v-text="user.fullName"
             class="block text-sm text-gray-900 dark:text-white"
           ></div>
           <div

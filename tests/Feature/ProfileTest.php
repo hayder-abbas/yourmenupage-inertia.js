@@ -26,14 +26,14 @@ class ProfileTest extends TestCase
     public function test_profile_page_is_displayed(): void
     {
         $response = $this->get('/profile');
-
         $response->assertOk();
     }
 
     public function test_profile_information_can_be_updated(): void
     {
         $response = $this->patch('/profile', [
-            'user_name' => 'Test User',
+            'first_name' => 'First name',
+            'last_name' => 'Last name',
             'email' => 'test@example.com',
         ]);
 
@@ -41,7 +41,7 @@ class ProfileTest extends TestCase
 
         $this->user->refresh();
 
-        $this->assertSame('Test User', $this->user->user_name);
+        $this->assertSame('First name', $this->user->first_name);
         $this->assertSame('test@example.com', $this->user->email);
         $this->assertNull($this->user->email_verified_at);
     }
@@ -49,12 +49,12 @@ class ProfileTest extends TestCase
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
         $response = $this->patch('/profile', [
-            'user_name' => 'Test User',
+            'first_name' => 'First name',
+            'last_name' => 'Last name',
             'email' => $this->user->email,
         ]);
 
         $response->assertSessionHasNoErrors()->assertRedirect('/profile');
-
         $this->assertNotNull($this->user->refresh()->email_verified_at);
     }
 
@@ -90,7 +90,8 @@ class ProfileTest extends TestCase
         $response = $this
             ->from('/profile')
             ->patch('/profile', [
-                'user_name' => 'Test User',
+                'first_name' => 'First name',
+                'last_name' => 'Last name',
                 'email' => 'test@example.com',
                 'user_image' => $file,
             ]);
@@ -109,7 +110,6 @@ class ProfileTest extends TestCase
             ->post('/reset/profile/image');
 
         $response->assertSessionHasNoErrors()->assertRedirect('/profile');
-
         $this->assertNull($this->user->refresh()->user_image);
     }
 }

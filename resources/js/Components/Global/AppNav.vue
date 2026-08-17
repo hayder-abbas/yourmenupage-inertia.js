@@ -40,12 +40,7 @@ function handleToggleLinksBar() {
       <div class="flex items-center gap-4 lg:order-2">
         <div class="hidden md:flex gap-4 items-center">
           <!-- Dark mode button -->
-          <DarkModeButton
-            @click="toggleDark()"
-            :isDark="isDark"
-            class="text-gray-900 dark:text-white"
-            :class="{ 'text-white': $page.component === 'Home' }"
-          />
+          <DarkModeButton @click="toggleDark()" :isDark="isDark" />
           <!-- Login button outside the dropdown -->
           <SecondaryButton v-if="!isAuth">
             <Link :href="route('login')"> Sign in </Link>

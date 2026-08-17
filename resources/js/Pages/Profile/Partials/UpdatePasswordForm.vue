@@ -34,7 +34,7 @@ const updatePassword = () => {
 </script>
 
 <template>
-  <section>
+  <section class="max-w-xl mx-auto">
     <header>
       <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
 
@@ -88,8 +88,12 @@ const updatePassword = () => {
         <InputError :message="form.errors.password_confirmation" class="mt-2" />
       </div>
 
-      <div class="flex items-center gap-4">
-        <PrimaryButton type="submit" :disabled="form.processing">
+      <div class="w-full md:flex items-center gap-4">
+        <PrimaryButton
+          class="w-full md:w-1/2"
+          type="submit"
+          :disabled="form.processing"
+        >
           Save
         </PrimaryButton>
 

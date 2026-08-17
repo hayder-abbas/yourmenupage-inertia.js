@@ -17,7 +17,8 @@ defineEmits(["change"]);
 
 const user = ref(usePage().props.auth.user);
 const form = useForm({
-  user_name: user.value.user_name,
+  first_name: user.value.firstName,
+  last_name: user.value.lastName,
   email: user.value.email,
   user_image: null,
   _method: "patch",
@@ -29,8 +30,8 @@ const status = reactive({
     "profile-image-deleted": "Profile image deleted successfully!",
   },
 });
-let previewImage = user.value.user_image
-  ? ref(`/storage/${user.value.user_image}`)
+let previewImage = user.value.userImage
+  ? ref(`/storage/${user.value.userImage}`)
   : ref(`/storage/default.png`);
 
 function onChangeInput(e) {
@@ -52,7 +53,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <section>
+  <section class="max-w-xl mx-auto">
     <!-- Notification Message -->
     <Notification
       :status="status.name"
@@ -70,7 +71,11 @@ watchEffect(() => {
       </p>
     </header>
 
-    <form @submit.prevent="submit" class="mt-6 space-y-6">
+    <form
+      @submit.prevent="submit"
+      class="mt-6 space-y-6 flex flex-col items-center"
+    >
+      <!-- User Image -->
       <div>
         <ImageInput
           @change="onChangeInput($event)"
@@ -80,24 +85,33 @@ watchEffect(() => {
         />
         <InputError class="mt-2" :message="form.errors.user_image" />
       </div>
-
-      <div>
-        <InputLabel for="user_name" value="User Name" />
-
+      <!-- First Name -->
+      <div class="w-full">
+        <InputLabel for="first_name" value="First Name" />
         <TextInput
-          id="user_name"
-          name="user_name"
+          id="first_name"
+          name="first_name"
           type="text"
           class="mt-1 block w-full"
-          v-model="form.user_name"
+          v-model="form.first_name"
         />
-
-        <InputError class="mt-2" :message="form.errors.user_name" />
+        <InputError class="mt-2" :message="form.errors.first_name" />
       </div>
-
-      <div>
+      <!-- Last Name -->
+      <div class="w-full">
+        <InputLabel for="last_name" value="Last Name" />
+        <TextInput
+          id="last_name"
+          name="last_name"
+          type="text"
+          class="mt-1 block w-full"
+          v-model="form.last_name"
+        />
+        <InputError class="mt-2" :message="form.errors.last_name" />
+      </div>
+      <!-- Email -->
+      <div class="w-full">
         <InputLabel for="email" value="Email" />
-
         <TextInput
           id="email"
           type="email"
@@ -105,10 +119,8 @@ watchEffect(() => {
           v-model="form.email"
           required
         />
-
         <InputError class="mt-2" :message="form.errors.email" />
       </div>
-
       <div v-if="mustVerifyEmail && user.email_verified_at === null">
         <p class="text-sm mt-2 text-gray-800">
           Your email address is unverified.
@@ -144,8 +156,12 @@ watchEffect(() => {
         </p>
       </Transition>
 
-      <div class="flex items-center gap-4">
-        <PrimaryButton type="submit" :disabled="form.processing">
+      <div class="w-full md:flex items-center gap-4">
+        <PrimaryButton
+          class="w-full md:w-1/2"
+          type="submit"
+          :disabled="form.processing"
+        >
           Save
         </PrimaryButton>
 

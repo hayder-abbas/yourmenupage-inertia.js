@@ -9,9 +9,9 @@ defineProps({
 <template>
   <button
     type="button"
-    class="rounded-lg p-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+    class="rounded-full p-2 text-orange-400 dark:text-slate-100 bg-slate-100 dark:bg-[#13141c]"
   >
     <MoonIcon class="w-5 h-5" :class="{ hidden: !isDark }" />
-    <SunIcon class="w-5 h-5 text-amber-400" :class="{ hidden: isDark }" />
+    <SunIcon class="w-5 h-5" :class="{ hidden: isDark }" />
   </button>
 </template>

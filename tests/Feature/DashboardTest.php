@@ -30,7 +30,7 @@ class DashboardTest extends TestCase
         $response->assertInertia(
             fn(Assert $page) => $page
                 ->component('Dashboard')
-                ->has('restaurants')
+                ->has('restaurant')
         );
     }
 

@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-  <Link href="/" class="italic">
-    Your<span class="text-amber-400 font-extrabold">Menu</span>Page
+  <Link href="/" class="italic font-bold">
+    Your<span class="text-orange-500">Menu</span>Page
   </Link>
 </template>

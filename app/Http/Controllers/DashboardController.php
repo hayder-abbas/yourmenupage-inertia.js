@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RestaurantResource;
 use App\Models\Restaurant;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         /** @todo: Search/Filter Items **/
         // $query = Item::query();
@@ -24,15 +23,13 @@ class DashboardController extends Controller
         // if ($request->has(['field', 'direction'])) {
         //     $query->orderBy($request->field, $request->direction);
         // }
+        $restaurant = Restaurant::where("user_id", Auth::id())->first();
 
-        return Inertia::render('Dashboard', [
-            'restaurants' => RestaurantResource::collection(
-                Restaurant::where('user_id', Auth::id())
-                    ->select('id', 'rest_name')
-                    ->get()
-            ),
-            // 'filters' => $request->all(['search', 'field', 'direction']),
-
+        return inertia("Dashboard", [
+            "restaurant" => $restaurant
+                ? new RestaurantResource($restaurant)
+                : null,
+            "canCreateRestaurant" => Gate::allows("createRestaurant", Auth::user()),
         ]);
     }
 }

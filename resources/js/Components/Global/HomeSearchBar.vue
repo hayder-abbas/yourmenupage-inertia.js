@@ -40,7 +40,7 @@ watch(
         <input
           v-model="search"
           type="search"
-          class="block w-full p-4 ps-12 text-gray-900 dark:placeholder:text-gray-50 rounded-lg bg-gray-50 dark:bg-gray-400 focus:outline-none focus:border-transparent"
+          class="block w-full p-4 ps-12 text-gray-900 dark:placeholder:text-gray-50 rounded-full bg-gray-50 dark:bg-gray-400 focus:outline-none border-2 focus:border-orange-500"
           placeholder="Search Restaurants..."
         />
       </div>

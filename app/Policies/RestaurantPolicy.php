@@ -15,7 +15,7 @@ class RestaurantPolicy
 
     public function create(User $user): bool
     {
-        return true;
+        return $user->has_restaurant === 0;
     }
 
 

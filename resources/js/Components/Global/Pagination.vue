@@ -18,7 +18,7 @@ const pages = ref(props.meta.links);
           as="button"
           :href="page.url ?? ''"
           v-html="page.label"
-          class="px-4 py-2 rounded-md bg-amber-50 text-amber-600 disabled:opacity-40 disabled:cursor-not-allowed"
+          class="px-4 py-2 rounded-md bg-amber-50 text-orange-500 disabled:opacity-40 disabled:cursor-not-allowed"
           :class="{ 'font-bold': page.active }"
           :disabled="!page.url"
         >
@@ -29,7 +29,7 @@ const pages = ref(props.meta.links);
         <Link
           as="button"
           :href="links.next ?? ''"
-          class="px-4 py-2 rounded-md bg-amber-50 text-amber-600 disabled:opacity-40 disabled:cursor-not-allowed"
+          class="px-4 py-2 rounded-md bg-amber-50 text-orange-500 disabled:opacity-40 disabled:cursor-not-allowed"
           :disabled="!links.next"
         >
           Next

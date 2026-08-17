@@ -14,71 +14,76 @@ An online menu platform for meals, coffee, and drinks, organized by city locatio
 ## Technologies Used
 
 - **Backend**: Laravel (PHP Framework)
-- **Frontend**: Inertia.js (React/Vue integration with Laravel)
+- **Frontend**: Inertia.js (Vue.js)
 - **Styling**: Tailwind CSS
-- **Database**: MySQL/PostgreSQL/SQLite (configurable)
+- **Database**: MySQL
 - **Build Tool**: Vite
 - **Testing**: PHPUnit
 
 ## Prerequisites
 
-- PHP 8.1 or higher
-- Composer
-- Node.js 16 or higher
-- NPM or Yarn
-- MySQL/PostgreSQL/SQLite database
+- Docker 29.7 or higher
 
 ## Installation
 
 1. **Clone the repository**
 
-   ```bash
-   git clone https://github.com/yourusername/yourmenupage-inertia.git
-   cd yourmenupage-inertia
-   ```
+    ```bash
+    git clone https://github.com/yourusername/yourmenupage-inertia.git
+    cd yourmenupage-inertia
+    ```
 
 2. **Install PHP dependencies**
 
-   ```bash
-   composer install
-   ```
+    ```bash
+    composer install
+    ```
 
 3. **Install Node.js dependencies**
 
-   ```bash
-   npm install
-   ```
+    ```bash
+    sail npm install
+    ```
 
 4. **Environment Configuration**
-   - Copy `.env.example` to `.env`
-   - Configure your database settings in `.env`
-   - Generate application key:
-     ```bash
-     php artisan key:generate
-     ```
+    - Copy `.env.example` to `.env`
+    - Configure your database settings in `.env`
+    - Generate application key:
+        ```bash
+        sail artisan key:generate
+        ```
 
 5. **Database Setup**
 
-   ```bash
-   php artisan migrate
-   php artisan db:seed  # Optional: seed with sample data
-   ```
+    ```bash
+    sail artisan migrate
+    ```
 
 6. **Build Assets**
 
-   ```bash
-   npm run build
-   # Or for development:
-   npm run dev
-   ```
+    ```bash
+    sail npm run build
+    # Or for development:
+    sail npm run dev
+    ```
 
 7. **Start the Application**
 
-   ```bash
-   php artisan serve
-   ```
+    ```bash
+    sail up -d
+    sail npm run dev
+    ```
 
-   Visit `http://localhost:8000` in your browser.
+    Visit `http://localhost` in your browser.
+
+8. **Stop the Application**
+
+    ```bash
+    crtl + c # for npm run dev
+    sail stop
+    # or
+    sail down -v
+    ```
 
 ## Usage
 
@@ -90,7 +95,7 @@ An online menu platform for meals, coffee, and drinks, organized by city locatio
 
 ### For Restaurant Owners
 
-- Register and manage restaurant profiles
+- Register and manage restaurant profile
 - Add menu categories and items
 - Update pricing and availability
 
@@ -99,36 +104,28 @@ An online menu platform for meals, coffee, and drinks, organized by city locatio
 ### Running Tests
 
 ```bash
-php artisan test
-```
-
-### Code Style
-
-```bash
-# Run PHP CS Fixer
-./vendor/bin/php-cs-fixer fix
-
-# Run ESLint
-npm run lint
+sail test
 ```
 
 ### Building for Production
 
 ```bash
-npm run build
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+sail npm run build
+sail artisan config:cache
+sail artisan route:cache
+sail artisan view:cache
 ```
 
 ## Project Structure
 
 ```
 app/
-├── Http/Controllers/     # Controllers
+├── Http/Controllers/    # Controllers
 ├── Models/              # Eloquent models
 ├── Policies/            # Authorization policies
 └── Providers/           # Service providers
+└── Rules/
+└── Services/
 
 resources/
 ├── js/                  # Frontend JavaScript/Vue components
@@ -137,12 +134,13 @@ resources/
 
 database/
 ├── migrations/          # Database migrations
-├── seeders/            # Database seeders
-└── factories/          # Model factories
+├── seeders/             # Database seeders
+└── factories/           # Model factories
 
 routes/
-├── web.php             # Web routes
-└── api.php             # API routes
+├── web.php              # Web routes
+└── auth.php             # Auth routes
+└── console.php
 ```
 
 ## Contributing
@@ -156,10 +154,6 @@ routes/
 ## License
 
 This project is licensed under the GNU License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-If you have any questions or need help, please open an issue on GitHub.
 
 ---
 

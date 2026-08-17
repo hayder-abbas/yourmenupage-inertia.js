@@ -17,7 +17,7 @@ defineProps({
       <h1
         class="mb-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none text-gray-50"
       >
-        Order your <span class="text-amber-400">next</span> meal
+        Order your <span class="text-orange-500">next</span> meal
       </h1>
       <p class="mb-8 text-2xl xl:text-3xl text-gray-200 sm:px-16">
         YourMenuPage is your source for restaurant menus

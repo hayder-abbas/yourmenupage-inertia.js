@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Http\Requests\StoreRestaurantRequest;
 use App\Models\Restaurant;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CreateRestaurant
@@ -21,7 +24,13 @@ class CreateRestaurant
                 $fields['rest_logo'] = $logoPath;
             }
 
-            $newRestaurant = Restaurant::create($fields);
+            $newRestaurant = DB::transaction(function () use ($fields) {
+                $newRest = Restaurant::create($fields);
+                $user = User::findOrFail(Auth::id());
+                $user->update(['has_restaurant' => 1]);
+
+                return $newRest;
+            });
         } catch (\Exception $ex) {
             if ($logoPath) {
                 Storage::disk('public')->delete($logoPath);
