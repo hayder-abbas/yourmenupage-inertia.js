@@ -15,6 +15,7 @@ use App\Services\CreateRestaurant;
 use App\Services\DeleteRestaurant;
 use App\Services\UpdateRestaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
 class RestaurantController extends Controller
@@ -45,7 +46,7 @@ class RestaurantController extends Controller
             'restaurant' => new RestaurantResource($restaurant),
             'items' => ItemResource::collection($restaurant->items),
             'categories' => CategoryResource::collection(
-                Category::all('id', 'cat_name')
+                Cache::remember('categories', 3600, fn() => Category::all('id', 'cat_name'))
             ),
             'can' => [
                 'update' => Gate::allows('update', $restaurant),
@@ -60,7 +61,7 @@ class RestaurantController extends Controller
 
         return inertia("Restaurant/Edit", [
             'restaurant' => new RestaurantResource($restaurant),
-            'cities' => CityResource::collection(City::all('id', 'city_name'))
+            'cities' => CityResource::collection(Cache::get('cities'))
         ]);
     }
 

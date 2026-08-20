@@ -18,7 +18,6 @@ defineOptions({
 
 const props = defineProps({
   item: Object,
-  restaurants: Array,
   categories: Array,
 });
 

@@ -7,17 +7,12 @@ use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
-use App\Http\Resources\RestaurantResource;
-use App\Models\Category;
-use App\Models\Restaurant;
 use App\Services\CreateItem;
 use App\Services\ForceDeleteItem;
-use App\Services\ItemService;
 use App\Services\UpdateItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
-use Inertia\Inertia;
 
 class ItemController extends Controller
 {
@@ -32,15 +27,10 @@ class ItemController extends Controller
     public function edit(Item $item)
     {
         Gate::authorize('update', $item);
-        return Inertia::render('Item/Edit', [
+
+        return inertia('Item/Edit', [
             'item' => new ItemResource($item),
-            'restaurants' => RestaurantResource::collection(
-                Restaurant::where('user_id', Auth::id())
-                    ->get(['id', 'rest_name'])
-            ),
-            'categories' => CategoryResource::collection(
-                Cache::remember('categories', 3600, fn() => Category::all('id', 'cat_name'))
-            ),
+            'categories' => CategoryResource::collection(Cache::get('categories')),
         ]);
     }
 
@@ -49,7 +39,7 @@ class ItemController extends Controller
     {
         Gate::authorize('update', $item);
         $service->update($request, $item);
-        return to_route('restaurants.show', $item->restaurant_id)
+        return redirect(route('restaurants.show', $item->restaurant_id))
             ->with('status', 'item-updated');
     }
 
@@ -58,20 +48,18 @@ class ItemController extends Controller
     {
         Gate::authorize('delete', $item);
         $item->delete();
-        return to_route('restaurants.show', $item->restaurant_id)
-            ->with('status', 'item-deleted');
+        return redirect()->back()->with('status', 'item-deleted');
     }
 
 
     public function trashed()
     {
-        return Inertia::render('Item/Trashed', [
+        return inertia('Item/Trashed', [
             'trashedItems' => ItemResource::collection(
                 Item::onlyTrashed()
                     ->whereHas('restaurant', function ($query) {
                         $query->where('user_id', Auth::id());
-                    })
-                    ->get()
+                    })->get()
             ),
         ]);
     }
@@ -81,7 +69,7 @@ class ItemController extends Controller
     {
         Gate::authorize('restore', $item);
         $item->restore();
-        return to_route('items.trashed')->with('status', 'item-restored');
+        return redirect()->back()->with('status', 'item-restored');
     }
 
 
@@ -89,6 +77,6 @@ class ItemController extends Controller
     {
         Gate::authorize('forceDelete', $item);
         $service->forceDelete($item);
-        return to_route('items.trashed')->with('status', 'item-deleted');
+        return redirect()->back()->with('status', 'item-deleted');
     }
 }
