@@ -6,6 +6,7 @@ import InputLabel from "@/Components/Ui/InputLabel.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import RecaptchaTerms from "@/Components/Global/RecaptchaTerms.vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
@@ -97,10 +98,6 @@ async function submit() {
             <InputError class="mt-2" :message="form.errors.password" />
           </div>
 
-          <div v-if="form.errors.captcha_token" class="text-sm text-red-600">
-            {{ form.errors.captcha_token }}
-          </div>
-
           <div class="flex items-center justify-between">
             <div class="flex items-start">
               <div class="flex items-center h-5">
@@ -147,6 +144,14 @@ async function submit() {
               Sign up
             </Link>
           </p>
+
+          <!-- Recaptcha Error -->
+          <div v-if="form.errors.captcha_token" class="text-sm text-red-600">
+            {{ form.errors.captcha_token }}
+          </div>
+
+          <!-- Google Required Privacy Disclaimer -->
+          <RecaptchaTerms />
         </form>
       </div>
     </div>
