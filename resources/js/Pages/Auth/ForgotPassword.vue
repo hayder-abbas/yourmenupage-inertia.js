@@ -1,21 +1,10 @@
 <script setup>
-import InputError from "@/Components/Ui/InputError.vue";
-import InputLabel from "@/Components/Ui/InputLabel.vue";
-import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
-import TextInput from "@/Components/Ui/TextInput.vue";
-import { useForm } from "@inertiajs/vue3";
+import ForgotPasswordForm from "@/Components/Forms/ForgotPasswordForm.vue";
+import { Head } from "@inertiajs/vue3";
 
 defineProps({
   status: String,
 });
-
-const form = useForm({
-  email: "",
-});
-
-function submit() {
-  form.post(route("password.email"));
-}
 </script>
 
 <template>
@@ -38,32 +27,8 @@ function submit() {
           {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
-          <div>
-            <InputLabel for="email" value="Email" />
-
-            <TextInput
-              id="email"
-              type="email"
-              class="mt-1 block w-full"
-              v-model="form.email"
-              autofocus
-              autocomplete="username"
-            />
-
-            <InputError class="mt-2" :message="form.errors.email" />
-          </div>
-
-          <div class="flex items-center justify-end mt-4">
-            <PrimaryButton
-              type="submit"
-              :class="{ 'opacity-25': form.processing }"
-              :disabled="form.processing"
-            >
-              Email Password Reset Link
-            </PrimaryButton>
-          </div>
-        </form>
+        <!-- Forgot Password Form -->
+        <ForgotPasswordForm />
       </div>
     </div>
   </section>

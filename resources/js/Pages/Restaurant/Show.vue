@@ -7,10 +7,10 @@ import PhoneIcon from "@/Components/Icons/PhoneIcon.vue";
 import MapPinIcon from "@/Components/Icons/MapPinIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import Notification from "@/Components/Global/Notification.vue";
-import CreateItemForm from "@/Components/Item/CreateItemForm.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import CardItem from "@/Components/Item/CardItem.vue";
 import ShowItem from "@/Components/Item/ShowItem.vue";
+import AddItemButton from "@/Components/Item/AddItemButton.vue";
 
 defineOptions({ layout: AppLayout });
 
@@ -99,11 +99,12 @@ watchEffect(() => {
 
         <div class="flex justify-end flex-col sm:flex-row gap-2">
           <!-- Add Item Form -->
-          <CreateItemForm
+          <AddItemButton
             v-if="can.manageItems"
             :restID="restData.id"
             :categories="categories"
           />
+
           <!-- Edit Restaurant Form -->
           <PrimaryButton v-if="can.update">
             <EditIcon class="w-5 h-5 mr-2" />

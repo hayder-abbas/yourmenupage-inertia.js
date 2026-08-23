@@ -1,12 +1,7 @@
 <script setup>
-import ImageInput from "@/Components/Ui/ImageInput.vue";
-import InputError from "@/Components/Ui/InputError.vue";
-import InputLabel from "@/Components/Ui/InputLabel.vue";
+import CreateRestaurantForm from "@/Components/Forms/CreateRestaurantForm.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
-import SelectInput from "@/Components/Ui/SelectInput.vue";
-import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
-import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
@@ -66,84 +61,20 @@ function submit() {
         </h2>
       </header>
 
-      <form @submit.prevent="submit">
-        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-          <div class="sm:col-span-2 text-center">
-            <ImageInput
-              @change="onChangeInput($event)"
-              :src="previewLogo"
-              alt="Restaurant Logo"
-            />
-            <InputError class="mt-2" :message="form.errors.rest_logo" />
-          </div>
-
-          <div class="w-full">
-            <InputLabel value="Restaurant Name" for="rest_name" />
-            <TextInput
-              v-model="form.rest_name"
-              type="text"
-              id="rest_name"
-              placeholder="Type restaurant name..."
-            />
-            <InputError :message="form.errors.rest_name" class="mt-2" />
-          </div>
-
-          <div class="w-full">
-            <InputLabel value="Phone" for="phone" />
-            <TextInput
-              v-model="form.rest_phone"
-              id="phone"
-              placeholder="Restaurant phone..."
-            />
-            <InputError :message="form.errors.rest_phone" class="mt-2" />
-          </div>
-
-          <div class="w-full">
-            <InputLabel value="Location" for="location" />
-            <TextInput
-              v-model="form.location"
-              id="location"
-              placeholder="Your location here..."
-            />
-            <InputError :message="form.errors.location" class="mt-2" />
-          </div>
-
-          <div>
-            <InputLabel value="City" for="city" />
-            <SelectInput v-model="form.city_id" id="city">
-              <option
-                v-for="c in cities"
-                :key="c.id"
-                :value="c.id"
-                v-text="c.cityName"
-              ></option>
-            </SelectInput>
-            <InputError :message="form.errors.city_id" class="mt-2" />
-          </div>
-
-          <div class="w-full">
-            <InputLabel value="Open at" for="open_at" />
-            <TextInput type="time" id="open_at" v-model="form.open_at" />
-            <InputError :message="form.errors.open_at" class="mt-2" />
-          </div>
-
-          <div class="w-full">
-            <InputLabel value="Close at" for="close_at" />
-            <TextInput type="time" id="close_at" v-model="form.close_at" />
-            <InputError :message="form.errors.close_at" class="mt-2" />
-          </div>
-
-          <div class="sm:col-span-2 mb-5">
-            <InputLabel value="Description" for="rest_desc" />
-            <TextAreaInput
-              v-model="form.rest_desc"
-              id="rest_desc"
-              placeholder="Your description here..."
-            />
-            <InputError :message="form.errors.rest_desc" class="mt-2" />
-          </div>
-        </div>
-
+      <CreateRestaurantForm
+        @submit.prevent="submit"
+        @onChange="onChangeInput($event)"
+        v-model:restName="form.rest_name"
+        v-model:restPhone="form.rest_phone"
+        v-model:location="form.location"
+        v-model:cityID="form.city_id"
+        v-model:openAt="form.open_at"
+        v-model:closeAt="form.close_at"
+        v-model:restDesc="form.rest_desc"
+        :errors="form.errors"
+        :cities="cities"
+        :previewLogo="previewLogo"
+      >
         <div class="flex items-center gap-4">
           <PrimaryButton type="submit" :disabled="form.processing">
             Create
@@ -152,19 +83,8 @@ function submit() {
           <SecondaryButton>
             <Link :href="route('dashboard')" as="button"> Cancel </Link>
           </SecondaryButton>
-
-          <Transition
-            enter-active-class="transition ease-in-out"
-            enter-from-class="opacity-0"
-            leave-active-class="transition ease-in-out"
-            leave-to-class="opacity-0"
-          >
-            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
-              Created...
-            </p>
-          </Transition>
         </div>
-      </form>
+      </CreateRestaurantForm>
     </div>
   </section>
 </template>

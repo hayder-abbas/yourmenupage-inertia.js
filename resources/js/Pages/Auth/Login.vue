@@ -1,14 +1,8 @@
 <script setup>
 import AppLogo from "@/Components/Global/AppLogo.vue";
-import Checkbox from "@/Components/Ui/Checkbox.vue";
-import InputError from "@/Components/Ui/InputError.vue";
-import InputLabel from "@/Components/Ui/InputLabel.vue";
-import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
-import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import RecaptchaTerms from "@/Components/Global/RecaptchaTerms.vue";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import LoginForm from "@/Components/Forms/LoginForm.vue";
+import { Head } from "@inertiajs/vue3";
 
 defineOptions({
   layout: AppLayout,
@@ -18,28 +12,6 @@ defineProps({
   canResetPassword: Boolean,
   status: String,
 });
-
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const form = useForm({
-  email: "",
-  password: "",
-  remember: false,
-  captcha_token: null, // Holds the generated token
-});
-
-async function submit() {
-  // 1. Wait for reCAPTCHA to load
-  await recaptchaLoaded();
-
-  // 2. Execute and get the token (the string 'login' is the action name)
-  form.captcha_token = await executeRecaptcha("login");
-
-  form.post(route("login"), {
-    onFinish: () => {
-      form.reset("password");
-    },
-  });
-}
 </script>
 
 <template>
@@ -49,11 +21,6 @@ async function submit() {
   >
     <Head title="Sign-in Page" />
 
-    <!-- Logo -->
-    <div class="p-6">
-      <AppLogo class="text-3xl dark:text-white" />
-    </div>
-
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
       {{ status }}
     </div>
@@ -61,98 +28,19 @@ async function submit() {
     <div
       class="w-full bg-white rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+      <div class="p-6 space-y-4 md:space-y-4 sm:p-8">
+        <!-- Logo -->
+        <div class="p-6 text-center">
+          <AppLogo class="text-3xl dark:text-white" />
+        </div>
         <h1
-          class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
+          class="text-xl text-center font-bold text-gray-900 md:text-2xl dark:text-white"
         >
           Sign in to your account
         </h1>
-        <form @submit.prevent="submit" class="space-y-4 md:space-y-6">
-          <div>
-            <InputLabel for="email" value="Email" />
 
-            <TextInput
-              id="email"
-              type="email"
-              class="mt-1 block w-full"
-              v-model="form.email"
-              autocomplete="username"
-              placeholder="name@company.com"
-            />
-
-            <InputError class="mt-2" :message="form.errors.email" />
-          </div>
-
-          <div>
-            <InputLabel for="password" value="Password" />
-
-            <TextInput
-              id="password"
-              type="password"
-              class="mt-1 block w-full"
-              v-model="form.password"
-              autocomplete="current-password"
-              placeholder="••••••••"
-            />
-
-            <InputError class="mt-2" :message="form.errors.password" />
-          </div>
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-start">
-              <div class="flex items-center h-5">
-                <Checkbox
-                  id="remember"
-                  name="remember"
-                  aria-describedby="remember"
-                  v-model:checked="form.remember"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label for="remember" class="text-gray-500 dark:text-gray-300">
-                  Remember me
-                </label>
-              </div>
-            </div>
-
-            <!-- Forgot password link -->
-            <Link
-              v-if="canResetPassword"
-              :href="route('password.request')"
-              class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-            >
-              Forgot password?
-            </Link>
-          </div>
-
-          <PrimaryButton
-            type="submit"
-            class="w-full"
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
-          >
-            Sign in
-          </PrimaryButton>
-
-          <!-- Sign up link -->
-          <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-            Don't have an account yet?
-            <Link
-              :href="route('register')"
-              class="font-medium text-blue-600 hover:underline dark:text-blue-500"
-            >
-              Sign up
-            </Link>
-          </p>
-
-          <!-- Recaptcha Error -->
-          <div v-if="form.errors.captcha_token" class="text-sm text-red-600">
-            {{ form.errors.captcha_token }}
-          </div>
-
-          <!-- Google Required Privacy Disclaimer -->
-          <RecaptchaTerms />
-        </form>
+        <!-- Login Form -->
+        <LoginForm :canResetPassword="canResetPassword" />
       </div>
     </div>
   </section>

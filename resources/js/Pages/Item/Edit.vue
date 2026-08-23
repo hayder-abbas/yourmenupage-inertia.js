@@ -1,13 +1,7 @@
 <script setup>
-import ImageInput from "@/Components/Ui/ImageInput.vue";
-import InputError from "@/Components/Ui/InputError.vue";
-import InputLabel from "@/Components/Ui/InputLabel.vue";
-import NumberInput from "@/Components/Ui/NumberInput.vue";
+import EditItemForm from "@/Components/Forms/EditItemForm.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
-import SelectInput from "@/Components/Ui/SelectInput.vue";
-import TextAreaInput from "@/Components/Ui/TextAreaInput.vue";
-import TextInput from "@/Components/Ui/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
@@ -65,79 +59,31 @@ function updateItem() {
         </h2>
       </header>
 
-      <form @submit.prevent="updateItem">
-        <div class="p-4 flex flex-col items-center">
-          <div class="w-full mb-4 text-center">
-            <ImageInput
-              @change="onChangeInput($event)"
-              :src="previewImage"
-              label="Image"
-            />
-            <InputError :message="form.errors.item_image" class="mt-2" />
-          </div>
-
-          <div class="w-full mb-4">
-            <InputLabel for="item_title" value="Item title" />
-            <TextInput
-              id="item_title"
-              ref="itemTitle"
-              v-model="form.item_title"
-              class="mt-1 block w-3/4"
-              placeholder="Item title..."
-            />
-            <InputError :message="form.errors.item_title" class="mt-2" />
-          </div>
-
-          <div class="w-full mb-4">
-            <InputLabel for="item_price" value="Item price" />
-            <NumberInput
-              id="item_price"
-              v-model="form.item_price"
-              class="mt-1 block w-3/4"
-              placeholder="Item price..."
-            />
-            <InputError :message="form.errors.item_price" class="mt-2" />
-          </div>
-
-          <div class="w-full mb-4">
-            <InputLabel for="category" value="Category" />
-            <SelectInput v-model="form.category_id" id="category">
-              <option
-                v-for="c in categories"
-                :key="c.id"
-                :value="c.id"
-                v-text="c.categoryName"
-              ></option>
-            </SelectInput>
-            <InputError :message="form.errors.category_id" class="mt-2" />
-          </div>
-
-          <div class="w-full mb-4">
-            <InputLabel for="item_desc" value="Item description" />
-            <TextAreaInput
-              v-model="form.item_desc"
-              id="item_desc"
-              placeholder="Your description here..."
-            />
-            <InputError :message="form.errors.item_desc" class="mt-2" />
-          </div>
-        </div>
-
-        <div class="flex justify-end items-center p-4 mb-4">
+      <EditItemForm
+        @submit.prevent="updateItem"
+        @onChange="onChangeInput($event)"
+        v-model:itemTitle="form.item_title"
+        v-model:itemPrice="form.item_price"
+        v-model:categoryID="form.category_id"
+        v-model:itemDesc="form.item_desc"
+        :errors="form.errors"
+        :categories="categories"
+        :previewImage="previewImage"
+      >
+        <div class="flex justify-end items-center p-4 pt-0 pb-8 space-x-4">
           <Link :href="route('restaurants.show', item.restaurantId)">
             <SecondaryButton> Cancel </SecondaryButton>
           </Link>
 
           <PrimaryButton
             type="submit"
-            class="ms-3"
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           >
             Save
           </PrimaryButton>
         </div>
-      </form>
+      </EditItemForm>
     </div>
   </section>
 </template>
