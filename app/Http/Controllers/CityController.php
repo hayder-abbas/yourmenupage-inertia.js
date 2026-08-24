@@ -5,19 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\RestaurantResource;
 use App\Models\City;
-use Illuminate\Support\Facades\Cache;
 
 class CityController extends Controller
 {
     public function index()
     {
         return inertia('City/Index', [
-            'cities' => CityResource::collection(
-                Cache::remember('cities', 3600, fn() => City::all())
-            )
+            'cities' => CityResource::collection(City::cached())
         ]);
     }
-
 
     public function show(City $city)
     {

@@ -7,11 +7,11 @@ use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
+use App\Models\Category;
 use App\Services\CreateItem;
 use App\Services\ForceDeleteItem;
 use App\Services\UpdateItem;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
 class ItemController extends Controller
@@ -27,10 +27,9 @@ class ItemController extends Controller
     public function edit(Item $item)
     {
         Gate::authorize('update', $item);
-
         return inertia('Item/Edit', [
             'item' => new ItemResource($item),
-            'categories' => CategoryResource::collection(Cache::get('categories')),
+            'categories' => CategoryResource::collection(Category::cached()),
         ]);
     }
 

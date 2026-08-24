@@ -15,7 +15,6 @@ use App\Services\CreateRestaurant;
 use App\Services\DeleteRestaurant;
 use App\Services\UpdateRestaurant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
 class RestaurantController extends Controller
@@ -23,16 +22,14 @@ class RestaurantController extends Controller
     public function create()
     {
         Gate::authorize('create', Restaurant::class);
-
         return inertia("Restaurant/Create", [
-            'cities' => CityResource::collection(City::all())
+            'cities' => CityResource::collection(City::cached())
         ]);
     }
 
     public function store(StoreRestaurantRequest $request, CreateRestaurant $service)
     {
         Gate::authorize('create', Restaurant::class);
-
         $restaurant = $service->create($request);
         return redirect(route('restaurants.show', $restaurant))
             ->with('status', 'restaurant-created');
@@ -41,13 +38,10 @@ class RestaurantController extends Controller
     public function show(Restaurant $restaurant)
     {
         Gate::authorize('view', $restaurant);
-
         return inertia('Restaurant/Show', [
             'restaurant' => new RestaurantResource($restaurant),
             'items' => ItemResource::collection($restaurant->items),
-            'categories' => CategoryResource::collection(
-                Cache::remember('categories', 3600, fn() => Category::all('id', 'cat_name'))
-            ),
+            'categories' => CategoryResource::collection(Category::cached()),
             'can' => [
                 'update' => Gate::allows('update', $restaurant),
                 'manageItems' => Gate::allows('manageItems', $restaurant)
@@ -58,17 +52,15 @@ class RestaurantController extends Controller
     public function edit(Restaurant $restaurant)
     {
         Gate::authorize('update', $restaurant);
-
         return inertia("Restaurant/Edit", [
             'restaurant' => new RestaurantResource($restaurant),
-            'cities' => CityResource::collection(Cache::get('cities'))
+            'cities' => CityResource::collection(City::cached())
         ]);
     }
 
     public function update(UpdateRestaurantRequest $request, Restaurant $restaurant, UpdateRestaurant $service)
     {
         Gate::authorize('update', $restaurant);
-
         $service->update($request, $restaurant);
         return redirect(route('restaurants.show', $restaurant))
             ->with('status', 'restaurant-updated');
