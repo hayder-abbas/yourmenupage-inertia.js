@@ -49,7 +49,7 @@ const closeAt = defineModel("closeAt");
       <FormInput
         v-model.trim="restPhone"
         inputID="restPhone"
-        label="Rest Phone"
+        label="Phone"
         inputType="text"
         placeholder="Restaurant phone..."
         :error="errors.rest_phone"
