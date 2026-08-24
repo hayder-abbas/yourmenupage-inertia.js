@@ -6,6 +6,7 @@ import InputError from "./InputError.vue";
 
 defineProps({
   src: String,
+  alt: String,
   error: String,
 });
 
@@ -33,7 +34,7 @@ function resetProfileImage() {
 
       <img
         :src="src"
-        alt="Image"
+        :alt="alt"
         class="w-32 h-32 rounded-full border-2 border-gray-300 dark:border-gray-500 bg-gray-50 dark:bg-gray-600"
       />
 

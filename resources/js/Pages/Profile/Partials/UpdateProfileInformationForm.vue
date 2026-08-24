@@ -1,11 +1,8 @@
 <script setup>
+import UpdateProfileForm from "@/Components/Forms/UpdateProfileForm.vue";
 import Notification from "@/Components/Global/Notification.vue";
-import ImageInput from "@/Components/Ui/ImageInput.vue";
-import InputError from "@/Components/Ui/InputError.vue";
-import InputLabel from "@/Components/Ui/InputLabel.vue";
 import PrimaryButton from "@/Components/Ui/PrimaryButton.vue";
-import TextInput from "@/Components/Ui/TextInput.vue";
-import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { reactive, ref, watchEffect } from "vue";
 
 const props = defineProps({
@@ -13,9 +10,10 @@ const props = defineProps({
   status: String,
 });
 
-defineEmits(["change"]);
-
 const user = ref(usePage().props.auth.user);
+const setProfileImg = (img) => `/storage/${img || "default.png"}`;
+let previewImage = ref(setProfileImg(user.value.userImage));
+
 const form = useForm({
   first_name: user.value.firstName,
   last_name: user.value.lastName,
@@ -23,16 +21,14 @@ const form = useForm({
   user_image: null,
   _method: "patch",
 });
-const status = reactive({
+
+const profileStatus = reactive({
   name: null,
   message: {
     "profile-updated": "Profile updated successfully!",
-    "profile-image-deleted": "Profile image deleted successfully!",
+    "profile-image-deleted": "Profile image has been reset.",
   },
 });
-let previewImage = user.value.userImage
-  ? ref(`/storage/${user.value.userImage}`)
-  : ref(`/storage/default.png`);
 
 function onChangeInput(e) {
   const file = e.target.files[0];
@@ -47,18 +43,16 @@ function submit() {
   });
 }
 
-watchEffect(() => {
-  status.name = props.status;
-});
+watchEffect(() => (profileStatus.name = props.status));
 </script>
 
 <template>
   <section class="max-w-xl mx-auto">
     <!-- Notification Message -->
     <Notification
-      :status="status.name"
-      :message="status.message[status.name]"
-      @closeNotification="status.name = null"
+      :status="profileStatus.name"
+      :message="profileStatus.message[profileStatus.name]"
+      @closeNotification="profileStatus.name = null"
     />
 
     <header>
@@ -71,92 +65,16 @@ watchEffect(() => {
       </p>
     </header>
 
-    <form
+    <UpdateProfileForm
       @submit.prevent="submit"
-      class="mt-6 space-y-6 flex flex-col items-center"
+      @onChange="onChangeInput($event)"
+      v-model:firstName="form.first_name"
+      v-model:lastName="form.last_name"
+      v-model:email="form.email"
+      :errors="form.errors"
+      :previewImage="previewImage"
     >
-      <!-- User Image -->
-      <div>
-        <ImageInput
-          @change="onChangeInput($event)"
-          name="user_image"
-          :src="previewImage"
-          alt="User Image"
-        />
-        <InputError class="mt-2" :message="form.errors.user_image" />
-      </div>
-      <!-- First Name -->
       <div class="w-full">
-        <InputLabel for="first_name" value="First Name" />
-        <TextInput
-          id="first_name"
-          name="first_name"
-          type="text"
-          class="mt-1 block w-full"
-          v-model="form.first_name"
-        />
-        <InputError class="mt-2" :message="form.errors.first_name" />
-      </div>
-      <!-- Last Name -->
-      <div class="w-full">
-        <InputLabel for="last_name" value="Last Name" />
-        <TextInput
-          id="last_name"
-          name="last_name"
-          type="text"
-          class="mt-1 block w-full"
-          v-model="form.last_name"
-        />
-        <InputError class="mt-2" :message="form.errors.last_name" />
-      </div>
-      <!-- Email -->
-      <div class="w-full">
-        <InputLabel for="email" value="Email" />
-        <TextInput
-          id="email"
-          type="email"
-          class="mt-1 block w-full"
-          v-model="form.email"
-          required
-        />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-      <div v-if="mustVerifyEmail && user.email_verified_at === null">
-        <p class="text-sm mt-2 text-gray-800">
-          Your email address is unverified.
-          <Link
-            :href="route('verification.send')"
-            method="post"
-            as="button"
-            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Click here to re-send the verification email.
-          </Link>
-        </p>
-        <div
-          v-show="status === 'verification-link-sent'"
-          class="mt-2 font-medium text-green-600"
-        >
-          A new verification link has been sent to your email address.
-        </div>
-      </div>
-
-      <!-- Status Notification -->
-      <Transition
-        enter-active-class="transition ease-in-out"
-        enter-from-class="opacity-0"
-        leave-active-class="transition ease-in-out"
-        leave-to-class="opacity-0"
-      >
-        <p
-          v-if="status === 'image-reset'"
-          class="mt-2 font-bold text-green-600"
-        >
-          Profile image has been reset.
-        </p>
-      </Transition>
-
-      <div class="w-full md:flex items-center gap-4">
         <PrimaryButton
           class="w-full md:w-1/2"
           type="submit"
@@ -164,18 +82,7 @@ watchEffect(() => {
         >
           Save
         </PrimaryButton>
-
-        <Transition
-          enter-active-class="transition ease-in-out"
-          enter-from-class="opacity-0"
-          leave-active-class="transition ease-in-out"
-          leave-to-class="opacity-0"
-        >
-          <p v-if="form.recentlySuccessful" class="font-bold text-green-600">
-            Saved.
-          </p>
-        </Transition>
       </div>
-    </form>
+    </UpdateProfileForm>
   </section>
 </template>

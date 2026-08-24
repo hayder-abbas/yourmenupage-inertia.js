@@ -19,12 +19,6 @@ defineProps({
   >
     <Head title="Profile" />
 
-    <h2
-      class="py-6 px-4 sm:px-6 lg:px-0 font-semibold text-xl text-gray-800 dark:text-gray-300 leading-tight"
-    >
-      Profile
-    </h2>
-
     <div class="py-6">
       <div class="space-y-6">
         <div class="p-4 sm:p-8 bg-white dark:bg-gray-900 shadow md:rounded-lg">

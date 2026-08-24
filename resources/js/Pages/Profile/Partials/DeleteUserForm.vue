@@ -1,10 +1,8 @@
 <script setup>
 import DangerButton from "@/Components/Ui/DangerButton.vue";
-import InputError from "@/Components/Ui/InputError.vue";
-import InputLabel from "@/Components/Ui/InputLabel.vue";
 import Modal from "@/Components/Modal.vue";
 import SecondaryButton from "@/Components/Ui/SecondaryButton.vue";
-import TextInput from "@/Components/Ui/TextInput.vue";
+import FormInput from "@/Components/Ui/FormInput.vue";
 import { useForm } from "@inertiajs/vue3";
 import { nextTick, ref } from "vue";
 
@@ -31,7 +29,6 @@ const deleteUser = () => {
 
 const closeModal = () => {
   confirmingUserDeletion.value = false;
-
   form.clearErrors();
   form.reset();
 };
@@ -49,13 +46,13 @@ const closeModal = () => {
       </p>
     </header>
 
-    <DangerButton class="w-full md:w-1/2" @click="confirmUserDeletion"
-      >Delete Account</DangerButton
-    >
+    <DangerButton class="w-full md:w-1/2" @click="confirmUserDeletion">
+      Delete Account
+    </DangerButton>
 
     <Modal :show="confirmingUserDeletion" @close="closeModal">
       <div class="p-6">
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">
           Are you sure you want to delete your account?
         </h2>
 
@@ -65,21 +62,16 @@ const closeModal = () => {
           like to permanently delete your account.
         </p>
 
-        <div class="mt-6">
-          <InputLabel for="password" value="Password" class="sr-only" />
-
-          <TextInput
-            id="password"
-            ref="passwordInput"
-            v-model="form.password"
-            type="password"
-            class="mt-1 block w-3/4"
-            placeholder="Password"
-            @keyup.enter="deleteUser"
-          />
-
-          <InputError :message="form.errors.password" class="mt-2" />
-        </div>
+        <FormInput
+          v-model="form.password"
+          inputID="password"
+          ref="passwordInput"
+          inputType="password"
+          placeholder="Password"
+          :error="form.errors.password"
+          @keyup.enter="deleteUser"
+          class="mt-2"
+        />
 
         <div class="mt-6 flex justify-end">
           <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>

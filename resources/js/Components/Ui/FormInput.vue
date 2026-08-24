@@ -3,11 +3,27 @@ import { onMounted, ref } from "vue";
 import InputError from "./InputError.vue";
 
 defineProps({
-  inputID: String,
-  label: String,
-  inputType: String,
-  placeholder: String,
-  error: String,
+  inputID: {
+    type: String,
+    required: true,
+  },
+  label: {
+    type: String,
+    required: false,
+  },
+  inputType: {
+    type: String,
+    required: true,
+  },
+  placeholder: {
+    type: String,
+    required: false,
+  },
+  error: {
+    type: String,
+    required: true,
+    default: () => "",
+  },
 });
 
 const model = defineModel({ required: true });
