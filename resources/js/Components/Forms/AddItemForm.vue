@@ -74,7 +74,7 @@ function closeModal() {
     <FormInput
       v-model.trim="form.item_title"
       inputID="itemTitle"
-      label="Item title"
+      label="Title"
       inputType="text"
       placeholder="Item title..."
       :error="form.errors.item_title"
@@ -84,7 +84,7 @@ function closeModal() {
     <FormInput
       v-model.number.trim="form.item_price"
       inputID="itemPrice"
-      label="Item price"
+      label="Price"
       inputType="number"
       placeholder="Item price..."
       :error="form.errors.item_price"
@@ -93,7 +93,7 @@ function closeModal() {
     <!-- Item category -->
     <SelectInput
       v-model="form.category_id"
-      label="Item price"
+      label="Category"
       :error="form.errors.category_id"
       class="mt-6"
     >
@@ -109,7 +109,7 @@ function closeModal() {
     <TextAreaInput
       v-model="form.item_desc"
       inputID="itemDesc"
-      label="Item description"
+      label="Description"
       :error="form.errors.item_desc"
       placeholder="Your description here..."
       class="mt-6"

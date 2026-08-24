@@ -35,7 +35,7 @@ const categoryID = defineModel("categoryID");
       <FormInput
         v-model.trim="itemTitle"
         inputID="itemTitle"
-        label="Item title"
+        label="Title"
         inputType="text"
         placeholder="Item title..."
         :error="errors.item_title"
@@ -45,7 +45,7 @@ const categoryID = defineModel("categoryID");
       <FormInput
         v-model.number.trim="itemPrice"
         inputID="itemPrice"
-        label="Item price"
+        label="Price"
         inputType="number"
         placeholder="Item price..."
         :error="errors.item_price"
@@ -54,7 +54,7 @@ const categoryID = defineModel("categoryID");
       <!-- Item category -->
       <SelectInput
         v-model="categoryID"
-        label="Item price"
+        label="Category"
         :error="errors.category_id"
         class="w-full mb-2"
       >
@@ -70,7 +70,7 @@ const categoryID = defineModel("categoryID");
       <TextAreaInput
         v-model="itemDesc"
         inputID="itemDesc"
-        label="Item description"
+        label="Description"
         :error="errors.item_desc"
         placeholder="Your description here..."
         class="w-full mb-2"
